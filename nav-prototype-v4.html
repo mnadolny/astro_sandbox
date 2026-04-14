@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASTRO.org — Navigation Prototype v4 (Style Tile B)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* ── Primary brand ── */
+      --color-blue:         #0E4C8C;
+      --color-blue-dark:    #0A3A6B;
+      --color-green:        #4E7E3A;
+
+      /* ── Accent ── */
+      --color-cyan:         #3ABEB6;
+      --color-cyan-dark:    #2A9E97;
+      --color-plum:         #C74090;
+
+      /* ── Light tint backgrounds ── */
+      --color-blue-50:      #E6F0FA;
+      --color-cyan-50:      #E3F3EF;
+      --color-cyan-25:      #EAF6F5;
+      --color-plum-50:      #F2DDE9;
+      --color-green-50:     #E5E8DE;
+      --color-ivory:        #FBF5E5;
+      --color-porcelain:    #FFFAF0;
+
+      /* ── Neutrals ── */
+      --color-charcoal:     #58595B;
+      --color-granite:      #979291;
+      --color-alabaster:    #E5E6E5;
+      --color-white:        #FFFFFF;
+      --color-light-bg:     #F4F6F8;
+
+      /* ── Brand gradient ── */
+      --gradient-brand: linear-gradient(135deg, #0E4C8C 0%, #00CCBE 55%, #1C9E4B 100%);
+
+      /* ── Semantic ── */
+      --color-nav-bg:           var(--color-blue);
+      --color-nav-text:         var(--color-white);
+      --color-nav-hover:        var(--color-cyan);
+      --color-dropdown-bg:      var(--color-white);
+      --color-dropdown-heading: var(--color-blue);
+      --color-dropdown-item:    var(--color-charcoal);
+      --color-dropdown-item-hover: var(--color-cyan-50);
+
+      /* ── Layout ── */
+      --nav-height:       64px;
+      --util-nav-height:  40px;
+      --container-max:    1280px;
+      --radius-sm:        4px;
+      --radius-md:        8px;
+      --radius-lg:        12px;
+      --radius-pill:      999px;
+
+      /* ── Font ── */
+      --font-primary: 'DM Sans', system-ui, -apple-system, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-primary);
+      color: var(--color-charcoal);
+      background: var(--color-light-bg);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    button { background: none; border: none; cursor: pointer; font-family: inherit; }
+
+    /* ══════════════════════════════════════════════
+       UTILITY NAV
+    ══════════════════════════════════════════════ */
+    .util-nav {
+      background: var(--color-charcoal);
+      height: var(--util-nav-height);
+      position: relative;
+      z-index: 1000;
+    }
+    .util-nav__inner {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .util-nav__search {
+      margin-right: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 12px;
+      height: 100%;
+      font-size: 12px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.7);
+      transition: color 0.15s;
+    }
+    .util-nav__search:hover { color: var(--color-white); }
+    .util-nav__search svg { width: 13px; height: 13px; }
+
+    .util-nav__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0 12px;
+      height: 100%;
+      font-size: 12px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.7);
+      white-space: nowrap;
+      transition: color 0.15s;
+    }
+    .util-nav__link:hover { color: var(--color-white); }
+    .util-nav__link .ext {
+      font-size: 10px;
+      opacity: 0.55;
+    }
+
+    .util-nav__cta {
+      background: var(--color-cyan);
+      color: var(--color-white) !important;
+      font-weight: 700 !important;
+      padding: 6px 16px !important;
+      border-radius: var(--radius-pill);
+      height: auto !important;
+      font-size: 12px;
+      margin-left: 4px;
+      transition: background 0.15s !important;
+    }
+    .util-nav__cta:hover { background: var(--color-cyan-dark) !important; }
+
+    /* Member dropdown */
+    .util-member {
+      position: relative;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      margin-left: 8px;
+    }
+    .util-member__btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 12px;
+      height: 100%;
+      font-size: 12px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.85);
+      white-space: nowrap;
+      transition: color 0.15s;
+    }
+    .util-member__btn:hover { color: var(--color-white); }
+    .util-member__btn .chev {
+      font-size: 9px;
+      transition: transform 0.2s;
+      opacity: 0.65;
+    }
+    .util-member.is-open .chev { transform: rotate(180deg); }
+    .util-member__panel {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 100%;
+      background: var(--color-white);
+      min-width: 200px;
+      border-radius: 0 0 var(--radius-md) var(--radius-md);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      z-index: 2000;
+      overflow: hidden;
+    }
+    .util-member.is-open .util-member__panel { display: block; }
+    .util-member__panel a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--color-charcoal);
+      border-bottom: 1px solid var(--color-alabaster);
+      transition: background 0.12s;
+    }
+    .util-member__panel a:last-child { border-bottom: none; }
+    .util-member__panel a:hover { background: var(--color-cyan-50); color: var(--color-blue); }
+    .util-member__panel a .ext { font-size: 10px; opacity: 0.45; }
+    .util-member__panel .logout { color: var(--color-plum); font-weight: 600; }
+
+    /* ══════════════════════════════════════════════
+       PRIMARY NAV
+    ══════════════════════════════════════════════ */
+    .primary-nav {
+      background: var(--color-blue);
+      height: var(--nav-height);
+      position: sticky;
+      top: 0;
+      z-index: 900;
+    }
+    .primary-nav__inner {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Logo placeholder */
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-right: 48px;
+      flex-shrink: 0;
+      color: var(--color-white);
+    }
+    .nav-logo__mark {
+      width: 36px;
+      height: 36px;
+      background: rgba(255,255,255,0.15);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1.5px solid rgba(255,255,255,0.25);
+    }
+    .nav-logo__mark svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--color-white);
+    }
+    .nav-logo__text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1;
+    }
+    .nav-logo__name {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--color-white);
+      letter-spacing: -0.02em;
+    }
+    .nav-logo__sub {
+      font-size: 9px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.5);
+      margin-top: 2px;
+    }
+
+    /* Nav items */
+    .nav-items {
+      display: flex;
+      align-items: stretch;
+      height: 100%;
+      flex: 1;
+    }
+    .nav-item {
+      display: flex;
+      align-items: stretch;
+    }
+    .nav-item__btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 16px;
+      height: 100%;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-white);
+      border-bottom: 2px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .nav-item__btn .chev {
+      font-size: 8px;
+      opacity: 0.6;
+      transition: transform 0.2s;
+    }
+    .nav-item__btn:hover {
+      color: var(--color-cyan);
+    }
+    .nav-item.is-open .nav-item__btn {
+      color: var(--color-cyan);
+      border-bottom-color: var(--color-cyan);
+    }
+    .nav-item.is-open .nav-item__btn .chev {
+      transform: rotate(180deg);
+    }
+
+    /* Hamburger */
+    .nav-hamburger {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      margin-left: auto;
+      width: 40px;
+      height: 40px;
+      color: var(--color-white);
+    }
+    .nav-hamburger svg { width: 24px; height: 24px; }
+
+    /* ══════════════════════════════════════════════
+       MEGA MENU
+    ══════════════════════════════════════════════ */
+    .mega {
+      position: fixed;
+      left: 0;
+      right: 0;
+      background: var(--color-white);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+      z-index: 850;
+      display: none;
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+    .mega.is-visible { display: block; }
+    .mega.is-open { opacity: 1; transform: translateY(0); }
+
+    .mega__inner {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 40px 2rem;
+      display: grid;
+      column-gap: 0;
+      row-gap: 0;
+    }
+    .mega__inner--2col { grid-template-columns: 1fr 1fr; }
+    .mega__inner--3col { grid-template-columns: repeat(3, 1fr); }
+    .mega__inner--4col { grid-template-columns: repeat(4, 1fr); }
+    .mega__inner--5col { grid-template-columns: repeat(5, 1fr); }
+
+    .mega__col {
+      padding: 0 28px;
+      border-right: 1px solid var(--color-alabaster);
+    }
+    .mega__col:first-child { padding-left: 0; }
+    .mega__col:last-child { border-right: none; padding-right: 0; }
+
+    .mega__col-head {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-blue);
+      padding-bottom: 10px;
+      margin-bottom: 8px;
+      border-bottom: 2px solid var(--color-cyan);
+    }
+
+    .mega__links a {
+      display: block;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--color-charcoal);
+      padding: 6px 8px;
+      margin: 0 -8px;
+      border-radius: var(--radius-sm);
+      transition: background 0.12s, color 0.12s;
+    }
+    .mega__links a:hover {
+      background: var(--color-cyan-50);
+      color: var(--color-blue);
+    }
+    .mega__links a .ext {
+      font-size: 10px;
+      opacity: 0.5;
+    }
+    .mega__links a.strong {
+      font-weight: 600;
+      color: var(--color-blue);
+    }
+    .mega__links a.strong:hover { color: var(--color-blue-dark); }
+    .mega__links a.cta-link {
+      font-weight: 600;
+      color: var(--color-cyan-dark);
+    }
+    .mega__links .sub-note {
+      font-size: 12px;
+      color: var(--color-granite);
+      padding: 2px 8px 6px;
+      margin: 0 -8px;
+      line-height: 1.5;
+    }
+
+    /* Callout card in mega menu */
+    .mega__callout {
+      background: var(--color-blue-50);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin-top: 16px;
+    }
+    .mega__callout-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-cyan);
+      margin-bottom: 6px;
+    }
+    .mega__callout-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--color-blue);
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+    .mega__callout-desc {
+      font-size: 13px;
+      color: var(--color-charcoal);
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+    .mega__callout-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-cyan-dark);
+      transition: color 0.12s;
+    }
+    .mega__callout-link:hover { color: var(--color-blue); }
+
+    /* Gradient callout variant */
+    .mega__callout--gradient {
+      background: var(--gradient-brand);
+      color: var(--color-white);
+    }
+    .mega__callout--gradient .mega__callout-label { color: rgba(255,255,255,0.7); }
+    .mega__callout--gradient .mega__callout-title { color: var(--color-white); }
+    .mega__callout--gradient .mega__callout-desc { color: rgba(255,255,255,0.85); }
+    .mega__callout--gradient .mega__callout-link { color: var(--color-white); }
+    .mega__callout--gradient .mega__callout-link:hover { opacity: 0.85; }
+
+    /* Featured item in mega menu */
+    .mega__featured {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 10px 8px;
+      margin: 4px -8px;
+      border-radius: var(--radius-sm);
+      transition: background 0.12s;
+    }
+    .mega__featured:hover { background: var(--color-cyan-50); }
+    .mega__featured-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--color-blue-50);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--color-blue);
+      font-size: 16px;
+    }
+    .mega__featured-content { flex: 1; }
+    .mega__featured-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-blue);
+      line-height: 1.3;
+    }
+    .mega__featured-desc {
+      font-size: 12px;
+      color: var(--color-granite);
+      line-height: 1.4;
+      margin-top: 2px;
+    }
+
+    .mega-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(14,76,140,0.08);
+      z-index: 849;
+    }
+    .mega-overlay.is-visible { display: block; }
+
+    /* ══════════════════════════════════════════════
+       MOBILE NAV
+    ══════════════════════════════════════════════ */
+    .mobile-nav {
+      position: fixed;
+      inset: 0;
+      background: var(--color-blue);
+      z-index: 2000;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .mobile-nav.is-open { display: flex; }
+
+    .mob-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      height: 64px;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      flex-shrink: 0;
+    }
+    .mob-close {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-white);
+    }
+    .mob-close svg { width: 20px; height: 20px; }
+    .mob-body { flex: 1; overflow-y: auto; }
+
+    .mob-l1__btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 16px 20px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--color-white);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      text-align: left;
+    }
+    .mob-l1__btn .chev {
+      font-size: 10px;
+      transition: transform 0.2s;
+      opacity: 0.6;
+    }
+    .mob-l1.is-open .mob-l1__btn {
+      color: var(--color-cyan);
+    }
+    .mob-l1.is-open .mob-l1__btn .chev { transform: rotate(180deg); }
+
+    .mob-l2 {
+      display: none;
+      background: rgba(0,0,0,0.15);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .mob-l1.is-open .mob-l2 { display: block; }
+
+    .mob-group__title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-cyan);
+      padding: 14px 20px 6px 24px;
+    }
+    .mob-group__links a {
+      display: block;
+      font-size: 15px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.8);
+      padding: 8px 20px 8px 36px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      transition: color 0.12s;
+    }
+    .mob-group__links a:last-child { border-bottom: none; }
+    .mob-group__links a:hover { color: var(--color-cyan); }
+
+    .mob-footer {
+      padding: 20px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      flex-shrink: 0;
+    }
+    .mob-footer__cta {
+      display: block;
+      background: var(--color-cyan);
+      color: var(--color-white);
+      text-align: center;
+      padding: 14px;
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: var(--radius-pill);
+      margin-bottom: 12px;
+      transition: background 0.15s;
+    }
+    .mob-footer__cta:hover { background: var(--color-cyan-dark); }
+    .mob-footer__links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 16px;
+      justify-content: center;
+    }
+    .mob-footer__links a {
+      font-size: 13px;
+      color: rgba(255,255,255,0.55);
+    }
+
+    /* ══════════════════════════════════════════════
+       EMPTY PAGE BELOW NAV
+    ══════════════════════════════════════════════ */
+    .page-placeholder {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 80px 2rem;
+      text-align: center;
+    }
+    .page-placeholder__label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-cyan);
+      margin-bottom: 8px;
+    }
+    .page-placeholder__title {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--color-blue);
+      letter-spacing: -0.01em;
+      margin-bottom: 8px;
+    }
+    .page-placeholder__desc {
+      font-size: 15px;
+      color: var(--color-granite);
+      line-height: 1.7;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* ══════════════════════════════════════════════
+       FOCUS STYLES
+    ══════════════════════════════════════════════ */
+    :focus-visible {
+      outline: 2px solid var(--color-cyan);
+      outline-offset: 2px;
+    }
+
+    /* ══════════════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════════════ */
+    @media (max-width: 1024px) {
+      .mega__inner--4col { grid-template-columns: repeat(2, 1fr); }
+      .mega__inner--5col { grid-template-columns: repeat(3, 1fr); }
+      .mega__col { padding: 0 20px; margin-bottom: 24px; }
+      .mega__col:nth-child(2n) { border-right: none; }
+    }
+    @media (max-width: 900px) {
+      .nav-items { display: none; }
+      .nav-hamburger { display: flex; }
+      .util-nav__link:not(.util-nav__cta) { display: none; }
+      .util-nav__search { display: none; }
+      .util-member { display: none; }
+      .util-nav__inner { justify-content: flex-end; }
+    }
+    @media (max-width: 640px) {
+      .util-nav__cta { font-size: 11px !important; padding: 5px 12px !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     UTILITY NAV
+════════════════════════════════════════════════ -->
+<nav class="util-nav" aria-label="Utility navigation">
+  <div class="util-nav__inner">
+    <button class="util-nav__search" aria-label="Search">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l4 4"/>
+      </svg>
+      Search
+    </button>
+    <a href="#" class="util-nav__link">For Patients <span class="ext">&#8599;</span></a>
+    <a href="#" class="util-nav__link">Speed of Light Foundation <span class="ext">&#8599;</span></a>
+    <a href="#" class="util-nav__link util-nav__cta">Become a Member</a>
+    <div class="util-member" id="memberDrop">
+      <button class="util-member__btn" aria-expanded="false" aria-haspopup="true">
+        Welcome Back, Dr. Chen <span class="chev">&#9662;</span>
+      </button>
+      <div class="util-member__panel" role="menu">
+        <a href="#">My Profile</a>
+        <a href="#">ROhub <span class="ext">&#8599;</span></a>
+        <a href="#">ASTRO Academy <span class="ext">&#8599;</span></a>
+        <a href="#">Member Directory</a>
+        <a href="#">Manage Membership</a>
+        <a href="#">Newsletters</a>
+        <a href="#" class="logout">Log Out</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════
+     PRIMARY NAV
+════════════════════════════════════════════════ -->
+<header class="primary-nav" id="primaryNav">
+  <div class="primary-nav__inner">
+    <a href="#" class="nav-logo" aria-label="ASTRO home">
+      <div class="nav-logo__mark">
+        <svg viewBox="0 0 24 24"><path d="M12 2L3 7v10l9 5 9-5V7L12 2zm0 2.3l7 3.9v7.6l-7 3.9-7-3.9V8.2l7-3.9z" opacity="0.7"/><circle cx="12" cy="12" r="3"/></svg>
+      </div>
+      <div class="nav-logo__text">
+        <span class="nav-logo__name">ASTRO</span>
+        <span class="nav-logo__sub">Logo Placeholder</span>
+      </div>
+    </a>
+
+    <nav class="nav-items" aria-label="Primary navigation">
+      <div class="nav-item" data-menu="meetings">
+        <button class="nav-item__btn" aria-expanded="false" aria-haspopup="true">
+          Meetings &amp; Events <span class="chev">&#9662;</span>
+        </button>
+      </div>
+      <div class="nav-item" data-menu="practice">
+        <button class="nav-item__btn" aria-expanded="false" aria-haspopup="true">
+          Practice <span class="chev">&#9662;</span>
+        </button>
+      </div>
+      <div class="nav-item" data-menu="publications">
+        <button class="nav-item__btn" aria-expanded="false" aria-haspopup="true">
+          Publications &amp; News <span class="chev">&#9662;</span>
+        </button>
+      </div>
+      <div class="nav-item" data-menu="advocacy">
+        <button class="nav-item__btn" aria-expanded="false" aria-haspopup="true">
+          Advocacy <span class="chev">&#9662;</span>
+        </button>
+      </div>
+      <div class="nav-item" data-menu="about">
+        <button class="nav-item__btn" aria-expanded="false" aria-haspopup="true">
+          About &amp; Join <span class="chev">&#9662;</span>
+        </button>
+      </div>
+    </nav>
+
+    <button class="nav-hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M3 6h18M3 12h18M3 18h18"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════
+     MEGA MENUS
+════════════════════════════════════════════════ -->
+
+<!-- Meetings & Events -->
+<div class="mega" id="mega-meetings" role="region" aria-label="Meetings &amp; Events menu">
+  <div class="mega__inner mega__inner--3col">
+    <div class="mega__col">
+      <span class="mega__col-head">Annual Meeting</span>
+      <div class="mega__links">
+        <a href="#">Attend</a>
+        <a href="#">Learn</a>
+        <a href="#">Exhibitors</a>
+        <a href="#">Become an Exhibitor</a>
+      </div>
+      <div class="mega__callout mega__callout--gradient">
+        <div class="mega__callout-label">Save the Date</div>
+        <div class="mega__callout-title">2026 Annual Meeting</div>
+        <div class="mega__callout-desc">Join us in San Diego for the premier radiation oncology event of the year.</div>
+        <a href="#" class="mega__callout-link">Register Now &#8594;</a>
+      </div>
+    </div>
+    <div class="mega__col">
+      <span class="mega__col-head">Events</span>
+      <div class="mega__links">
+        <a href="#">Head &amp; Neck Symposium</a>
+        <a href="#">RPT Symposium</a>
+        <a href="#">Annual Refresher Course</a>
+        <a href="#">Coding &amp; Coverage Seminar</a>
+        <a href="#">Advocacy Day</a>
+      </div>
+    </div>
+    <div class="mega__col">
+      <span class="mega__col-head">Featured Events</span>
+      <a href="#" class="mega__featured">
+        <div class="mega__featured-icon">&#128197;</div>
+        <div class="mega__featured-content">
+          <div class="mega__featured-title">Coding &amp; Coverage Seminar</div>
+          <div class="mega__featured-desc">Master radiation oncology billing updates for 2026</div>
+        </div>
+      </a>
+      <a href="#" class="mega__featured">
+        <div class="mega__featured-icon">&#127891;</div>
+        <div class="mega__featured-content">
+          <div class="mega__featured-title">Annual Refresher Course</div>
+          <div class="mega__featured-desc">Comprehensive review of clinical advances</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Practice -->
+<div class="mega" id="mega-practice" role="region" aria-label="Practice menu">
+  <div class="mega__inner mega__inner--4col">
+    <div class="mega__col">
+      <span class="mega__col-head">Treat Patients</span>
+      <div class="mega__links">
+        <a href="#">Clinical Practice Guidelines</a>
+        <a href="#">Collaborative Guideline Process</a>
+        <a href="#">Consensus Documents</a>
+        <a href="#">Guideline Development Process</a>
+        <a href="#">Patient Videos</a>
+        <a href="#">Patient Brochures</a>
+        <a href="#">Radiation Oncology Presentations</a>
+        <a href="#">RPT Roundtable</a>
+        <a href="#">AU Status for RPT</a>
+        <a href="#">RPT Learning Collaboratives</a>
+      </div>
+    </div>
+    <div class="mega__col">
+      <span class="mega__col-head">Manage Your Practice</span>
+      <div class="mega__links">
+        <a href="#" class="strong">Reimbursement &#8594;</a>
+        <div class="sub-note">Coding &middot; Medicare Resources &middot; Model Policies &middot; Practice Management &middot; Private Payers</div>
+      </div>
+      <div class="mega__callout">
+        <div class="mega__callout-label">Quick Access</div>
+        <div class="mega__callout-title">Coding &amp; Reimbursement</div>
+        <div class="mega__callout-desc">Get the latest coding guidance, Medicare updates, and payer resources.</div>
+        <a href="#" class="mega__callout-link">Explore Resources &#8594;</a>
+      </div>
+    </div>
+    <div class="mega__col">
+      <span class="mega__col-head">Improve Quality</span>
+      <div class="mega__links">
+        <a href="#">RO-ILS</a>
+        <a href="#">Safety is No Accident</a>
+        <a href="#">Data Standards</a>
+        <a href="#">Quality Measures</a>
+        <a href="#">Functional Radiation Medicine</a>
+        <a href="#">Disaster Management</a>
+        <a href="#" class="strong">APEx Accreditation &#8594;</a>
+        <div class="sub-note">About &middot; Facilities &middot; Application &middot; Portal &middot; Become a Surveyor</div>
+      </div>
+    </div>
+    <div class="mega__col">
+      <span class="mega__col-head">Learn &amp; Certify</span>
+      <div class="mega__links">
+        <a href="#">ASTRO Academy <span class="ext">&#8599;</span></a>
+        <a href="#">Sessions on Demand</a>
+        <a href="#">Meetings on Demand</a>
+        <a href="#">eContouring</a>
+        <a href="#">Webinars</a>
+        <a href="#">Journal Activities</a>
+        <a href="#">Continuing Certification</a>
+        <a href="#">ASTRO ROCKS</a>
+        <a href="#">RO Communities Corner</a>
+        <a href="#">Past Meetings</a>
+        <a href="#">RPT in ASTRO Academy</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Publications & News -->
+<div class="mega" id="mega-publications" role="region" aria-label="Publications &amp; News menu">
+  <div class="mega__inner mega__inner--4col">
+    <div class="mega__col">
+      <span class="mega__col-head">Journals</span>
+      <div class="mega__links">
+        <a href="#" class="strong">Red Journal</a>
+        <a href="#">Practical Radiation Oncology (PRO)</a>
+        <a href="#">Advances in Radiation Oncology</a>
+        <a href="#">Journal News</a>
+        <a href="#">Author Instructions</a>
+      </div>
+      <div class="mega__callout">
+        <div class="mega__callout-label">Latest Issue</div>
+        <div class="mega__callout-title">Red Journal &mdash; April 2026</div>
+        <div class="mega__callout-desc">Featuring new guidelines on adaptive radiation therapy techniques.</div>
+        <a href="#" class="mega__callout-link">Read Now &#8594;</a>
+      </div>
+    </div>
+    <div class="mega__col">
+      <span class="mega__col-head">Society News</span>
+      <div class="mega__links">
+        <a href="#">ASTROgram</a>
+        <a href="#">ASTROblog</a>
+        <a href="#">ASTROnews</a>
+        <a href="#">President's Corner</a>
+        <a href="#">Podcasts</a>
+      </div>
+    </div>
+    <div class="mega__col">
+      <span class="mega__col-head">News &amp; Media</span>
+      <div class="mega__links">
+        <a href="#">News Releases</a>
+        <a href="#">Press Kits</a>
+        <a href="#">Media Resources</a>
+        <a href="#">Media Experts</a>
+      </div>
+    </div>
+    <div class="mega__col">
+      <span class="mega__col-head">Research</span>
+      <div class="mega__links">
+        <a href="#">Funding Opportunities</a>
+        <a href="#">Professional Development</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Advocacy -->
+<div class="mega" id="mega-advocacy" role="region" aria-label="Advocacy menu">
+  <div class="mega__inner mega__inner--4col">
+    <div class="mega__col">
+      <span class="mega__col-head">Key Issues</span>
+      <div class="mega__links">
+        <a href="#">Radiation Oncology Case Rate Program</a>
+        <a href="#">Cancer Research</a>
+        <a href="#">Access to Care</a>
+        <a href="#">Source Security</a>
+        <a href="#">Obtaining AU Status</a>
+        <a href="#">Disparities in Health Care</a>
+      </div>
+    </div>
+    <div class="mega__col">
+      <span class="mega__col-head">Washington Updates</span>
+      <div class="mega__links">
+        <a href="#" class="strong">What's Happening in Washington &#8594;</a>
+      </div>
+      <div class="mega__callout mega__callout--gradient" style="margin-top: 12px;">
+        <div class="mega__callout-label">Take Action</div>
+        <div class="mega__callout-title">Advocacy Day 2026</div>
+        <div class="mega__callout-desc">Make your voice heard on Capitol Hill.</div>
+        <a href="#" class="mega__callout-link">Learn More &#8594;</a>
+      </div>
+    </div>
+    <div class="mega__col">
+      <span class="mega__col-head">Become an Advocate</span>
+      <div class="mega__links">
+        <a href="#">Resources</a>
+        <a href="#">Key Legislation</a>
+        <a href="#">Patient Stories <span class="ext">&#8599;</span></a>
+      </div>
+      <br>
+      <span class="mega__col-head" style="margin-top: 8px; display: block;">State Regulations Library</span>
+      <div class="mega__links">
+        <a href="#">State Regulations Library</a>
+      </div>
+    </div>
+    <div class="mega__col">
+      <span class="mega__col-head">ASTRO PAC</span>
+      <div class="mega__links">
+        <a href="#">PAC Donors</a>
+        <a href="#">PAC Toolkit</a>
+        <a href="#" class="cta-link">Donate Now</a>
+        <a href="#">PAC Board</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- About & Join -->
+<div class="mega" id="mega-about" role="region" aria-label="About &amp; Join menu">
+  <div class="mega__inner mega__inner--4col">
+    <div class="mega__col">
+      <span class="mega__col-head">About ASTRO</span>
+      <div class="mega__links">
+        <a href="#">Mission &amp; Vision</a>
+        <a href="#">Board &amp; Leadership</a>
+        <a href="#">Governance</a>
+        <a href="#">History</a>
+        <a href="#">What is Radiation Oncology?</a>
+        <a href="#">Jobs at ASTRO</a>
+      </div>
+    </div>
+    <div class="mega__col">
+      <span class="mega__col-head">Membership</span>
+      <div class="mega__links">
+        <a href="#" class="cta-link">Why Join ASTRO</a>
+        <a href="#">Categories &amp; Benefits</a>
+        <a href="#">Renew Membership</a>
+        <a href="#">ASTRO Policies</a>
+        <a href="#">Demographics</a>
+        <a href="#">Workforce</a>
+        <a href="#">Recognition Awards</a>
+      </div>
+    </div>
+    <div class="mega__col">
+      <span class="mega__col-head">Career Pathways</span>
+      <div class="mega__links">
+        <a href="#">Medical Students</a>
+        <a href="#">Residents &mdash; ARRO</a>
+        <a href="#">Early Career</a>
+        <a href="#">Established Practitioners</a>
+        <a href="#">Career Center</a>
+      </div>
+    </div>
+    <div class="mega__col">
+      <span class="mega__col-head">Community</span>
+      <div class="mega__links">
+        <a href="#">ROhub <span class="ext">&#8599;</span></a>
+        <a href="#">Physician Networking</a>
+        <a href="#">International Members</a>
+        <a href="#">ADROP</a>
+        <a href="#">SCAROP</a>
+        <a href="#">Industry</a>
+      </div>
+      <div class="mega__callout">
+        <div class="mega__callout-label">Community</div>
+        <div class="mega__callout-title">Join ROhub</div>
+        <div class="mega__callout-desc">Connect with peers, share knowledge, and collaborate online.</div>
+        <a href="#" class="mega__callout-link">Get Started &#8594;</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mega-overlay" id="megaOverlay"></div>
+
+<!-- ═══════════════════════════════════════════════
+     MOBILE NAV
+════════════════════════════════════════════════ -->
+<div class="mobile-nav" id="mobileNav" role="dialog" aria-modal="true" aria-label="Site navigation">
+  <div class="mob-head">
+    <a href="#" class="nav-logo" aria-label="ASTRO home">
+      <div class="nav-logo__mark">
+        <svg viewBox="0 0 24 24"><path d="M12 2L3 7v10l9 5 9-5V7L12 2zm0 2.3l7 3.9v7.6l-7 3.9-7-3.9V8.2l7-3.9z" opacity="0.7"/><circle cx="12" cy="12" r="3"/></svg>
+      </div>
+      <div class="nav-logo__text"><span class="nav-logo__name">ASTRO</span></div>
+    </a>
+    <button class="mob-close" id="mobileNavClose" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M18 6L6 18M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
+  <div class="mob-body">
+    <!-- Meetings & Events -->
+    <div class="mob-l1">
+      <button class="mob-l1__btn">Meetings &amp; Events <span class="chev">&#9662;</span></button>
+      <div class="mob-l2">
+        <div class="mob-group">
+          <div class="mob-group__title">Annual Meeting</div>
+          <div class="mob-group__links">
+            <a href="#">Attend</a><a href="#">Learn</a><a href="#">Exhibitors</a><a href="#">Become an Exhibitor</a>
+          </div>
+        </div>
+        <div class="mob-group">
+          <div class="mob-group__title">Events</div>
+          <div class="mob-group__links">
+            <a href="#">Head &amp; Neck Symposium</a><a href="#">RPT Symposium</a>
+            <a href="#">Annual Refresher Course</a><a href="#">Coding &amp; Coverage Seminar</a><a href="#">Advocacy Day</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Practice -->
+    <div class="mob-l1">
+      <button class="mob-l1__btn">Practice <span class="chev">&#9662;</span></button>
+      <div class="mob-l2">
+        <div class="mob-group">
+          <div class="mob-group__title">Treat Patients</div>
+          <div class="mob-group__links">
+            <a href="#">Clinical Practice Guidelines</a><a href="#">Collaborative Guideline Process</a>
+            <a href="#">Consensus Documents</a><a href="#">Patient Videos</a>
+            <a href="#">Patient Brochures</a><a href="#">RPT Roundtable</a>
+          </div>
+        </div>
+        <div class="mob-group">
+          <div class="mob-group__title">Manage Your Practice</div>
+          <div class="mob-group__links"><a href="#">Reimbursement</a></div>
+        </div>
+        <div class="mob-group">
+          <div class="mob-group__title">Improve Quality</div>
+          <div class="mob-group__links">
+            <a href="#">RO-ILS</a><a href="#">Data Standards</a>
+            <a href="#">Quality Measures</a><a href="#">APEx Accreditation</a>
+          </div>
+        </div>
+        <div class="mob-group">
+          <div class="mob-group__title">Learn &amp; Certify</div>
+          <div class="mob-group__links">
+            <a href="#">ASTRO Academy &#8599;</a><a href="#">Sessions on Demand</a>
+            <a href="#">eContouring</a><a href="#">Webinars</a><a href="#">Continuing Certification</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Publications & News -->
+    <div class="mob-l1">
+      <button class="mob-l1__btn">Publications &amp; News <span class="chev">&#9662;</span></button>
+      <div class="mob-l2">
+        <div class="mob-group">
+          <div class="mob-group__title">Journals</div>
+          <div class="mob-group__links">
+            <a href="#">Red Journal</a><a href="#">Practical Radiation Oncology (PRO)</a>
+            <a href="#">Advances in Radiation Oncology</a><a href="#">Journal News</a><a href="#">Author Instructions</a>
+          </div>
+        </div>
+        <div class="mob-group">
+          <div class="mob-group__title">Society News</div>
+          <div class="mob-group__links">
+            <a href="#">ASTROgram</a><a href="#">ASTROblog</a>
+            <a href="#">ASTROnews</a><a href="#">President's Corner</a><a href="#">Podcasts</a>
+          </div>
+        </div>
+        <div class="mob-group">
+          <div class="mob-group__title">News &amp; Media</div>
+          <div class="mob-group__links">
+            <a href="#">News Releases</a><a href="#">Press Kits</a><a href="#">Media Resources</a>
+          </div>
+        </div>
+        <div class="mob-group">
+          <div class="mob-group__title">Research</div>
+          <div class="mob-group__links">
+            <a href="#">Funding Opportunities</a><a href="#">Professional Development</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Advocacy -->
+    <div class="mob-l1">
+      <button class="mob-l1__btn">Advocacy <span class="chev">&#9662;</span></button>
+      <div class="mob-l2">
+        <div class="mob-group">
+          <div class="mob-group__title">Key Issues</div>
+          <div class="mob-group__links">
+            <a href="#">RO Case Rate Program</a><a href="#">Cancer Research</a>
+            <a href="#">Access to Care</a><a href="#">Source Security</a><a href="#">Obtaining AU Status</a>
+          </div>
+        </div>
+        <div class="mob-group">
+          <div class="mob-group__title">Washington Updates</div>
+          <div class="mob-group__links"><a href="#">What's Happening in Washington</a></div>
+        </div>
+        <div class="mob-group">
+          <div class="mob-group__title">Become an Advocate</div>
+          <div class="mob-group__links">
+            <a href="#">Resources</a><a href="#">Key Legislation</a><a href="#">Patient Stories &#8599;</a>
+          </div>
+        </div>
+        <div class="mob-group">
+          <div class="mob-group__title">ASTRO PAC</div>
+          <div class="mob-group__links">
+            <a href="#">PAC Donors</a><a href="#">PAC Toolkit</a><a href="#">Donate Now</a><a href="#">PAC Board</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- About & Join -->
+    <div class="mob-l1">
+      <button class="mob-l1__btn">About &amp; Join <span class="chev">&#9662;</span></button>
+      <div class="mob-l2">
+        <div class="mob-group">
+          <div class="mob-group__title">About ASTRO</div>
+          <div class="mob-group__links">
+            <a href="#">Mission &amp; Vision</a><a href="#">Board &amp; Leadership</a>
+            <a href="#">Governance</a><a href="#">Jobs at ASTRO</a>
+          </div>
+        </div>
+        <div class="mob-group">
+          <div class="mob-group__title">Membership</div>
+          <div class="mob-group__links">
+            <a href="#">Why Join ASTRO</a><a href="#">Categories &amp; Benefits</a><a href="#">Renew Membership</a>
+          </div>
+        </div>
+        <div class="mob-group">
+          <div class="mob-group__title">Career Pathways</div>
+          <div class="mob-group__links">
+            <a href="#">Medical Students</a><a href="#">Residents &mdash; ARRO</a>
+            <a href="#">Early Career</a><a href="#">Career Center</a>
+          </div>
+        </div>
+        <div class="mob-group">
+          <div class="mob-group__title">Community</div>
+          <div class="mob-group__links">
+            <a href="#">ROhub &#8599;</a><a href="#">Physician Networking</a>
+            <a href="#">International Members</a><a href="#">ADROP</a><a href="#">SCAROP</a><a href="#">Industry</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mob-footer">
+    <a href="#" class="mob-footer__cta">Become a Member</a>
+    <div class="mob-footer__links">
+      <a href="#">For Patients</a>
+      <a href="#">Speed of Light Foundation</a>
+      <a href="#">Search</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     PAGE CONTENT (placeholder only)
+════════════════════════════════════════════════ -->
+<main>
+  <div class="page-placeholder">
+    <div class="page-placeholder__label">Navigation Prototype v4</div>
+    <div class="page-placeholder__title">Style Tile B &mdash; Header &amp; Mega Menu</div>
+    <div class="page-placeholder__desc">Hover over the navigation items above to explore the mega menu dropdowns. Resize the browser to see the mobile navigation.</div>
+  </div>
+</main>
+
+<!-- ═══════════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════════════ -->
+<script>
+(function() {
+  'use strict';
+
+  // ── Desktop Mega Menu ──
+  const navItems = document.querySelectorAll('.nav-item');
+  const megaOverlay = document.getElementById('megaOverlay');
+  let openTimeout = null;
+  let closeTimeout = null;
+  let currentMenu = null;
+
+  function openMega(menuId) {
+    clearTimeout(closeTimeout);
+    closeMega(true); // close any currently open menu immediately
+
+    const trigger = document.querySelector(`.nav-item[data-menu="${menuId}"]`);
+    const mega = document.getElementById('mega-' + menuId);
+    if (!trigger || !mega) return;
+
+    trigger.classList.add('is-open');
+    trigger.querySelector('.nav-item__btn').setAttribute('aria-expanded', 'true');
+    mega.classList.add('is-visible');
+    megaOverlay.classList.add('is-visible');
+    currentMenu = menuId;
+
+    // Position mega below the sticky nav
+    const navRect = document.getElementById('primaryNav').getBoundingClientRect();
+    mega.style.top = navRect.bottom + 'px';
+
+    requestAnimationFrame(() => {
+      mega.classList.add('is-open');
+    });
+  }
+
+  function closeMega(immediate) {
+    if (!currentMenu) return;
+    const trigger = document.querySelector(`.nav-item[data-menu="${currentMenu}"]`);
+    const mega = document.getElementById('mega-' + currentMenu);
+    if (!trigger || !mega) return;
+
+    if (immediate) {
+      trigger.classList.remove('is-open');
+      trigger.querySelector('.nav-item__btn').setAttribute('aria-expanded', 'false');
+      mega.classList.remove('is-open', 'is-visible');
+      megaOverlay.classList.remove('is-visible');
+      currentMenu = null;
+    } else {
+      mega.classList.remove('is-open');
+      trigger.classList.remove('is-open');
+      trigger.querySelector('.nav-item__btn').setAttribute('aria-expanded', 'false');
+      megaOverlay.classList.remove('is-visible');
+      const menuId = currentMenu;
+      currentMenu = null;
+      setTimeout(() => {
+        mega.classList.remove('is-visible');
+      }, 150);
+    }
+  }
+
+  navItems.forEach(item => {
+    const menuId = item.dataset.menu;
+
+    item.addEventListener('mouseenter', () => {
+      clearTimeout(closeTimeout);
+      openTimeout = setTimeout(() => openMega(menuId), 150);
+    });
+
+    item.addEventListener('mouseleave', () => {
+      clearTimeout(openTimeout);
+      closeTimeout = setTimeout(() => closeMega(), 200);
+    });
+
+    // Click also toggles
+    item.querySelector('.nav-item__btn').addEventListener('click', (e) => {
+      e.preventDefault();
+      if (currentMenu === menuId) {
+        closeMega();
+      } else {
+        openMega(menuId);
+      }
+    });
+  });
+
+  // Keep menu open when hovering over the dropdown itself
+  document.querySelectorAll('.mega').forEach(mega => {
+    mega.addEventListener('mouseenter', () => {
+      clearTimeout(closeTimeout);
+    });
+    mega.addEventListener('mouseleave', () => {
+      closeTimeout = setTimeout(() => closeMega(), 200);
+    });
+  });
+
+  megaOverlay.addEventListener('click', () => closeMega());
+
+  // Close on ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeMega();
+      closeMemberDrop();
+      closeMobileNav();
+    }
+  });
+
+  // ── Member Dropdown ──
+  const memberDrop = document.getElementById('memberDrop');
+  const memberBtn = memberDrop.querySelector('.util-member__btn');
+
+  function closeMemberDrop() {
+    memberDrop.classList.remove('is-open');
+    memberBtn.setAttribute('aria-expanded', 'false');
+  }
+
+  memberBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = memberDrop.classList.toggle('is-open');
+    memberBtn.setAttribute('aria-expanded', isOpen);
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!memberDrop.contains(e.target)) closeMemberDrop();
+  });
+
+  // ── Mobile Nav ──
+  const mobileNav = document.getElementById('mobileNav');
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const mobileNavClose = document.getElementById('mobileNavClose');
+
+  function openMobileNav() {
+    mobileNav.classList.add('is-open');
+    hamburgerBtn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMobileNav() {
+    mobileNav.classList.remove('is-open');
+    hamburgerBtn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  hamburgerBtn.addEventListener('click', openMobileNav);
+  mobileNavClose.addEventListener('click', closeMobileNav);
+
+  // Mobile accordion
+  document.querySelectorAll('.mob-l1__btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const parent = btn.parentElement;
+      const wasOpen = parent.classList.contains('is-open');
+      // Close all
+      document.querySelectorAll('.mob-l1').forEach(el => el.classList.remove('is-open'));
+      // Toggle clicked
+      if (!wasOpen) parent.classList.add('is-open');
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
