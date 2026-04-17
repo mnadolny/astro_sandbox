@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASTRO.org — Navigation Prototypes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-blue:         #0E4C8C;
+      --color-blue-dark:    #0A3A6B;
+      --color-cyan:         #3ABEB6;
+      --color-green:        #4E7E3A;
+      --color-plum:         #C74090;
+      --color-charcoal:     #58595B;
+      --color-granite:      #979291;
+      --color-alabaster:    #E5E6E5;
+      --color-white:        #FFFFFF;
+      --color-light-bg:     #F4F6F8;
+      --color-porcelain:    #FFFAF0;
+      --gradient-brand:     linear-gradient(135deg, #0E4C8C 0%, #00CCBE 55%, #1C9E4B 100%);
+      --font-primary:       'DM Sans', system-ui, -apple-system, sans-serif;
+      --radius-md:          8px;
+      --radius-lg:          16px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-primary);
+      color: var(--color-charcoal);
+      background: var(--color-light-bg);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+    }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+
+    .hero {
+      background: var(--gradient-brand);
+      color: var(--color-white);
+      padding: 80px 2rem 96px;
+    }
+    .hero__inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .hero__eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 12px;
+      font-weight: 600;
+      opacity: 0.85;
+      margin-bottom: 16px;
+    }
+    .hero__title {
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+    .hero__sub {
+      font-size: 18px;
+      line-height: 1.5;
+      max-width: 680px;
+      opacity: 0.9;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: -48px auto 0;
+      padding: 0 2rem 96px;
+      position: relative;
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-granite);
+      margin: 48px 0 20px;
+    }
+    .section-label:first-child { margin-top: 0; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--color-white);
+      border: 1px solid var(--color-alabaster);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: var(--accent, var(--color-blue));
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(14, 76, 140, 0.12);
+      border-color: transparent;
+    }
+    .card--coming-soon {
+      background: #FAFBFC;
+      border-style: dashed;
+    }
+    .card--coming-soon::before { display: none; }
+    .card--coming-soon:hover { transform: none; box-shadow: none; border-color: var(--color-alabaster); }
+
+    .card__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      align-self: flex-start;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: rgba(14, 76, 140, 0.08);
+      color: var(--color-blue);
+    }
+    .card__badge--live {
+      background: rgba(78, 126, 58, 0.12);
+      color: var(--color-green);
+    }
+    .card__badge--draft {
+      background: rgba(199, 64, 144, 0.1);
+      color: var(--color-plum);
+    }
+    .card__badge--soon {
+      background: #EEF0F3;
+      color: var(--color-granite);
+    }
+
+    .card__title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--color-blue-dark);
+      letter-spacing: -0.01em;
+    }
+    .card__desc {
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--color-charcoal);
+      flex: 1;
+    }
+    .card__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--color-blue);
+      margin-top: 4px;
+    }
+    .card__link:hover { color: var(--color-blue-dark); }
+    .card__link svg { width: 14px; height: 14px; transition: transform 0.15s; }
+    .card:hover .card__link svg { transform: translateX(2px); }
+
+    footer {
+      border-top: 1px solid var(--color-alabaster);
+      padding: 24px 2rem;
+      text-align: center;
+      font-size: 13px;
+      color: var(--color-granite);
+    }
+    footer a { color: var(--color-blue); font-weight: 500; }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="hero__inner">
+      <div class="hero__eyebrow">ASTRO.org</div>
+      <h1 class="hero__title">Navigation Prototypes</h1>
+      <p class="hero__sub">Explore iterations of the ASTRO.org primary navigation. Each version builds on feedback from the previous round and explores a different layout or interaction direction.</p>
+    </div>
+  </section>
+
+  <main>
+    <div class="section-label">Current iterations</div>
+    <div class="grid">
+
+      <a class="card" href="nav-prototype-v5.html" style="--accent: var(--gradient-brand);">
+        <span class="card__badge card__badge--draft">v5 · In progress</span>
+        <h2 class="card__title">Prototype v5</h2>
+        <p class="card__desc">Next iteration — exploration in progress. Starting point forked from v4.</p>
+        <span class="card__link">
+          Open prototype
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3l5 5-5 5"/></svg>
+        </span>
+      </a>
+
+      <a class="card" href="nav-prototype-v4.html" style="--accent: var(--color-cyan);">
+        <span class="card__badge card__badge--live">v4 · Latest stable</span>
+        <h2 class="card__title">Prototype v4</h2>
+        <p class="card__desc">Style Tile B direction. Refined utility nav, right-aligned primary items, emphasized search, and wider mega-menu middle column.</p>
+        <span class="card__link">
+          Open prototype
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3l5 5-5 5"/></svg>
+        </span>
+      </a>
+
+    </div>
+
+    <div class="section-label">Archive</div>
+    <div class="grid">
+
+      <a class="card" href="nav-prototype-v3.html" style="--accent: var(--color-granite);">
+        <span class="card__badge">v3</span>
+        <h2 class="card__title">Prototype v3</h2>
+        <p class="card__desc">Earlier exploration. Kept for reference and comparison against newer directions.</p>
+        <span class="card__link">
+          Open prototype
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3l5 5-5 5"/></svg>
+        </span>
+      </a>
+
+    </div>
+  </main>
+
+  <footer>
+    Internal prototype gallery · Hosted on GitHub Pages
+  </footer>
+</body>
+</html>
