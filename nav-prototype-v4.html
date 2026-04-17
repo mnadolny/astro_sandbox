@@ -203,7 +203,7 @@
     .nav-items {
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-end;
       height: 100%;
       flex: 1;
     }
@@ -257,15 +257,15 @@
     .util-nav__search {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--color-charcoal);
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-blue);
       transition: color 0.15s;
       margin-right: auto;
     }
-    .util-nav__search:hover { color: var(--color-blue); }
-    .util-nav__search svg { width: 12px; height: 12px; }
+    .util-nav__search:hover { color: var(--color-blue-dark); }
+    .util-nav__search svg { width: 14px; height: 14px; }
 
     /* Become a Member CTA */
     .nav-cta {
@@ -319,7 +319,7 @@
       column-gap: 0;
       row-gap: 0;
     }
-    .mega__inner--3col { grid-template-columns: auto auto 280px; }
+    .mega__inner--3col { grid-template-columns: auto minmax(250px, auto) 280px; }
     .mega__inner--4col { grid-template-columns: repeat(4, minmax(240px, auto)); }
 
     .mega__col {
