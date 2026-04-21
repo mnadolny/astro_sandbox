@@ -1,0 +1,128 @@
+:: FOR New Mega Menu Schema
+++ Search
+++ For Patients
+++ Become a Member (Button)/Welcome Back [Name]+
+++ Log In/ Log Out
+Meetings & Events
+-- Annual Meeting BOX
+---- Attend
+---- Learn
+---- Exhibitors
+---- Become An Exhibitor
+-- Head and Neck Symposium Symposium
+-- Radiopharmaceutical Symposium
+-- Annual Refresher Course
+-- Coding and Coverage Seminar
+-- Advocacy Day
+Practice
+-- Learn & Certify
+---- ASTRO Academy
+---- Guidelines
+---- eContouring
+---- Radiopharmaceutical Therapy
+---- Continuing Certification
+---- Journal Activities
+---- Functional Radiation Medicine
+-- Improve Quality
+---- RO-ILS
+---- Safety is No Accident
+---- Data Standards
+---- Measures (Quality Measures?)- more clear?)
+---- Disaster Management
+---- PQI Templates
+-- Manage Your Practice
+---- Reimbursement
+---- APEx Accreditation
+-- Educate Patients & Others
+---- Patient Videos
+---- Patient Brochures
+---- Radiation Therapy Presentations
+---- Speed of Light Foundation
+Career Pathways
+-- Careers in Radiation Oncology
+---- Physician
+---- Physicist
+---- Nurse
+---- Etc.
+-- Networking
+---- Residents Association (ARRO)
+---- Mentor Connect
+---- Membership Directory
+-- ATRO Committees
+-- Research Career Support (ASTRO ROCKS)
+-- Radiation Oncology-Biology Integration Network (ROBIN)
+Publications
+-- Journals
+---- Red Journal
+---- Practical Radiation Oncology
+------ PRO Instructions for Authors
+---- Advances in Radiation Oncology
+------ Advances Instructions for Authors
+------ Article Spotlights
+-- Society News
+---- ASTROgram
+---- ASTROnews
+---- ASTROblog
+---- Podcasts
+------ On Target
+------ RadOnc Report
+---- President's Corner
+Advocacy
+-- Key Issues
+---- Radiation Oncology Case Rate Program (ROCR)
+------ ROCR FAQs
+---- Cancer Research
+---- Access to Care
+---- Source Security
+---- Disparities in Health Care
+-- Become an Advocate
+---- Resources
+---- Key Legislation
+---- Patient Stories
+-- What's Happening in Washington
+-- ASTRO PAC
+---- ASTRO PAC Donors
+---- ASTRO PAC Toolkit
+---- PAC Board
+---- Donate Now
+About ASTRO
+-- About ASTRO
+---- Mission & Vision
+---- Board & Leadership
+---- Governance
+---- History
+---- What is Radiation Oncology?
+---- Jobs at ASTRO
+-- Press Room
+---- Experts for Media
+---- News Releases
+------ Past News
+---- Press Kits
+>> About ASTRO
+>> Board and Leadership
+>> Governance
+>> Mission and Vision
+>> What is Radiation Oncology
+>> History
+>> Jobs at ASTRO
+>> Membership
+>> Categories and Benefits
+>> ASTRO Policies
+>> Demographics
+>> Workforce
+>> Recognition Awards
+>> Directory
+>> Career Center
+>> Interest Groups
+>> Medical Students
+>> ARRO
+>> Early Career
+>> International
+>> ADROP
+>> SCAROP
+>> Industry
+>> Advertising
+>> Terms of Use and Privacy Policy
+>> Contact Us
+>> Connect With Us
+>> Speed of Light Foundation

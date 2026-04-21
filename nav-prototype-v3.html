@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASTRO.org — Navigation Prototype v3 (Sitemap 3.0)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* ── Primary brand ── */
+      --color-blue:         #0E4C8C;
+      --color-blue-dark:    #0A3A6B;
+      --color-green:        #4E7E3A;
+
+      /* ── Accent ── */
+      --color-cyan:         #3ABEB6;
+      --color-cyan-dark:    #2A9E97;
+      --color-plum:         #C74090;
+
+      /* ── Light tint backgrounds ── */
+      --color-blue-50:      #E6F0FA;
+      --color-cyan-50:      #E3F3EF;
+      --color-cyan-25:      #EAF6F5;
+      --color-plum-50:      #F2DDE9;
+      --color-green-50:     #E5E8DE;
+      --color-ivory:        #FBF5E5;
+      --color-porcelain:    #FFFAF0;
+
+      /* ── Neutrals ── */
+      --color-charcoal:     #58595B;
+      --color-granite:      #979291;
+      --color-alabaster:    #E5E6E5;
+      --color-white:        #FFFFFF;
+      --color-light-bg:     #F4F6F8;
+
+      /* ── Brand gradient ── */
+      --gradient-brand: linear-gradient(135deg, #0E4C8C 0%, #00CCBE 55%, #1C9E4B 100%);
+
+      /* ── Semantic ── */
+      --color-nav-bg:           var(--color-blue);
+      --color-nav-text:         var(--color-white);
+      --color-nav-hover:        var(--color-cyan);
+      --color-dropdown-bg:      var(--color-white);
+      --color-dropdown-heading: var(--color-blue);
+      --color-dropdown-item:    var(--color-charcoal);
+      --color-dropdown-item-hover: var(--color-cyan-50);
+
+      /* ── Layout ── */
+      --nav-height:       72px;
+      --util-nav-height:  40px;
+      --container-max:    1504px;  /* 1440 + 64px padding */
+      --radius-sm:        4px;
+      --radius-md:        8px;
+      --radius-lg:        12px;
+      --radius-pill:      999px;
+
+      /* ── Font ── */
+      --font-primary: 'DM Sans', system-ui, -apple-system, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-primary);
+      color: var(--color-charcoal);
+      background: var(--color-light-bg);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    button { background: none; border: none; cursor: pointer; font-family: inherit; }
+
+    /* ══════════════════════════════════════════════
+       UTILITY NAV
+    ══════════════════════════════════════════════ */
+    .util-nav {
+      background: #F8F9FA;
+      height: var(--util-nav-height);
+      border-bottom: 1px solid #F0F0F0;
+      position: relative;
+      z-index: 1000;
+    }
+    .util-nav__inner {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 16px;
+    }
+
+    .util-nav__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--color-charcoal);
+      white-space: nowrap;
+      transition: color 0.15s;
+    }
+    .util-nav__link:hover { color: var(--color-blue); }
+    .util-nav__link--accent {
+      font-weight: 600;
+      color: var(--color-plum);
+    }
+    .util-nav__link--accent:hover { color: #A83578; }
+    .util-nav__divider {
+      color: var(--color-granite);
+      font-size: 11px;
+      user-select: none;
+    }
+
+    /* Member dropdown */
+    .util-member {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .util-member__btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--color-charcoal);
+      white-space: nowrap;
+      transition: color 0.15s;
+    }
+    .util-member__btn:hover { color: var(--color-blue); }
+    .util-member__btn .chev {
+      font-size: 9px;
+      transition: transform 0.2s;
+      opacity: 0.65;
+    }
+    .util-member.is-open .chev { transform: rotate(180deg); }
+    .util-member__panel {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: calc(100% + 8px);
+      background: var(--color-white);
+      min-width: 200px;
+      border-radius: var(--radius-md);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      border: 1px solid var(--color-alabaster);
+      z-index: 2000;
+      overflow: hidden;
+    }
+    .util-member.is-open .util-member__panel { display: block; }
+    .util-member__panel a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--color-charcoal);
+      border-bottom: 1px solid var(--color-alabaster);
+      transition: background 0.12s;
+    }
+    .util-member__panel a:last-child { border-bottom: none; }
+    .util-member__panel a:hover { background: var(--color-cyan-50); color: var(--color-blue); }
+    .util-member__panel a .ext { font-size: 10px; opacity: 0.45; }
+    .util-member__panel .logout { color: var(--color-plum); font-weight: 600; }
+
+    /* ══════════════════════════════════════════════
+       PRIMARY NAV
+    ══════════════════════════════════════════════ */
+    .primary-nav {
+      background: var(--color-white);
+      height: 56px;
+      border-bottom: 1px solid var(--color-alabaster);
+      position: sticky;
+      top: 0;
+      z-index: 900;
+    }
+    .primary-nav__inner {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 100%;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+    }
+
+    /* Logo */
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .nav-logo svg {
+      height: 42px;
+      width: auto;
+    }
+
+    /* Nav items */
+    .nav-items {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+    }
+    .nav-item__btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 0 16px;
+      height: 100%;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--color-charcoal);
+      transition: color 0.15s;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .nav-item__btn .chev {
+      width: 11px;
+      height: 11px;
+      opacity: 0.35;
+      transition: transform 0.2s, opacity 0.15s;
+      flex-shrink: 0;
+    }
+    .nav-item__btn:hover {
+      color: var(--color-blue);
+    }
+    .nav-item__btn:hover .chev {
+      opacity: 0.5;
+    }
+    .nav-item.is-open .nav-item__btn {
+      color: var(--color-blue);
+    }
+    .nav-item.is-open .nav-item__btn .chev {
+      transform: rotate(180deg);
+      opacity: 0.6;
+    }
+
+    /* Right side of nav */
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-self: end;
+    }
+
+    /* Utility search */
+    .util-nav__search {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-blue);
+      transition: color 0.15s;
+      margin-right: auto;
+    }
+    .util-nav__search:hover { color: var(--color-blue-dark); }
+    .util-nav__search svg { width: 14px; height: 14px; }
+
+    /* Become a Member CTA */
+    .nav-cta {
+      background: var(--color-blue);
+      color: var(--color-white);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 20px;
+      border-radius: var(--radius-pill);
+      white-space: nowrap;
+      transition: background 0.15s;
+      flex-shrink: 0;
+    }
+    .nav-cta:hover { background: var(--color-blue-dark); }
+
+
+    /* Hamburger */
+    .nav-hamburger {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      margin-left: auto;
+      width: 40px;
+      height: 40px;
+      color: var(--color-charcoal);
+    }
+    .nav-hamburger svg { width: 24px; height: 24px; }
+
+    /* ══════════════════════════════════════════════
+       MEGA MENU
+    ══════════════════════════════════════════════ */
+    .mega {
+      position: fixed;
+      left: 50%;
+      background: var(--color-white);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+      z-index: 850;
+      display: none;
+      opacity: 0;
+      transform: translateX(-50%) translateY(-6px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    .mega.is-visible { display: block; }
+    .mega.is-open { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .mega.is-exiting { opacity: 0; transform: translateX(-50%) translateY(0); transition: opacity 0.15s ease; }
+
+    .mega__inner {
+      padding: 28px 32px;
+      display: grid;
+      column-gap: 0;
+      row-gap: 0;
+    }
+    .mega__inner--3col { grid-template-columns: auto minmax(250px, auto) 280px; }
+    .mega__inner--4col { grid-template-columns: repeat(4, minmax(240px, auto)); }
+
+    .mega__col {
+      padding: 0 28px;
+      border-right: 1px solid var(--color-alabaster);
+      min-width: 170px;
+    }
+    .mega__col:first-child { padding-left: 0; }
+    .mega__col:last-child { border-right: none; padding-right: 0; }
+
+    .mega__col-head {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-blue);
+      padding-bottom: 0;
+      margin-bottom: 12px;
+    }
+
+    .mega__links a {
+      display: block;
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--color-charcoal);
+      padding: 7px 10px;
+      margin: 0 -10px;
+      border-radius: var(--radius-sm);
+      line-height: 1.4;
+      transition: background 0.12s, color 0.12s;
+    }
+    .mega__links a:hover {
+      background: var(--color-cyan-50);
+      color: var(--color-blue);
+    }
+    .mega__links a .ext {
+      font-size: 11px;
+      opacity: 0.5;
+    }
+    .mega__links a.strong {
+      font-weight: 600;
+      color: var(--color-blue);
+    }
+    .mega__links a.strong:hover { color: var(--color-blue-dark); }
+    .mega__links a.cta-link {
+      font-weight: 600;
+      color: var(--color-cyan-dark);
+    }
+    .mega__links .sub-note {
+      font-size: 13px;
+      color: var(--color-granite);
+      padding: 2px 10px 6px;
+      margin: 0 -10px;
+      line-height: 1.5;
+    }
+
+    /* Callout card — used sparingly */
+    .mega__callout {
+      background: var(--color-blue-50);
+      border-radius: var(--radius-md);
+      padding: 20px 24px;
+      margin-top: 20px;
+    }
+    .mega__callout-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-cyan-dark);
+      margin-bottom: 6px;
+    }
+    .mega__callout-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--color-blue);
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+    .mega__callout-desc {
+      font-size: 13px;
+      color: var(--color-charcoal);
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
+    .mega__callout-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-blue);
+      transition: color 0.12s;
+    }
+    .mega__callout-link:hover { color: var(--color-cyan-dark); }
+
+    /* View all link */
+    .mega__view-all {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-blue);
+      margin-top: 8px;
+      padding: 4px 0;
+      transition: color 0.12s;
+    }
+    .mega__view-all:hover { color: var(--color-cyan-dark); }
+
+    .mega-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(14,76,140,0.08);
+      z-index: 849;
+    }
+    .mega-overlay.is-visible { display: block; }
+
+    /* ══════════════════════════════════════════════
+       MOBILE NAV
+    ══════════════════════════════════════════════ */
+    .mobile-nav {
+      position: fixed;
+      inset: 0;
+      background: var(--color-white);
+      z-index: 2000;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .mobile-nav.is-open { display: flex; }
+
+    .mob-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      height: 56px;
+      border-bottom: 1px solid var(--color-alabaster);
+      flex-shrink: 0;
+    }
+    .mob-close {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-charcoal);
+    }
+    .mob-close svg { width: 20px; height: 20px; }
+    .mob-body { flex: 1; overflow-y: auto; }
+
+    .mob-l1__btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 16px 20px;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--color-charcoal);
+      border-bottom: 1px solid var(--color-alabaster);
+      text-align: left;
+    }
+    .mob-l1__btn .chev {
+      font-size: 10px;
+      transition: transform 0.2s;
+      opacity: 0.35;
+    }
+    .mob-l1.is-open .mob-l1__btn {
+      color: var(--color-blue);
+      font-weight: 600;
+    }
+    .mob-l1.is-open .mob-l1__btn .chev { transform: rotate(180deg); opacity: 0.6; }
+
+    .mob-l2 {
+      display: none;
+      background: var(--color-light-bg);
+      border-bottom: 1px solid var(--color-alabaster);
+    }
+    .mob-l1.is-open .mob-l2 { display: block; }
+
+    .mob-group__title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-blue);
+      padding: 14px 20px 6px 24px;
+    }
+    .mob-group__links a {
+      display: block;
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--color-charcoal);
+      padding: 8px 20px 8px 36px;
+      border-bottom: 1px solid var(--color-alabaster);
+      border-radius: 0;
+      transition: background 0.12s, color 0.12s;
+    }
+    .mob-group__links a:last-child { border-bottom: none; }
+    .mob-group__links a:hover { background: var(--color-cyan-50); color: var(--color-blue); }
+
+    .mob-footer {
+      padding: 20px;
+      border-top: 1px solid var(--color-alabaster);
+      flex-shrink: 0;
+    }
+    .mob-footer__cta {
+      display: block;
+      background: var(--color-blue);
+      color: var(--color-white);
+      text-align: center;
+      padding: 14px;
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: var(--radius-pill);
+      margin-bottom: 12px;
+      transition: background 0.15s;
+    }
+    .mob-footer__cta:hover { background: var(--color-blue-dark); }
+    .mob-footer__links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 16px;
+      justify-content: center;
+    }
+    .mob-footer__links a {
+      font-size: 13px;
+      color: var(--color-granite);
+      transition: color 0.12s;
+    }
+    .mob-footer__links a:hover { color: var(--color-blue); }
+    .nav-logo--mobile svg { height: 34px; width: auto; }
+
+    /* ══════════════════════════════════════════════
+       EMPTY PAGE BELOW NAV
+    ══════════════════════════════════════════════ */
+    .page-placeholder {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 80px 2rem;
+      text-align: center;
+    }
+    .page-placeholder__label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-cyan);
+      margin-bottom: 8px;
+    }
+    .page-placeholder__title {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--color-blue);
+      letter-spacing: -0.01em;
+      margin-bottom: 8px;
+    }
+    .page-placeholder__desc {
+      font-size: 15px;
+      color: var(--color-granite);
+      line-height: 1.7;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* ══════════════════════════════════════════════
+       FOCUS STYLES
+    ══════════════════════════════════════════════ */
+    :focus-visible {
+      outline: 2px solid var(--color-cyan);
+      outline-offset: 2px;
+    }
+
+    /* ══════════════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════════════ */
+    @media (max-width: 1024px) {
+      .mega__inner--4col { grid-template-columns: repeat(2, auto); }
+      .mega__col { margin-bottom: 20px; }
+    }
+    @media (max-width: 900px) {
+      .nav-items { display: none; }
+      .nav-right { display: none; }
+      .nav-hamburger { display: flex; }
+      .util-nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     UTILITY NAV
+════════════════════════════════════════════════ -->
+<nav class="util-nav" aria-label="Utility navigation">
+  <div class="util-nav__inner">
+    <button class="util-nav__search" aria-label="Search">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6.5" cy="6.5" r="4.5"/><path d="M10 10l4 4"/></svg>
+      Search
+    </button>
+    <a href="#" class="util-nav__link util-nav__link--accent">Speed of Light Foundation</a>
+    <a href="#" class="util-nav__link">For Patients</a>
+    <span class="util-nav__divider">|</span>
+    <div class="util-member" id="memberDrop">
+      <button class="util-member__btn" aria-expanded="false" aria-haspopup="true">
+        Welcome back, Dr. Chen <span class="chev">&#9662;</span>
+      </button>
+      <div class="util-member__panel" role="menu">
+        <a href="#">My Profile</a>
+        <a href="#">ROhub <span class="ext">&#8599;</span></a>
+        <a href="#">ASTRO Academy <span class="ext">&#8599;</span></a>
+        <a href="#">Member Directory</a>
+        <a href="#">Manage Membership</a>
+        <a href="#">Newsletters</a>
+        <a href="#" class="logout">Log Out</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════
+     PRIMARY NAV
+════════════════════════════════════════════════ -->
+<header class="primary-nav" id="primaryNav">
+  <div class="primary-nav__inner">
+    <a href="#" class="nav-logo" aria-label="ASTRO home">
+      <svg width="231" height="37" viewBox="0 0 231 37" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_102_324)"><path d="M23.9976 24.1548C25.2117 26.2054 27.1617 27.3188 29.5834 27.3188C32.0052 27.3188 33.647 25.6707 33.647 23.532C33.647 21.6701 32.4959 20.4938 30.3257 19.3112C27.0988 17.5436 24.677 16.361 24.677 13.2599C24.677 10.3726 27.0988 8.07666 31.1309 8.07666C32.716 8.07666 33.8294 8.20247 34.4207 8.20247C34.578 8.20247 34.7604 8.23392 35.012 8.23392H35.7857V11.4609C35.012 10.1588 33.5841 9.44166 31.6907 9.44166C28.9607 9.44166 27.5013 10.7752 27.5013 12.5805C27.5013 14.7822 29.3947 15.7131 31.8165 16.9901C34.9806 18.6696 36.5972 20.2799 36.5972 22.7017C36.5972 25.8972 33.647 28.7278 29.4891 28.7278C27.7844 28.7278 25.9791 28.2938 23.9913 27.5452V24.161L23.9976 24.1548Z" fill="#0F4C8C"/><path d="M44.2777 19.5942V18.3865C44.2777 15.8074 44.2462 13.0774 44.089 10.1273H40.7991C39.7109 10.1273 38.7485 10.2216 37.7231 10.901L38.4717 8.44775H54.2416C53.4679 9.6555 52.4425 10.0329 50.8888 10.0329L47.102 10.0644C46.9762 13.3228 46.9448 16.2415 46.9448 18.8205C46.9448 24.4378 46.9448 27.5452 47.7185 28.3504H43.4977C44.2399 27.5767 44.2714 24.7209 44.2714 19.5942" fill="#4E7E3A"/><path d="M60.2425 17.6694C63.287 17.6694 64.9288 15.9962 64.9288 13.1089C64.9288 10.6557 63.721 9.47937 61.1735 9.47937C60.6136 9.47937 59.9594 9.47937 59.2172 9.57373C58.997 10.5676 58.9404 12.6497 58.9404 15.7823V17.5499C59.343 17.6442 59.777 17.6757 60.2425 17.6757M63.1298 8.23389C66.2938 8.23389 67.9104 9.63034 67.9104 12.2094C67.9104 14.7884 66.2938 16.7699 63.1927 18.0783L67.6336 24.2554C69.1244 26.306 70.3636 27.671 71.3575 28.3567H68.4073C67.6336 28.3567 67.3191 28.1994 66.8536 27.5515L61.5446 20.1037C60.9218 19.2357 60.4564 18.7702 59.1857 18.7702H58.9404V20.6636C58.9404 24.9788 58.9404 27.4949 59.7141 28.363H55.4933C56.2418 27.5892 56.2733 24.6076 56.2733 19.2671V17.9965C56.2733 12.4107 56.2733 9.27179 55.4933 8.46663H56.3928C59.5568 8.46663 61.7962 8.24647 63.1298 8.24647" fill="#0F4C8C"/><path d="M86.1461 18.9401C86.1461 12.9517 83.6299 9.47311 79.6859 9.47311C75.7419 9.47311 73.1377 12.4547 73.1377 17.9462C73.1377 23.9094 75.7733 27.2307 80.0885 27.2307C83.7809 27.2307 86.1398 24.2491 86.1398 18.9401M69.9988 18.7891C69.9988 11.8634 73.5088 8.07666 80.0256 8.07666C86.1398 8.07666 89.2472 11.3665 89.2472 17.8204C89.2472 24.2743 85.2403 28.7153 79.1261 28.7153C73.0119 28.7153 69.9988 25.1423 69.9988 18.7828" fill="#0F4C8C"/><path d="M14.3608 8.391H10.4985C10.6558 8.69923 10.7501 9.01374 10.7501 9.35342C10.7501 9.78745 9.87578 12.7187 7.69932 17.7888C5.73673 22.3996 3.86851 25.9159 1.84302 28.3439H5.8248C5.73044 28.0357 5.66754 27.7212 5.66754 27.3752C5.66754 26.0039 6.25883 24.6075 6.94448 22.9531L8.28432 19.6822L8.78126 18.531L12.1466 10.4983L15.0716 18.531L15.5308 19.6822H15.5371L18.6822 28.3377H22.079C20.3051 25.8152 17.594 19.1852 14.3608 8.37842" fill="#0F4C8C"/><path d="M21.4313 18.6128C21.3621 18.248 20.9847 18.053 20.6827 17.9146C20.2927 17.7322 19.8776 17.5812 19.4624 17.4617C18.8271 17.273 18.1918 17.1346 17.5313 17.0339C17.5502 17.0905 17.6194 17.2604 17.6571 17.3673C19.3177 17.663 20.0097 18.4681 19.8336 18.9902C19.7455 19.2481 19.3177 19.613 17.9213 19.9212C17.3111 20.0533 16.6884 20.1476 16.0656 20.2168C15.2731 20.3049 14.4742 20.3489 13.6753 20.3615C13.4992 19.7136 12.9079 19.2356 12.2097 19.2356C11.5114 19.2356 10.939 19.6947 10.7503 20.3238C10.1213 20.2986 9.48595 20.2672 8.86321 20.2168C7.84417 20.1414 6.82514 19.9715 5.89417 19.5312C5.47901 19.3299 4.91917 19.072 4.92546 18.531C4.92546 18.3297 5.03239 18.1033 5.1582 17.9523C5.71804 17.3107 6.66159 17.2101 7.44788 17.1346C7.46046 17.1346 7.59885 16.8955 7.59885 16.8955C4.46626 16.8893 0.553672 17.6567 0.119639 18.4241C-0.0816519 18.7826 -0.0313293 19.1035 0.258026 19.3928C1.43432 20.5502 8.83175 20.8962 9.80047 20.9214C10.0961 20.9276 10.398 20.9339 10.6937 20.9339C10.7818 21.6888 11.4234 22.2738 12.2034 22.2738C12.9834 22.2738 13.669 21.6447 13.7193 20.8459C14.6692 20.783 15.6127 20.6949 16.55 20.5565C17.2923 20.4496 18.0282 20.3301 18.7579 20.1665C19.475 20.003 20.211 19.8583 20.8589 19.4935C21.1671 19.3173 21.5068 19.0091 21.4313 18.6191" fill="#4E7E3A"/><path d="M95.8396 0V36.7985" stroke="#0F4C8C" stroke-width="0.339678"/><path d="M105.344 12.4988L104.803 10.7941C104.671 10.3726 104.558 9.90085 104.457 9.50456H104.438C104.338 9.90714 104.231 10.3852 104.111 10.7941L103.577 12.4988H105.351H105.344ZM103.363 13.4549L102.765 15.4175H101.463L103.677 8.50439H105.288L107.533 15.4175H106.181L105.558 13.4549H103.363Z" fill="#0F4C8C"/><path d="M114.572 12.5931C114.528 11.6999 114.478 10.6242 114.49 9.68069H114.459C114.232 10.5299 113.943 11.4671 113.641 12.3415L112.635 15.3357H111.66L110.735 12.3792C110.471 11.4986 110.219 10.555 110.037 9.68069H110.018C109.986 10.5928 109.949 11.6936 109.892 12.6371L109.741 15.4175H108.559L109.018 8.50439H110.678L111.584 11.2847C111.83 12.0962 112.043 12.9139 112.22 13.6876H112.251C112.433 12.9391 112.672 12.0836 112.937 11.2784L113.893 8.51068H115.535L115.937 15.4238H114.704L114.572 12.5994V12.5931Z" fill="#0F4C8C"/><path d="M121.34 12.3477H118.736V14.3795H121.649V15.4111H117.472V8.49805H121.498V9.53595H118.736V11.3161H121.34V12.3477Z" fill="#0F4C8C"/><path d="M124.266 11.65H125.014C125.863 11.65 126.398 11.1971 126.398 10.5115C126.398 9.75034 125.863 9.40437 125.046 9.40437C124.643 9.40437 124.392 9.43582 124.266 9.46728V11.6563V11.65ZM123.014 8.59292C123.486 8.51115 124.196 8.44824 124.92 8.44824C125.914 8.44824 126.593 8.61179 127.052 9.00179C127.43 9.31631 127.65 9.80066 127.65 10.3857C127.65 11.2789 127.046 11.8828 126.398 12.1218V12.1532C126.889 12.3357 127.191 12.82 127.361 13.4868C127.574 14.3486 127.763 15.1474 127.908 15.4179H126.606C126.505 15.2104 126.342 14.6505 126.147 13.7887C125.952 12.8829 125.624 12.5999 124.907 12.581H124.272V15.4242H123.02V8.59921L123.014 8.59292Z" fill="#0F4C8C"/><path d="M130.373 8.49805H129.109V15.4111H130.373V8.49805Z" fill="#0F4C8C"/><path d="M137.029 15.2103C136.733 15.3612 136.073 15.5311 135.242 15.5311C133.047 15.5311 131.713 14.1472 131.713 12.0399C131.713 9.76284 133.292 8.38525 135.406 8.38525C136.236 8.38525 136.834 8.56138 137.085 8.69348L136.809 9.69993C136.481 9.55526 136.029 9.43574 135.456 9.43574C134.053 9.43574 133.034 10.3164 133.034 11.9833C133.034 13.4993 133.928 14.4743 135.444 14.4743C135.959 14.4743 136.488 14.3737 136.821 14.2164L137.029 15.2103Z" fill="#0F4C8C"/><path d="M141.803 12.4988L141.262 10.7941C141.13 10.3726 141.017 9.90085 140.916 9.50456H140.897C140.797 9.90714 140.69 10.3852 140.57 10.7941L140.035 12.4988H141.809H141.803ZM139.822 13.4549L139.224 15.4175H137.922L140.136 8.50439H141.746L143.992 15.4175H142.64L142.017 13.4549H139.822Z" fill="#0F4C8C"/><path d="M145.219 15.4111V8.49805H146.653L148.439 11.4608C148.899 12.2282 149.301 13.0334 149.622 13.7819H149.641C149.559 12.8572 149.528 11.964 149.528 10.9072V8.49805H150.698V15.4111H149.396L147.59 12.3603C147.15 11.6118 146.691 10.7626 146.351 9.98257L146.32 9.99515C146.37 10.8884 146.382 11.8005 146.382 12.939V15.4111H145.225H145.219Z" fill="#0F4C8C"/><path d="M154.761 14.0397C155.17 14.2788 155.786 14.48 156.434 14.48C157.246 14.48 157.699 14.1026 157.699 13.5365C157.699 13.0144 157.353 12.7062 156.466 12.3854C155.327 11.9765 154.598 11.3726 154.598 10.3725C154.598 9.24019 155.541 8.37842 157.038 8.37842C157.787 8.37842 158.34 8.54197 158.699 8.72439L158.391 9.74342C158.145 9.61132 157.661 9.41632 157.019 9.41632C156.22 9.41632 155.868 9.84407 155.868 10.2466C155.868 10.7813 156.271 11.0266 157.189 11.3852C158.391 11.8381 158.976 12.442 158.976 13.4358C158.976 14.5429 158.133 15.5179 156.346 15.5179C155.617 15.5179 154.855 15.3041 154.478 15.0776L154.755 14.0334L154.761 14.0397Z" fill="#0F4C8C"/><path d="M161.347 11.9833C161.347 13.3924 162.058 14.5183 163.266 14.5183C164.473 14.5183 165.172 13.3798 165.172 11.933C165.172 10.6309 164.524 9.38542 163.266 9.38542C162.008 9.38542 161.347 10.5554 161.347 11.9833ZM166.511 11.8827C166.511 14.2038 165.109 15.5248 163.196 15.5248C161.284 15.5248 160.014 14.034 160.014 12.0085C160.014 9.983 161.347 8.38525 163.297 8.38525C165.247 8.38525 166.511 9.91381 166.511 11.8827Z" fill="#0F4C8C"/><path d="M172.808 15.2103C172.512 15.3612 171.852 15.5311 171.022 15.5311C168.826 15.5311 167.493 14.1472 167.493 12.0399C167.493 9.76284 169.072 8.38525 171.185 8.38525C172.016 8.38525 172.613 8.56138 172.865 8.69348L172.588 9.69993C172.261 9.55526 171.808 9.43574 171.236 9.43574C169.833 9.43574 168.814 10.3164 168.814 11.9833C168.814 13.4993 169.707 14.4743 171.223 14.4743C171.739 14.4743 172.267 14.3737 172.601 14.2164L172.808 15.2103Z" fill="#0F4C8C"/><path d="M175.412 8.49805H174.148V15.4111H175.412V8.49805Z" fill="#0F4C8C"/><path d="M180.979 12.3477H178.375V14.3795H181.288V15.4111H177.111V8.49805H181.13V9.53595H178.375V11.3161H180.979V12.3477Z" fill="#0F4C8C"/><path d="M184.08 9.55482H182.105V8.49805H187.332V9.55482H185.338V15.4111H184.08V9.55482Z" fill="#0F4C8C"/><path d="M190.132 15.4111V12.5302L187.949 8.49805H189.383L190.213 10.2719C190.453 10.7877 190.622 11.1714 190.811 11.6432H190.83C191.006 11.2029 191.201 10.7689 191.434 10.2719L192.264 8.49805H193.692L191.396 12.4987V15.4111H190.132Z" fill="#0F4C8C"/><path d="M101.979 20.8086H105.973V21.8465H103.243V23.7588H105.785V24.7904H103.243V27.728H101.979V20.8086Z" fill="#0F4C8C"/><path d="M108.433 24.2997C108.433 25.7088 109.144 26.8347 110.351 26.8347C111.559 26.8347 112.257 25.6962 112.257 24.2494C112.257 22.9473 111.609 21.7018 110.351 21.7018C109.093 21.7018 108.433 22.8718 108.433 24.2997ZM113.597 24.1991C113.597 26.5202 112.188 27.8412 110.282 27.8412C108.376 27.8412 107.099 26.3504 107.099 24.3249C107.099 22.2994 108.433 20.7017 110.383 20.7017C112.333 20.7017 113.597 22.2302 113.597 24.1991Z" fill="#0F4C8C"/><path d="M116.189 23.9601H116.937C117.787 23.9601 118.321 23.5072 118.321 22.8215C118.321 22.0604 117.787 21.7144 116.969 21.7144C116.566 21.7144 116.315 21.7459 116.189 21.7773V23.9664V23.9601ZM114.937 20.903C115.409 20.8212 116.12 20.7583 116.843 20.7583C117.837 20.7583 118.516 20.9219 118.975 21.3119C119.353 21.6264 119.573 22.1107 119.573 22.6957C119.573 23.589 118.969 24.1928 118.321 24.4319V24.4633C118.812 24.6457 119.114 25.1301 119.284 25.7969C119.498 26.6586 119.686 27.4575 119.831 27.728H118.529C118.428 27.5204 118.265 26.9606 118.07 26.0988C117.875 25.193 117.547 24.9099 116.83 24.8911H116.195V27.7343H114.943V20.9093L114.937 20.903Z" fill="#0F4C8C"/><path d="M124.668 23.9601H125.417C126.266 23.9601 126.801 23.5072 126.801 22.8215C126.801 22.0604 126.266 21.7144 125.448 21.7144C125.046 21.7144 124.794 21.7459 124.668 21.7773V23.9664V23.9601ZM123.416 20.903C123.888 20.8212 124.599 20.7583 125.322 20.7583C126.316 20.7583 126.996 20.9219 127.455 21.3119C127.832 21.6264 128.052 22.1107 128.052 22.6957C128.052 23.589 127.448 24.1928 126.801 24.4319V24.4633C127.291 24.6457 127.593 25.1301 127.763 25.7969C127.977 26.6586 128.166 27.4575 128.31 27.728H127.008C126.908 27.5204 126.744 26.9606 126.549 26.0988C126.354 25.193 126.027 24.9099 125.31 24.8911H124.674V27.7343H123.423V20.9093L123.416 20.903Z" fill="#0F4C8C"/><path d="M132.946 24.8151L132.405 23.1104C132.273 22.689 132.16 22.2172 132.059 21.8209H132.04C131.94 22.2235 131.833 22.7016 131.713 23.1104L131.179 24.8151H132.952H132.946ZM130.965 25.7649L130.367 27.7275H129.065L131.279 20.8145H132.89L135.135 27.7275H133.783L133.16 25.7649H130.965Z" fill="#0F4C8C"/><path d="M137.626 26.7593C137.802 26.7907 138.067 26.7907 138.325 26.7907C139.966 26.8033 140.941 25.8975 140.941 24.1425C140.954 22.614 140.067 21.7396 138.488 21.7396C138.085 21.7396 137.802 21.771 137.626 21.8088V26.753V26.7593ZM136.362 20.903C136.915 20.8086 137.626 20.7583 138.375 20.7583C139.671 20.7583 140.564 21.0225 141.199 21.5572C141.866 22.0981 142.275 22.9222 142.275 24.0985C142.275 25.2748 141.853 26.2561 141.199 26.8473C140.514 27.4701 139.413 27.7909 138.067 27.7909C137.324 27.7909 136.777 27.7469 136.362 27.6965V20.8904V20.903Z" fill="#0F4C8C"/><path d="M144.892 20.8086H143.627V27.7217H144.892V20.8086Z" fill="#0F4C8C"/><path d="M149.962 24.8151L149.421 23.1104C149.289 22.689 149.175 22.2172 149.075 21.8209H149.056C148.955 22.2235 148.848 22.7016 148.729 23.1104L148.194 24.8151H149.968H149.962ZM147.98 25.7649L147.383 27.7275H146.08L148.295 20.8145H149.905L152.151 27.7275H150.798L150.175 25.7649H147.98Z" fill="#0F4C8C"/><path d="M153.868 21.8654H151.899V20.8086H157.12V21.8654H155.132V27.728H153.868V21.8654Z" fill="#0F4C8C"/><path d="M159.454 20.8086H158.189V27.7217H159.454V20.8086Z" fill="#0F4C8C"/><path d="M162.127 24.2997C162.127 25.7088 162.838 26.8347 164.046 26.8347C165.253 26.8347 165.952 25.6962 165.952 24.2494C165.952 22.9473 165.304 21.7018 164.046 21.7018C162.788 21.7018 162.127 22.8718 162.127 24.2997ZM167.292 24.1991C167.292 26.5202 165.889 27.8412 163.976 27.8412C162.064 27.8412 160.794 26.3504 160.794 24.3249C160.794 22.2994 162.127 20.7017 164.077 20.7017C166.027 20.7017 167.292 22.2302 167.292 24.1991Z" fill="#0F4C8C"/><path d="M168.631 27.7275V20.8145H170.066L171.852 23.7772C172.311 24.5446 172.714 25.3498 173.035 26.0983H173.053C172.972 25.1737 172.94 24.2804 172.94 23.2237V20.8145H174.11V27.7275H172.808L171.003 24.6767C170.562 23.9282 170.103 23.079 169.764 22.299L169.732 22.3116C169.782 23.2048 169.795 24.1169 169.795 25.2554V27.7275H168.638H168.631Z" fill="#0F4C8C"/><path d="M179.18 24.2997C179.18 25.7088 179.891 26.8347 181.099 26.8347C182.307 26.8347 183.005 25.6962 183.005 24.2494C183.005 22.9473 182.357 21.7018 181.099 21.7018C179.841 21.7018 179.18 22.8718 179.18 24.2997ZM184.345 24.1991C184.345 26.5202 182.942 27.8412 181.03 27.8412C179.117 27.8412 177.847 26.3504 177.847 24.3249C177.847 22.2994 179.18 20.7017 181.13 20.7017C183.08 20.7017 184.345 22.2302 184.345 24.1991Z" fill="#0F4C8C"/><path d="M185.691 27.7275V20.8145H187.125L188.911 23.7772C189.371 24.5446 189.773 25.3498 190.094 26.0983H190.113C190.031 25.1737 190 24.2804 190 23.2237V20.8145H191.17V27.7275H189.867L188.062 24.6767C187.622 23.9282 187.163 23.079 186.823 22.299L186.791 22.3116C186.842 23.2048 186.854 24.1169 186.854 25.2554V27.7275H185.697H185.691Z" fill="#0F4C8C"/><path d="M197.837 27.5203C197.542 27.6713 196.881 27.797 196.051 27.797C193.856 27.797 192.522 26.4573 192.522 24.35C192.522 22.0729 194.101 20.6953 196.215 20.6953C197.045 20.6953 197.642 20.8714 197.894 21.0035L197.617 22.01C197.29 21.8653 196.837 21.7458 196.265 21.7458C194.862 21.7458 193.843 22.6264 193.843 24.2934C193.843 25.8094 194.736 26.7844 196.252 26.7844C196.768 26.7844 197.108 26.7215 197.271 26.6397V24.916H196.051V23.9222H197.837V27.4197V27.5203Z" fill="#0F4C8C"/><path d="M200.612 27.7275V24.8466L198.429 20.8145H199.863L200.693 22.5883C200.933 23.1041 201.102 23.4878 201.291 23.9596H201.31C201.486 23.5193 201.681 23.0853 201.914 22.5883L202.744 20.8145H204.172L201.876 24.8151V27.7275H200.612Z" fill="#0F4C8C"/></g><defs><clipPath id="clip0_102_324"><rect width="231" height="36.7985" fill="white"/></clipPath></defs></svg>
+    </a>
+
+    <nav class="nav-items" aria-label="Primary navigation">
+      <div class="nav-item" data-menu="meetings">
+        <button class="nav-item__btn" aria-expanded="false" aria-haspopup="true">
+          Meetings &amp; Events <svg class="chev" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 3.5L5 6.5L7.5 3.5"/></svg>
+        </button>
+      </div>
+      <div class="nav-item" data-menu="practice">
+        <button class="nav-item__btn" aria-expanded="false" aria-haspopup="true">
+          Practice <svg class="chev" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 3.5L5 6.5L7.5 3.5"/></svg>
+        </button>
+      </div>
+      <div class="nav-item" data-menu="careers">
+        <button class="nav-item__btn" aria-expanded="false" aria-haspopup="true">
+          Career Pathways <svg class="chev" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 3.5L5 6.5L7.5 3.5"/></svg>
+        </button>
+      </div>
+      <div class="nav-item" data-menu="publications">
+        <button class="nav-item__btn" aria-expanded="false" aria-haspopup="true">
+          Publications <svg class="chev" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 3.5L5 6.5L7.5 3.5"/></svg>
+        </button>
+      </div>
+      <div class="nav-item" data-menu="advocacy">
+        <button class="nav-item__btn" aria-expanded="false" aria-haspopup="true">
+          Advocacy <svg class="chev" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 3.5L5 6.5L7.5 3.5"/></svg>
+        </button>
+      </div>
+      <div class="nav-item" data-menu="about">
+        <button class="nav-item__btn" aria-expanded="false" aria-haspopup="true">
+          About ASTRO <svg class="chev" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 3.5L5 6.5L7.5 3.5"/></svg>
+        </button>
+      </div>
+    </nav>
+
+    <div class="nav-right">
+      <a href="#" class="nav-cta">Become a Member</a>
+    </div>
+
+    <button class="nav-hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M3 6h18M3 12h18M3 18h18"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════
+     MEGA MENUS
+════════════════════════════════════════════════ -->
+
+<!-- Meetings & Events -->
+<div class="mega" id="mega-meetings" role="region" aria-label="Meetings &amp; Events menu">
+  <div class="mega__inner mega__inner--3col">
+    <div class="mega__col">
+      <span class="mega__col-head">Annual Meeting</span>
+      <div class="mega__links">
+        <a href="#" class="strong">Attend &#8594;</a>
+        <a href="#">Learn</a>
+        <a href="#">Exhibitors</a>
+        <a href="#">Become an Exhibitor</a>
+      </div>
+    </div>
+    <div class="mega__col">
+      <span class="mega__col-head">Events</span>
+      <div class="mega__links">
+        <a href="#">Head &amp; Neck Symposium</a>
+        <a href="#">Radiopharmaceutical Symposium</a>
+        <a href="#">Annual Refresher Course</a>
+        <a href="#">Coding &amp; Coverage Seminar</a>
+        <a href="#">Advocacy Day</a>
+      </div>
+    </div>
+    <div class="mega__col">
+      <div class="mega__callout">
+        <div class="mega__callout-label">Save the Date</div>
+        <div class="mega__callout-title">ASTRO 2026 Annual Meeting</div>
+        <div class="mega__callout-desc">Join us in San Diego, September 13&ndash;16 for the premier radiation oncology event of the year.</div>
+        <a href="#" class="mega__callout-link">Register Now &#8594;</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Practice -->
+<div class="mega" id="mega-practice" role="region" aria-label="Practice menu">
+  <div class="mega__inner mega__inner--4col">
+    <div class="mega__col">
+      <span class="mega__col-head">Learn &amp; Certify</span>
+      <div class="mega__links">
+        <a href="#" class="strong">ASTRO Academy <span class="ext">&#8599;</span></a>
+        <a href="#">Guidelines</a>
+        <a href="#">eContouring</a>
+        <a href="#">Radiopharmaceutical Therapy</a>
+        <a href="#">Continuing Certification</a>
+        <a href="#">Journal Activities</a>
+        <a href="#">Functional Radiation Medicine</a>
+      </div>
+    </div>
+    <div class="mega__col">
+      <span class="mega__col-head">Improve Quality</span>
+      <div class="mega__links">
+        <a href="#">RO-ILS</a>
+        <a href="#">Safety is No Accident</a>
+        <a href="#">Data Standards</a>
+        <a href="#">Quality Measures</a>
+        <a href="#">Disaster Management</a>
+        <a href="#">PQI Templates</a>
+      </div>
+    </div>
+    <div class="mega__col">
+      <span class="mega__col-head">Manage Your Practice</span>
+      <div class="mega__links">
+        <a href="#" class="strong">Reimbursement &#8594;</a>
+        <a href="#" class="strong">APEx Accreditation &#8594;</a>
+      </div>
+    </div>
+    <div class="mega__col">
+      <span class="mega__col-head">Educate Patients &amp; Others</span>
+      <div class="mega__links">
+        <a href="#">Patient Videos</a>
+        <a href="#">Patient Brochures</a>
+        <a href="#">Radiation Therapy Presentations</a>
+        <a href="#" class="cta-link">Speed of Light Foundation</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Career Pathways -->
+<div class="mega" id="mega-careers" role="region" aria-label="Career Pathways menu">
+  <div class="mega__inner mega__inner--4col">
+    <div class="mega__col">
+      <span class="mega__col-head">Careers in Radiation Oncology</span>
+      <div class="mega__links">
+        <a href="#">Physician</a>
+        <a href="#">Physicist</a>
+        <a href="#">Nurse</a>
+        <a href="#">Dosimetrist</a>
+        <a href="#">Radiation Therapist</a>
+      </div>
+    </div>
+    <div class="mega__col">
+      <span class="mega__col-head">Networking</span>
+      <div class="mega__links">
+        <a href="#" class="strong">Residents Association (ARRO)</a>
+        <a href="#">Mentor Connect</a>
+        <a href="#">Membership Directory</a>
+      </div>
+    </div>
+    <div class="mega__col">
+      <span class="mega__col-head">Committees &amp; Research</span>
+      <div class="mega__links">
+        <a href="#">ASTRO Committees</a>
+        <a href="#" class="strong">Research Career Support (ASTRO ROCKS)</a>
+        <a href="#">Radiation Oncology-Biology Integration Network (ROBIN)</a>
+      </div>
+    </div>
+    <div class="mega__col">
+      <div class="mega__callout">
+        <div class="mega__callout-label">For Every Stage</div>
+        <div class="mega__callout-title">Build your career with ASTRO</div>
+        <div class="mega__callout-desc">From medical student to established practitioner &mdash; find mentors, committees, and funding to grow your path in radiation oncology.</div>
+        <a href="#" class="mega__callout-link">Explore Networking &#8594;</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Publications -->
+<div class="mega" id="mega-publications" role="region" aria-label="Publications menu">
+  <div class="mega__inner mega__inner--3col">
+    <div class="mega__col">
+      <span class="mega__col-head">Journals</span>
+      <div class="mega__links">
+        <a href="#" class="strong">Red Journal</a>
+        <a href="#">Practical Radiation Oncology (PRO)</a>
+        <div class="sub-note">PRO Instructions for Authors</div>
+        <a href="#">Advances in Radiation Oncology</a>
+        <div class="sub-note">Advances Instructions for Authors &middot; Article Spotlights</div>
+      </div>
+    </div>
+    <div class="mega__col">
+      <span class="mega__col-head">Society News</span>
+      <div class="mega__links">
+        <a href="#">ASTROgram</a>
+        <a href="#">ASTROnews</a>
+        <a href="#">ASTROblog</a>
+        <a href="#">President's Corner</a>
+      </div>
+    </div>
+    <div class="mega__col">
+      <span class="mega__col-head">Podcasts</span>
+      <div class="mega__links">
+        <a href="#" class="strong">On Target</a>
+        <a href="#" class="strong">RadOnc Report</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Advocacy -->
+<div class="mega" id="mega-advocacy" role="region" aria-label="Advocacy menu">
+  <div class="mega__inner mega__inner--4col">
+    <div class="mega__col">
+      <span class="mega__col-head">Key Issues</span>
+      <div class="mega__links">
+        <a href="#" class="strong">Radiation Oncology Case Rate Program (ROCR)</a>
+        <div class="sub-note">ROCR FAQs</div>
+        <a href="#">Cancer Research</a>
+        <a href="#">Access to Care</a>
+        <a href="#">Source Security</a>
+        <a href="#">Disparities in Health Care</a>
+      </div>
+    </div>
+    <div class="mega__col">
+      <span class="mega__col-head">Become an Advocate</span>
+      <div class="mega__links">
+        <a href="#">Resources</a>
+        <a href="#">Key Legislation</a>
+        <a href="#">Patient Stories <span class="ext">&#8599;</span></a>
+      </div>
+      <a href="#" class="mega__view-all">What's Happening in Washington &#8594;</a>
+    </div>
+    <div class="mega__col">
+      <span class="mega__col-head">ASTRO PAC</span>
+      <div class="mega__links">
+        <a href="#">ASTRO PAC Donors</a>
+        <a href="#">ASTRO PAC Toolkit</a>
+        <a href="#">PAC Board</a>
+        <a href="#" class="cta-link">Donate Now &#8594;</a>
+      </div>
+    </div>
+    <div class="mega__col">
+      <div class="mega__callout">
+        <div class="mega__callout-label">Take Action</div>
+        <div class="mega__callout-title">ROCR is ASTRO's top priority</div>
+        <div class="mega__callout-desc">The Radiation Oncology Case Rate Program would stabilize reimbursement and improve access to care.</div>
+        <a href="#" class="mega__callout-link">Learn about ROCR &#8594;</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- About ASTRO -->
+<div class="mega" id="mega-about" role="region" aria-label="About ASTRO menu">
+  <div class="mega__inner mega__inner--3col">
+    <div class="mega__col">
+      <span class="mega__col-head">About ASTRO</span>
+      <div class="mega__links">
+        <a href="#">Mission &amp; Vision</a>
+        <a href="#">Board &amp; Leadership</a>
+        <a href="#">Governance</a>
+        <a href="#">History</a>
+        <a href="#">What is Radiation Oncology?</a>
+        <a href="#">Jobs at ASTRO</a>
+      </div>
+    </div>
+    <div class="mega__col">
+      <span class="mega__col-head">Press Room</span>
+      <div class="mega__links">
+        <a href="#">Experts for Media</a>
+        <a href="#">News Releases</a>
+        <div class="sub-note">Past News</div>
+        <a href="#">Press Kits</a>
+      </div>
+    </div>
+    <div class="mega__col">
+      <div class="mega__callout">
+        <div class="mega__callout-label">Join ASTRO</div>
+        <div class="mega__callout-title">Become a Member</div>
+        <div class="mega__callout-desc">Access premier education, advocacy, and a worldwide community of radiation oncology professionals.</div>
+        <a href="#" class="mega__callout-link">View Membership Categories &#8594;</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mega-overlay" id="megaOverlay"></div>
+
+<!-- ═══════════════════════════════════════════════
+     MOBILE NAV
+════════════════════════════════════════════════ -->
+<div class="mobile-nav" id="mobileNav" role="dialog" aria-modal="true" aria-label="Site navigation">
+  <div class="mob-head">
+    <a href="#" class="nav-logo nav-logo--mobile" aria-label="ASTRO home">
+      <svg width="231" height="37" viewBox="0 0 231 37" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_mob)"><path d="M23.9976 24.1548C25.2117 26.2054 27.1617 27.3188 29.5834 27.3188C32.0052 27.3188 33.647 25.6707 33.647 23.532C33.647 21.6701 32.4959 20.4938 30.3257 19.3112C27.0988 17.5436 24.677 16.361 24.677 13.2599C24.677 10.3726 27.0988 8.07666 31.1309 8.07666C32.716 8.07666 33.8294 8.20247 34.4207 8.20247C34.578 8.20247 34.7604 8.23392 35.012 8.23392H35.7857V11.4609C35.012 10.1588 33.5841 9.44166 31.6907 9.44166C28.9607 9.44166 27.5013 10.7752 27.5013 12.5805C27.5013 14.7822 29.3947 15.7131 31.8165 16.9901C34.9806 18.6696 36.5972 20.2799 36.5972 22.7017C36.5972 25.8972 33.647 28.7278 29.4891 28.7278C27.7844 28.7278 25.9791 28.2938 23.9913 27.5452V24.161L23.9976 24.1548Z" fill="#0F4C8C"/><path d="M44.2777 19.5942V18.3865C44.2777 15.8074 44.2462 13.0774 44.089 10.1273H40.7991C39.7109 10.1273 38.7485 10.2216 37.7231 10.901L38.4717 8.44775H54.2416C53.4679 9.6555 52.4425 10.0329 50.8888 10.0329L47.102 10.0644C46.9762 13.3228 46.9448 16.2415 46.9448 18.8205C46.9448 24.4378 46.9448 27.5452 47.7185 28.3504H43.4977C44.2399 27.5767 44.2714 24.7209 44.2714 19.5942" fill="#4E7E3A"/><path d="M60.2425 17.6694C63.287 17.6694 64.9288 15.9962 64.9288 13.1089C64.9288 10.6557 63.721 9.47937 61.1735 9.47937C60.6136 9.47937 59.9594 9.47937 59.2172 9.57373C58.997 10.5676 58.9404 12.6497 58.9404 15.7823V17.5499C59.343 17.6442 59.777 17.6757 60.2425 17.6757M63.1298 8.23389C66.2938 8.23389 67.9104 9.63034 67.9104 12.2094C67.9104 14.7884 66.2938 16.7699 63.1927 18.0783L67.6336 24.2554C69.1244 26.306 70.3636 27.671 71.3575 28.3567H68.4073C67.6336 28.3567 67.3191 28.1994 66.8536 27.5515L61.5446 20.1037C60.9218 19.2357 60.4564 18.7702 59.1857 18.7702H58.9404V20.6636C58.9404 24.9788 58.9404 27.4949 59.7141 28.363H55.4933C56.2418 27.5892 56.2733 24.6076 56.2733 19.2671V17.9965C56.2733 12.4107 56.2733 9.27179 55.4933 8.46663H56.3928C59.5568 8.46663 61.7962 8.24647 63.1298 8.24647" fill="#0F4C8C"/><path d="M86.1461 18.9401C86.1461 12.9517 83.6299 9.47311 79.6859 9.47311C75.7419 9.47311 73.1377 12.4547 73.1377 17.9462C73.1377 23.9094 75.7733 27.2307 80.0885 27.2307C83.7809 27.2307 86.1398 24.2491 86.1398 18.9401M69.9988 18.7891C69.9988 11.8634 73.5088 8.07666 80.0256 8.07666C86.1398 8.07666 89.2472 11.3665 89.2472 17.8204C89.2472 24.2743 85.2403 28.7153 79.1261 28.7153C73.0119 28.7153 69.9988 25.1423 69.9988 18.7828" fill="#0F4C8C"/><path d="M14.3608 8.391H10.4985C10.6558 8.69923 10.7501 9.01374 10.7501 9.35342C10.7501 9.78745 9.87578 12.7187 7.69932 17.7888C5.73673 22.3996 3.86851 25.9159 1.84302 28.3439H5.8248C5.73044 28.0357 5.66754 27.7212 5.66754 27.3752C5.66754 26.0039 6.25883 24.6075 6.94448 22.9531L8.28432 19.6822L8.78126 18.531L12.1466 10.4983L15.0716 18.531L15.5308 19.6822H15.5371L18.6822 28.3377H22.079C20.3051 25.8152 17.594 19.1852 14.3608 8.37842" fill="#0F4C8C"/><path d="M21.4313 18.6128C21.3621 18.248 20.9847 18.053 20.6827 17.9146C20.2927 17.7322 19.8776 17.5812 19.4624 17.4617C18.8271 17.273 18.1918 17.1346 17.5313 17.0339C17.5502 17.0905 17.6194 17.2604 17.6571 17.3673C19.3177 17.663 20.0097 18.4681 19.8336 18.9902C19.7455 19.2481 19.3177 19.613 17.9213 19.9212C17.3111 20.0533 16.6884 20.1476 16.0656 20.2168C15.2731 20.3049 14.4742 20.3489 13.6753 20.3615C13.4992 19.7136 12.9079 19.2356 12.2097 19.2356C11.5114 19.2356 10.939 19.6947 10.7503 20.3238C10.1213 20.2986 9.48595 20.2672 8.86321 20.2168C7.84417 20.1414 6.82514 19.9715 5.89417 19.5312C5.47901 19.3299 4.91917 19.072 4.92546 18.531C4.92546 18.3297 5.03239 18.1033 5.1582 17.9523C5.71804 17.3107 6.66159 17.2101 7.44788 17.1346C7.46046 17.1346 7.59885 16.8955 7.59885 16.8955C4.46626 16.8893 0.553672 17.6567 0.119639 18.4241C-0.0816519 18.7826 -0.0313293 19.1035 0.258026 19.3928C1.43432 20.5502 8.83175 20.8962 9.80047 20.9214C10.0961 20.9276 10.398 20.9339 10.6937 20.9339C10.7818 21.6888 11.4234 22.2738 12.2034 22.2738C12.9834 22.2738 13.669 21.6447 13.7193 20.8459C14.6692 20.783 15.6127 20.6949 16.55 20.5565C17.2923 20.4496 18.0282 20.3301 18.7579 20.1665C19.475 20.003 20.211 19.8583 20.8589 19.4935C21.1671 19.3173 21.5068 19.0091 21.4313 18.6191" fill="#4E7E3A"/><path d="M95.8396 0V36.7985" stroke="#0F4C8C" stroke-width="0.339678"/><path d="M105.344 12.4988L104.803 10.7941C104.671 10.3726 104.558 9.90085 104.457 9.50456H104.438C104.338 9.90714 104.231 10.3852 104.111 10.7941L103.577 12.4988H105.351H105.344ZM103.363 13.4549L102.765 15.4175H101.463L103.677 8.50439H105.288L107.533 15.4175H106.181L105.558 13.4549H103.363Z" fill="#0F4C8C"/><path d="M114.572 12.5931C114.528 11.6999 114.478 10.6242 114.49 9.68069H114.459C114.232 10.5299 113.943 11.4671 113.641 12.3415L112.635 15.3357H111.66L110.735 12.3792C110.471 11.4986 110.219 10.555 110.037 9.68069H110.018C109.986 10.5928 109.949 11.6936 109.892 12.6371L109.741 15.4175H108.559L109.018 8.50439H110.678L111.584 11.2847C111.83 12.0962 112.043 12.9139 112.22 13.6876H112.251C112.433 12.9391 112.672 12.0836 112.937 11.2784L113.893 8.51068H115.535L115.937 15.4238H114.704L114.572 12.5994V12.5931Z" fill="#0F4C8C"/><path d="M121.34 12.3477H118.736V14.3795H121.649V15.4111H117.472V8.49805H121.498V9.53595H118.736V11.3161H121.34V12.3477Z" fill="#0F4C8C"/><path d="M124.266 11.65H125.014C125.863 11.65 126.398 11.1971 126.398 10.5115C126.398 9.75034 125.863 9.40437 125.046 9.40437C124.643 9.40437 124.392 9.43582 124.266 9.46728V11.6563V11.65ZM123.014 8.59292C123.486 8.51115 124.196 8.44824 124.92 8.44824C125.914 8.44824 126.593 8.61179 127.052 9.00179C127.43 9.31631 127.65 9.80066 127.65 10.3857C127.65 11.2789 127.046 11.8828 126.398 12.1218V12.1532C126.889 12.3357 127.191 12.82 127.361 13.4868C127.574 14.3486 127.763 15.1474 127.908 15.4179H126.606C126.505 15.2104 126.342 14.6505 126.147 13.7887C125.952 12.8829 125.624 12.5999 124.907 12.581H124.272V15.4242H123.02V8.59921L123.014 8.59292Z" fill="#0F4C8C"/><path d="M130.373 8.49805H129.109V15.4111H130.373V8.49805Z" fill="#0F4C8C"/><path d="M137.029 15.2103C136.733 15.3612 136.073 15.5311 135.242 15.5311C133.047 15.5311 131.713 14.1472 131.713 12.0399C131.713 9.76284 133.292 8.38525 135.406 8.38525C136.236 8.38525 136.834 8.56138 137.085 8.69348L136.809 9.69993C136.481 9.55526 136.029 9.43574 135.456 9.43574C134.053 9.43574 133.034 10.3164 133.034 11.9833C133.034 13.4993 133.928 14.4743 135.444 14.4743C135.959 14.4743 136.488 14.3737 136.821 14.2164L137.029 15.2103Z" fill="#0F4C8C"/><path d="M141.803 12.4988L141.262 10.7941C141.13 10.3726 141.017 9.90085 140.916 9.50456H140.897C140.797 9.90714 140.69 10.3852 140.57 10.7941L140.035 12.4988H141.809H141.803ZM139.822 13.4549L139.224 15.4175H137.922L140.136 8.50439H141.746L143.992 15.4175H142.64L142.017 13.4549H139.822Z" fill="#0F4C8C"/><path d="M145.219 15.4111V8.49805H146.653L148.439 11.4608C148.899 12.2282 149.301 13.0334 149.622 13.7819H149.641C149.559 12.8572 149.528 11.964 149.528 10.9072V8.49805H150.698V15.4111H149.396L147.59 12.3603C147.15 11.6118 146.691 10.7626 146.351 9.98257L146.32 9.99515C146.37 10.8884 146.382 11.8005 146.382 12.939V15.4111H145.225H145.219Z" fill="#0F4C8C"/><path d="M154.761 14.0397C155.17 14.2788 155.786 14.48 156.434 14.48C157.246 14.48 157.699 14.1026 157.699 13.5365C157.699 13.0144 157.353 12.7062 156.466 12.3854C155.327 11.9765 154.598 11.3726 154.598 10.3725C154.598 9.24019 155.541 8.37842 157.038 8.37842C157.787 8.37842 158.34 8.54197 158.699 8.72439L158.391 9.74342C158.145 9.61132 157.661 9.41632 157.019 9.41632C156.22 9.41632 155.868 9.84407 155.868 10.2466C155.868 10.7813 156.271 11.0266 157.189 11.3852C158.391 11.8381 158.976 12.442 158.976 13.4358C158.976 14.5429 158.133 15.5179 156.346 15.5179C155.617 15.5179 154.855 15.3041 154.478 15.0776L154.755 14.0334L154.761 14.0397Z" fill="#0F4C8C"/><path d="M161.347 11.9833C161.347 13.3924 162.058 14.5183 163.266 14.5183C164.473 14.5183 165.172 13.3798 165.172 11.933C165.172 10.6309 164.524 9.38542 163.266 9.38542C162.008 9.38542 161.347 10.5554 161.347 11.9833ZM166.511 11.8827C166.511 14.2038 165.109 15.5248 163.196 15.5248C161.284 15.5248 160.014 14.034 160.014 12.0085C160.014 9.983 161.347 8.38525 163.297 8.38525C165.247 8.38525 166.511 9.91381 166.511 11.8827Z" fill="#0F4C8C"/><path d="M172.808 15.2103C172.512 15.3612 171.852 15.5311 171.022 15.5311C168.826 15.5311 167.493 14.1472 167.493 12.0399C167.493 9.76284 169.072 8.38525 171.185 8.38525C172.016 8.38525 172.613 8.56138 172.865 8.69348L172.588 9.69993C172.261 9.55526 171.808 9.43574 171.236 9.43574C169.833 9.43574 168.814 10.3164 168.814 11.9833C168.814 13.4993 169.707 14.4743 171.223 14.4743C171.739 14.4743 172.267 14.3737 172.601 14.2164L172.808 15.2103Z" fill="#0F4C8C"/><path d="M175.412 8.49805H174.148V15.4111H175.412V8.49805Z" fill="#0F4C8C"/><path d="M180.979 12.3477H178.375V14.3795H181.288V15.4111H177.111V8.49805H181.13V9.53595H178.375V11.3161H180.979V12.3477Z" fill="#0F4C8C"/><path d="M184.08 9.55482H182.105V8.49805H187.332V9.55482H185.338V15.4111H184.08V9.55482Z" fill="#0F4C8C"/><path d="M190.132 15.4111V12.5302L187.949 8.49805H189.383L190.213 10.2719C190.453 10.7877 190.622 11.1714 190.811 11.6432H190.83C191.006 11.2029 191.201 10.7689 191.434 10.2719L192.264 8.49805H193.692L191.396 12.4987V15.4111H190.132Z" fill="#0F4C8C"/><path d="M101.979 20.8086H105.973V21.8465H103.243V23.7588H105.785V24.7904H103.243V27.728H101.979V20.8086Z" fill="#0F4C8C"/><path d="M108.433 24.2997C108.433 25.7088 109.144 26.8347 110.351 26.8347C111.559 26.8347 112.257 25.6962 112.257 24.2494C112.257 22.9473 111.609 21.7018 110.351 21.7018C109.093 21.7018 108.433 22.8718 108.433 24.2997ZM113.597 24.1991C113.597 26.5202 112.188 27.8412 110.282 27.8412C108.376 27.8412 107.099 26.3504 107.099 24.3249C107.099 22.2994 108.433 20.7017 110.383 20.7017C112.333 20.7017 113.597 22.2302 113.597 24.1991Z" fill="#0F4C8C"/><path d="M116.189 23.9601H116.937C117.787 23.9601 118.321 23.5072 118.321 22.8215C118.321 22.0604 117.787 21.7144 116.969 21.7144C116.566 21.7144 116.315 21.7459 116.189 21.7773V23.9664V23.9601ZM114.937 20.903C115.409 20.8212 116.12 20.7583 116.843 20.7583C117.837 20.7583 118.516 20.9219 118.975 21.3119C119.353 21.6264 119.573 22.1107 119.573 22.6957C119.573 23.589 118.969 24.1928 118.321 24.4319V24.4633C118.812 24.6457 119.114 25.1301 119.284 25.7969C119.498 26.6586 119.686 27.4575 119.831 27.728H118.529C118.428 27.5204 118.265 26.9606 118.07 26.0988C117.875 25.193 117.547 24.9099 116.83 24.8911H116.195V27.7343H114.943V20.9093L114.937 20.903Z" fill="#0F4C8C"/><path d="M124.668 23.9601H125.417C126.266 23.9601 126.801 23.5072 126.801 22.8215C126.801 22.0604 126.266 21.7144 125.448 21.7144C125.046 21.7144 124.794 21.7459 124.668 21.7773V23.9664V23.9601ZM123.416 20.903C123.888 20.8212 124.599 20.7583 125.322 20.7583C126.316 20.7583 126.996 20.9219 127.455 21.3119C127.832 21.6264 128.052 22.1107 128.052 22.6957C128.052 23.589 127.448 24.1928 126.801 24.4319V24.4633C127.291 24.6457 127.593 25.1301 127.763 25.7969C127.977 26.6586 128.166 27.4575 128.31 27.728H127.008C126.908 27.5204 126.744 26.9606 126.549 26.0988C126.354 25.193 126.027 24.9099 125.31 24.8911H124.674V27.7343H123.423V20.9093L123.416 20.903Z" fill="#0F4C8C"/><path d="M132.946 24.8151L132.405 23.1104C132.273 22.689 132.16 22.2172 132.059 21.8209H132.04C131.94 22.2235 131.833 22.7016 131.713 23.1104L131.179 24.8151H132.952H132.946ZM130.965 25.7649L130.367 27.7275H129.065L131.279 20.8145H132.89L135.135 27.7275H133.783L133.16 25.7649H130.965Z" fill="#0F4C8C"/><path d="M137.626 26.7593C137.802 26.7907 138.067 26.7907 138.325 26.7907C139.966 26.8033 140.941 25.8975 140.941 24.1425C140.954 22.614 140.067 21.7396 138.488 21.7396C138.085 21.7396 137.802 21.771 137.626 21.8088V26.753V26.7593ZM136.362 20.903C136.915 20.8086 137.626 20.7583 138.375 20.7583C139.671 20.7583 140.564 21.0225 141.199 21.5572C141.866 22.0981 142.275 22.9222 142.275 24.0985C142.275 25.2748 141.853 26.2561 141.199 26.8473C140.514 27.4701 139.413 27.7909 138.067 27.7909C137.324 27.7909 136.777 27.7469 136.362 27.6965V20.8904V20.903Z" fill="#0F4C8C"/><path d="M144.892 20.8086H143.627V27.7217H144.892V20.8086Z" fill="#0F4C8C"/><path d="M149.962 24.8151L149.421 23.1104C149.289 22.689 149.175 22.2172 149.075 21.8209H149.056C148.955 22.2235 148.848 22.7016 148.729 23.1104L148.194 24.8151H149.968H149.962ZM147.98 25.7649L147.383 27.7275H146.08L148.295 20.8145H149.905L152.151 27.7275H150.798L150.175 25.7649H147.98Z" fill="#0F4C8C"/><path d="M153.868 21.8654H151.899V20.8086H157.12V21.8654H155.132V27.728H153.868V21.8654Z" fill="#0F4C8C"/><path d="M159.454 20.8086H158.189V27.7217H159.454V20.8086Z" fill="#0F4C8C"/><path d="M162.127 24.2997C162.127 25.7088 162.838 26.8347 164.046 26.8347C165.253 26.8347 165.952 25.6962 165.952 24.2494C165.952 22.9473 165.304 21.7018 164.046 21.7018C162.788 21.7018 162.127 22.8718 162.127 24.2997ZM167.292 24.1991C167.292 26.5202 165.889 27.8412 163.976 27.8412C162.064 27.8412 160.794 26.3504 160.794 24.3249C160.794 22.2994 162.127 20.7017 164.077 20.7017C166.027 20.7017 167.292 22.2302 167.292 24.1991Z" fill="#0F4C8C"/><path d="M168.631 27.7275V20.8145H170.066L171.852 23.7772C172.311 24.5446 172.714 25.3498 173.035 26.0983H173.053C172.972 25.1737 172.94 24.2804 172.94 23.2237V20.8145H174.11V27.7275H172.808L171.003 24.6767C170.562 23.9282 170.103 23.079 169.764 22.299L169.732 22.3116C169.782 23.2048 169.795 24.1169 169.795 25.2554V27.7275H168.638H168.631Z" fill="#0F4C8C"/><path d="M179.18 24.2997C179.18 25.7088 179.891 26.8347 181.099 26.8347C182.307 26.8347 183.005 25.6962 183.005 24.2494C183.005 22.9473 182.357 21.7018 181.099 21.7018C179.841 21.7018 179.18 22.8718 179.18 24.2997ZM184.345 24.1991C184.345 26.5202 182.942 27.8412 181.03 27.8412C179.117 27.8412 177.847 26.3504 177.847 24.3249C177.847 22.2994 179.18 20.7017 181.13 20.7017C183.08 20.7017 184.345 22.2302 184.345 24.1991Z" fill="#0F4C8C"/><path d="M185.691 27.7275V20.8145H187.125L188.911 23.7772C189.371 24.5446 189.773 25.3498 190.094 26.0983H190.113C190.031 25.1737 190 24.2804 190 23.2237V20.8145H191.17V27.7275H189.867L188.062 24.6767C187.622 23.9282 187.163 23.079 186.823 22.299L186.791 22.3116C186.842 23.2048 186.854 24.1169 186.854 25.2554V27.7275H185.697H185.691Z" fill="#0F4C8C"/><path d="M197.837 27.5203C197.542 27.6713 196.881 27.797 196.051 27.797C193.856 27.797 192.522 26.4573 192.522 24.35C192.522 22.0729 194.101 20.6953 196.215 20.6953C197.045 20.6953 197.642 20.8714 197.894 21.0035L197.617 22.01C197.29 21.8653 196.837 21.7458 196.265 21.7458C194.862 21.7458 193.843 22.6264 193.843 24.2934C193.843 25.8094 194.736 26.7844 196.252 26.7844C196.768 26.7844 197.108 26.7215 197.271 26.6397V24.916H196.051V23.9222H197.837V27.4197V27.5203Z" fill="#0F4C8C"/><path d="M200.612 27.7275V24.8466L198.429 20.8145H199.863L200.693 22.5883C200.933 23.1041 201.102 23.4878 201.291 23.9596H201.31C201.486 23.5193 201.681 23.0853 201.914 22.5883L202.744 20.8145H204.172L201.876 24.8151V27.7275H200.612Y" fill="#0F4C8C"/></g><defs><clipPath id="clip0_mob"><rect width="231" height="36.7985" fill="white"/></clipPath></defs></svg>
+    </a>
+    <button class="mob-close" id="mobileNavClose" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M18 6L6 18M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
+  <div class="mob-body">
+    <!-- Meetings & Events -->
+    <div class="mob-l1">
+      <button class="mob-l1__btn">Meetings &amp; Events <span class="chev">&#9662;</span></button>
+      <div class="mob-l2">
+        <div class="mob-group">
+          <div class="mob-group__title">Annual Meeting</div>
+          <div class="mob-group__links">
+            <a href="#">Attend</a><a href="#">Learn</a><a href="#">Exhibitors</a><a href="#">Become an Exhibitor</a>
+          </div>
+        </div>
+        <div class="mob-group">
+          <div class="mob-group__title">Events</div>
+          <div class="mob-group__links">
+            <a href="#">Head &amp; Neck Symposium</a><a href="#">Radiopharmaceutical Symposium</a>
+            <a href="#">Annual Refresher Course</a><a href="#">Coding &amp; Coverage Seminar</a><a href="#">Advocacy Day</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Practice -->
+    <div class="mob-l1">
+      <button class="mob-l1__btn">Practice <span class="chev">&#9662;</span></button>
+      <div class="mob-l2">
+        <div class="mob-group">
+          <div class="mob-group__title">Learn &amp; Certify</div>
+          <div class="mob-group__links">
+            <a href="#">ASTRO Academy &#8599;</a><a href="#">Guidelines</a>
+            <a href="#">eContouring</a><a href="#">Radiopharmaceutical Therapy</a>
+            <a href="#">Continuing Certification</a><a href="#">Journal Activities</a>
+            <a href="#">Functional Radiation Medicine</a>
+          </div>
+        </div>
+        <div class="mob-group">
+          <div class="mob-group__title">Improve Quality</div>
+          <div class="mob-group__links">
+            <a href="#">RO-ILS</a><a href="#">Safety is No Accident</a>
+            <a href="#">Data Standards</a><a href="#">Quality Measures</a>
+            <a href="#">Disaster Management</a><a href="#">PQI Templates</a>
+          </div>
+        </div>
+        <div class="mob-group">
+          <div class="mob-group__title">Manage Your Practice</div>
+          <div class="mob-group__links">
+            <a href="#">Reimbursement</a><a href="#">APEx Accreditation</a>
+          </div>
+        </div>
+        <div class="mob-group">
+          <div class="mob-group__title">Educate Patients &amp; Others</div>
+          <div class="mob-group__links">
+            <a href="#">Patient Videos</a><a href="#">Patient Brochures</a>
+            <a href="#">Radiation Therapy Presentations</a><a href="#">Speed of Light Foundation</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Career Pathways -->
+    <div class="mob-l1">
+      <button class="mob-l1__btn">Career Pathways <span class="chev">&#9662;</span></button>
+      <div class="mob-l2">
+        <div class="mob-group">
+          <div class="mob-group__title">Careers in Radiation Oncology</div>
+          <div class="mob-group__links">
+            <a href="#">Physician</a><a href="#">Physicist</a>
+            <a href="#">Nurse</a><a href="#">Dosimetrist</a><a href="#">Radiation Therapist</a>
+          </div>
+        </div>
+        <div class="mob-group">
+          <div class="mob-group__title">Networking</div>
+          <div class="mob-group__links">
+            <a href="#">Residents Association (ARRO)</a><a href="#">Mentor Connect</a>
+            <a href="#">Membership Directory</a>
+          </div>
+        </div>
+        <div class="mob-group">
+          <div class="mob-group__title">Committees &amp; Research</div>
+          <div class="mob-group__links">
+            <a href="#">ASTRO Committees</a>
+            <a href="#">Research Career Support (ASTRO ROCKS)</a>
+            <a href="#">Radiation Oncology-Biology Integration Network (ROBIN)</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Publications -->
+    <div class="mob-l1">
+      <button class="mob-l1__btn">Publications <span class="chev">&#9662;</span></button>
+      <div class="mob-l2">
+        <div class="mob-group">
+          <div class="mob-group__title">Journals</div>
+          <div class="mob-group__links">
+            <a href="#">Red Journal</a>
+            <a href="#">Practical Radiation Oncology (PRO)</a>
+            <a href="#">Advances in Radiation Oncology</a>
+          </div>
+        </div>
+        <div class="mob-group">
+          <div class="mob-group__title">Society News</div>
+          <div class="mob-group__links">
+            <a href="#">ASTROgram</a><a href="#">ASTROnews</a>
+            <a href="#">ASTROblog</a><a href="#">President's Corner</a>
+          </div>
+        </div>
+        <div class="mob-group">
+          <div class="mob-group__title">Podcasts</div>
+          <div class="mob-group__links">
+            <a href="#">On Target</a><a href="#">RadOnc Report</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Advocacy -->
+    <div class="mob-l1">
+      <button class="mob-l1__btn">Advocacy <span class="chev">&#9662;</span></button>
+      <div class="mob-l2">
+        <div class="mob-group">
+          <div class="mob-group__title">Key Issues</div>
+          <div class="mob-group__links">
+            <a href="#">Radiation Oncology Case Rate Program (ROCR)</a>
+            <a href="#">Cancer Research</a><a href="#">Access to Care</a>
+            <a href="#">Source Security</a><a href="#">Disparities in Health Care</a>
+          </div>
+        </div>
+        <div class="mob-group">
+          <div class="mob-group__title">Become an Advocate</div>
+          <div class="mob-group__links">
+            <a href="#">Resources</a><a href="#">Key Legislation</a>
+            <a href="#">Patient Stories &#8599;</a>
+            <a href="#">What's Happening in Washington</a>
+          </div>
+        </div>
+        <div class="mob-group">
+          <div class="mob-group__title">ASTRO PAC</div>
+          <div class="mob-group__links">
+            <a href="#">ASTRO PAC Donors</a><a href="#">ASTRO PAC Toolkit</a>
+            <a href="#">PAC Board</a><a href="#">Donate Now</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- About ASTRO -->
+    <div class="mob-l1">
+      <button class="mob-l1__btn">About ASTRO <span class="chev">&#9662;</span></button>
+      <div class="mob-l2">
+        <div class="mob-group">
+          <div class="mob-group__title">About ASTRO</div>
+          <div class="mob-group__links">
+            <a href="#">Mission &amp; Vision</a><a href="#">Board &amp; Leadership</a>
+            <a href="#">Governance</a><a href="#">History</a>
+            <a href="#">What is Radiation Oncology?</a><a href="#">Jobs at ASTRO</a>
+          </div>
+        </div>
+        <div class="mob-group">
+          <div class="mob-group__title">Press Room</div>
+          <div class="mob-group__links">
+            <a href="#">Experts for Media</a><a href="#">News Releases</a>
+            <a href="#">Press Kits</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mob-footer">
+    <a href="#" class="mob-footer__cta">Become a Member</a>
+    <div class="mob-footer__links">
+      <a href="#">For Patients</a>
+      <a href="#">Speed of Light Foundation</a>
+      <a href="#">Search</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════════════ -->
+<script>
+(function() {
+  'use strict';
+
+  // ── Desktop Mega Menu (click to open/close, crossfade between) ──
+  const navItems = document.querySelectorAll('.nav-item');
+  const megaOverlay = document.getElementById('megaOverlay');
+  let currentMenu = null;
+
+  function positionMega(mega) {
+    const navRect = document.getElementById('primaryNav').getBoundingClientRect();
+    mega.style.top = navRect.bottom + 'px';
+  }
+
+  function openMega(menuId) {
+    const oldMenuId = currentMenu;
+    const trigger = document.querySelector(`.nav-item[data-menu="${menuId}"]`);
+    const mega = document.getElementById('mega-' + menuId);
+    if (!trigger || !mega) return;
+
+    // Switching between menus — crossfade
+    if (oldMenuId && oldMenuId !== menuId) {
+      const oldTrigger = document.querySelector(`.nav-item[data-menu="${oldMenuId}"]`);
+      const oldMega = document.getElementById('mega-' + oldMenuId);
+
+      // Deactivate old trigger
+      if (oldTrigger) {
+        oldTrigger.classList.remove('is-open');
+        oldTrigger.querySelector('.nav-item__btn').setAttribute('aria-expanded', 'false');
+      }
+
+      // Fade out old menu
+      if (oldMega) {
+        oldMega.classList.add('is-exiting');
+        oldMega.classList.remove('is-open');
+        setTimeout(() => {
+          oldMega.classList.remove('is-visible', 'is-exiting');
+        }, 150);
+      }
+    } else if (!oldMenuId) {
+      // First open — just show overlay
+      megaOverlay.classList.add('is-visible');
+    }
+
+    // Activate new trigger
+    trigger.classList.add('is-open');
+    trigger.querySelector('.nav-item__btn').setAttribute('aria-expanded', 'true');
+    currentMenu = menuId;
+
+    // Show and position new menu
+    positionMega(mega);
+    mega.classList.add('is-visible');
+    requestAnimationFrame(() => {
+      mega.classList.add('is-open');
+    });
+  }
+
+  function closeMega(immediate) {
+    if (!currentMenu) return;
+    const trigger = document.querySelector(`.nav-item[data-menu="${currentMenu}"]`);
+    const mega = document.getElementById('mega-' + currentMenu);
+    if (!trigger || !mega) return;
+
+    trigger.classList.remove('is-open');
+    trigger.querySelector('.nav-item__btn').setAttribute('aria-expanded', 'false');
+    megaOverlay.classList.remove('is-visible');
+
+    if (immediate) {
+      mega.classList.remove('is-open', 'is-visible');
+      currentMenu = null;
+    } else {
+      mega.classList.remove('is-open');
+      currentMenu = null;
+      setTimeout(() => {
+        mega.classList.remove('is-visible');
+      }, 200);
+    }
+  }
+
+  navItems.forEach(item => {
+    const menuId = item.dataset.menu;
+    item.querySelector('.nav-item__btn').addEventListener('click', (e) => {
+      e.preventDefault();
+      if (currentMenu === menuId) {
+        closeMega();
+      } else {
+        openMega(menuId);
+      }
+    });
+  });
+
+  // Close when clicking the overlay or anywhere outside
+  megaOverlay.addEventListener('click', () => closeMega());
+  document.addEventListener('click', (e) => {
+    if (!currentMenu) return;
+    const mega = document.getElementById('mega-' + currentMenu);
+    const navBar = document.getElementById('primaryNav');
+    if (!mega.contains(e.target) && !navBar.contains(e.target)) {
+      closeMega();
+    }
+  });
+
+  // Close on ESC
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeMega();
+      closeMemberDrop();
+      closeMobileNav();
+    }
+  });
+
+  // ── Member Dropdown ──
+  const memberDrop = document.getElementById('memberDrop');
+  const memberBtn = memberDrop.querySelector('.util-member__btn');
+
+  function closeMemberDrop() {
+    memberDrop.classList.remove('is-open');
+    memberBtn.setAttribute('aria-expanded', 'false');
+  }
+
+  memberBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = memberDrop.classList.toggle('is-open');
+    memberBtn.setAttribute('aria-expanded', isOpen);
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!memberDrop.contains(e.target)) closeMemberDrop();
+  });
+
+  // ── Mobile Nav ──
+  const mobileNav = document.getElementById('mobileNav');
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const mobileNavClose = document.getElementById('mobileNavClose');
+
+  function openMobileNav() {
+    mobileNav.classList.add('is-open');
+    hamburgerBtn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMobileNav() {
+    mobileNav.classList.remove('is-open');
+    hamburgerBtn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  hamburgerBtn.addEventListener('click', openMobileNav);
+  mobileNavClose.addEventListener('click', closeMobileNav);
+
+  // Mobile accordion
+  document.querySelectorAll('.mob-l1__btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const parent = btn.parentElement;
+      const wasOpen = parent.classList.contains('is-open');
+      // Close all
+      document.querySelectorAll('.mob-l1').forEach(el => el.classList.remove('is-open'));
+      // Toggle clicked
+      if (!wasOpen) parent.classList.add('is-open');
+    });
+  });
+
+  // ── FIGMA CAPTURE HELPER: force mega menu open ──
+  // Remove this block after capturing
+  const urlHash = window.location.hash;
+  if (urlHash.includes('figmacapture') && urlHash.includes('forcemega=')) {
+    const match = urlHash.match(/forcemega=([a-z-]+)/);
+    if (match) {
+      const menuId = match[1];
+      setTimeout(() => {
+        openMega(menuId);
+        // Disable all close behavior so menu stays open during capture
+        closeMega = function() {};
+        megaOverlay.removeEventListener('click', closeMega);
+        document.removeEventListener('click', closeMega);
+      }, 200);
+    }
+  }
+})();
+</script>
+<script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+
+</body>
+</html>
