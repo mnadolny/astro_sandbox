@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASTRO.org — Navigation Prototype v4</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-blue:         #0E4C8C;
+      --color-blue-dark:    #0A3A6B;
+      --color-blue-50:      #E6F0FA;
+      --color-cyan:         #3ABEB6;
+      --color-cyan-dark:    #2A9E97;
+      --color-cyan-50:      #E3F3EF;
+      --color-green:        #4E7E3A;
+      --color-plum:         #C74090;
+      --color-charcoal:     #58595B;
+      --color-granite:      #979291;
+      --color-alabaster:    #E5E6E5;
+      --color-white:        #FFFFFF;
+      --color-light-bg:     #F4F6F8;
+
+      --nav-height:        68px;
+      --util-height:       38px;
+      --container-max:     1504px;
+      --radius-sm:         4px;
+      --radius-md:         8px;
+      --radius-pill:       999px;
+      --font-primary:      'DM Sans', system-ui, -apple-system, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-primary);
+      color: var(--color-charcoal);
+      background: var(--color-light-bg);
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    button { background: none; border: none; cursor: pointer; font-family: inherit; }
+
+    /* ════════════════════════════════════
+       UTILITY NAV
+    ════════════════════════════════════ */
+    .util-nav {
+      height: var(--util-height);
+      background: var(--color-white);
+      border-bottom: 1px solid var(--color-alabaster);
+      position: relative;
+      z-index: 1000;
+    }
+    .util-nav__inner {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 20px;
+    }
+    .util-nav__link {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-charcoal);
+      transition: color 0.15s;
+      white-space: nowrap;
+    }
+    .util-nav__link:hover { color: var(--color-blue); }
+    .util-nav__sep {
+      width: 1px;
+      height: 14px;
+      background: var(--color-alabaster);
+      flex-shrink: 0;
+    }
+
+    /* Member dropdown */
+    .util-member {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .util-member__btn {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-charcoal);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.15s;
+      white-space: nowrap;
+    }
+    .util-member__btn:hover { color: var(--color-blue); }
+    .util-member__btn .chev {
+      font-size: 9px;
+      opacity: 0.5;
+      transition: transform 0.2s;
+    }
+    .util-member.is-open .chev { transform: rotate(180deg); }
+    .util-member__panel {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: calc(100% + 8px);
+      background: var(--color-white);
+      min-width: 192px;
+      border-radius: var(--radius-md);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.13);
+      border: 1px solid var(--color-alabaster);
+      z-index: 2000;
+      overflow: hidden;
+    }
+    .util-member.is-open .util-member__panel { display: block; }
+    .util-member__panel a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 14px;
+      font-size: 13px;
+      color: var(--color-charcoal);
+      border-bottom: 1px solid var(--color-alabaster);
+      transition: background 0.1s, color 0.1s;
+    }
+    .util-member__panel a:last-child { border-bottom: none; }
+    .util-member__panel a:hover { background: var(--color-blue-50); color: var(--color-blue); }
+    .util-member__panel a.logout { color: var(--color-plum); font-weight: 600; }
+    .util-member__panel a .ext { font-size: 10px; opacity: 0.45; }
+
+    /* ════════════════════════════════════
+       PRIMARY NAV
+    ════════════════════════════════════ */
+    .primary-nav {
+      height: var(--nav-height);
+      background: var(--color-white);
+      border-bottom: 3px solid var(--color-blue);
+      position: sticky;
+      top: 0;
+      z-index: 900;
+    }
+    .primary-nav__inner {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 100%;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .nav-logo img {
+      height: 42px;
+      width: auto;
+      display: block;
+    }
+
+    /* Nav item list */
+    .nav-items {
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      height: 100%;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: stretch;
+      position: relative;
+    }
+
+    .nav-item__btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 0 15px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--color-charcoal);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: color 0.15s;
+      position: relative;
+    }
+
+    /* Active indicator — bottom stripe that matches the nav border */
+    .nav-item__btn::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 15px;
+      right: 15px;
+      height: 3px;
+      background: var(--color-blue);
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform 0.2s ease;
+    }
+
+    .nav-item__btn:hover { color: var(--color-blue); }
+    .nav-item__btn:hover::after { transform: scaleX(1); }
+    .nav-item.is-open .nav-item__btn { color: var(--color-blue); }
+    .nav-item.is-open .nav-item__btn::after { transform: scaleX(1); }
+
+    .nav-item__btn .chev {
+      width: 10px;
+      height: 10px;
+      opacity: 0.35;
+      flex-shrink: 0;
+      transition: transform 0.2s, opacity 0.15s;
+    }
+    .nav-item.is-open .nav-item__btn .chev {
+      transform: rotate(180deg);
+      opacity: 0.65;
+    }
+
+    /* Right cluster */
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-self: end;
+    }
+    .nav-search {
+      width: 36px;
+      height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      color: var(--color-charcoal);
+      transition: background 0.15s, color 0.15s;
+    }
+    .nav-search:hover { background: var(--color-blue-50); color: var(--color-blue); }
+    .nav-search svg { width: 20px; height: 20px; }
+    .nav-cta {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--color-white);
+      background: var(--color-blue);
+      padding: 8px 20px;
+      border-radius: var(--radius-pill);
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+    .nav-cta:hover { background: var(--color-blue-dark); }
+
+    .nav-hamburger {
+      display: none;
+      width: 40px;
+      height: 40px;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-charcoal);
+    }
+    .nav-hamburger svg { width: 24px; height: 24px; }
+
+    /* ════════════════════════════════════
+       DROPDOWN  — NCOA-style
+       [2-col link list | description panel]
+       [──────────── see all footer ──────]
+    ════════════════════════════════════ */
+    .drop {
+      position: fixed;
+      left: 50%;
+      background: var(--color-white);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+      border-radius: 0 0 var(--radius-md) var(--radius-md);
+      z-index: 850;
+      display: none;
+      opacity: 0;
+      min-width: 700px;
+      max-width: 800px;
+      transform: translateX(-50%) translateY(-6px);
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+    .drop.is-visible { display: block; }
+    .drop.is-open {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    .drop.is-exiting {
+      opacity: 0;
+      transform: translateX(-50%) translateY(0);
+      transition: opacity 0.12s ease;
+    }
+
+    /* Body: link columns + description panel */
+    .drop__body {
+      display: flex;
+      align-items: stretch;
+      padding: 28px 32px 28px;
+    }
+
+    /* Left wrapper: link grid + see-all grouped together */
+    .drop__left {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding-right: 28px;
+      border-right: 1px solid var(--color-alabaster);
+    }
+
+    /* Two-column flat link grid */
+    .drop__links {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-content: start;
+      gap: 0 24px;
+    }
+    .drop__links a {
+      display: block;
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--color-charcoal);
+      padding: 8px 8px;
+      margin: 0 -8px;
+      border-radius: var(--radius-sm);
+      line-height: 1.35;
+      transition: background 0.12s, color 0.12s;
+    }
+    .drop__links a:hover {
+      background: var(--color-blue-50);
+      color: var(--color-blue);
+    }
+
+    /* Description panel */
+    .drop__panel {
+      width: 218px;
+      flex-shrink: 0;
+      padding-left: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+    .drop__panel-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-cyan-dark);
+      margin-bottom: 8px;
+    }
+    .drop__panel-title {
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--color-blue);
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+    .drop__panel-desc {
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--color-charcoal);
+    }
+
+    /* See-all — sits below the link grid, grouped with the links column */
+    .drop__see-all {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--color-blue);
+      margin-top: 16px;
+      transition: color 0.12s;
+    }
+    .drop__see-all:hover { color: var(--color-cyan-dark); }
+    .drop__see-all:hover .drop__arrow { background: var(--color-cyan-dark); }
+    .drop__arrow {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--color-blue);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.12s;
+    }
+    .drop__arrow svg {
+      width: 11px;
+      height: 11px;
+      color: var(--color-white);
+    }
+
+    /* Overlay */
+    .drop-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(14,76,140,0.06);
+      z-index: 849;
+    }
+    .drop-overlay.is-visible { display: block; }
+
+    /* ════════════════════════════════════
+       MOBILE NAV
+    ════════════════════════════════════ */
+    .mobile-nav {
+      position: fixed;
+      inset: 0;
+      background: var(--color-white);
+      z-index: 2000;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .mobile-nav.is-open { display: flex; }
+
+    .mob-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      height: 56px;
+      border-bottom: 1px solid var(--color-alabaster);
+      flex-shrink: 0;
+    }
+    .mob-logo svg { height: 32px; width: auto; }
+    .mob-close {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-charcoal);
+    }
+    .mob-close svg { width: 20px; height: 20px; }
+    .mob-body { flex: 1; overflow-y: auto; }
+
+    .mob-l1__btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 15px 20px;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--color-charcoal);
+      border-bottom: 1px solid var(--color-alabaster);
+      text-align: left;
+    }
+    .mob-l1__btn .chev { font-size: 10px; opacity: 0.35; transition: transform 0.2s; }
+    .mob-l1.is-open .mob-l1__btn { color: var(--color-blue); font-weight: 600; }
+    .mob-l1.is-open .mob-l1__btn .chev { transform: rotate(180deg); opacity: 0.6; }
+
+    .mob-l2 {
+      display: none;
+      background: var(--color-light-bg);
+      border-bottom: 1px solid var(--color-alabaster);
+    }
+    .mob-l1.is-open .mob-l2 { display: block; }
+    .mob-l2 a {
+      display: block;
+      font-size: 15px;
+      color: var(--color-charcoal);
+      padding: 10px 20px 10px 32px;
+      border-bottom: 1px solid var(--color-alabaster);
+      transition: background 0.1s, color 0.1s;
+    }
+    .mob-l2 a:last-child { border-bottom: none; }
+    .mob-l2 a:hover { background: var(--color-cyan-50); color: var(--color-blue); }
+
+    .mob-footer {
+      padding: 20px;
+      border-top: 1px solid var(--color-alabaster);
+      flex-shrink: 0;
+    }
+    .mob-footer__cta {
+      display: block;
+      background: var(--color-blue);
+      color: var(--color-white);
+      text-align: center;
+      padding: 13px;
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: var(--radius-pill);
+      margin-bottom: 14px;
+      transition: background 0.15s;
+    }
+    .mob-footer__cta:hover { background: var(--color-blue-dark); }
+    .mob-footer__links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 16px;
+      justify-content: center;
+    }
+    .mob-footer__links a {
+      font-size: 13px;
+      color: var(--color-granite);
+      transition: color 0.12s;
+    }
+    .mob-footer__links a:hover { color: var(--color-blue); }
+
+/* ════════════════════════════════════
+       FOCUS & RESPONSIVE
+    ════════════════════════════════════ */
+    :focus-visible { outline: 2px solid var(--color-cyan); outline-offset: 2px; }
+
+    @media (max-width: 1024px) {
+      .nav-items { gap: 0; }
+      .nav-item__btn { padding: 0 11px; font-size: 14px; }
+    }
+    @media (max-width: 900px) {
+      .nav-items, .nav-right { display: none; }
+      .nav-hamburger { display: flex; }
+      .util-nav { display: none; }
+      .primary-nav__inner { grid-template-columns: 1fr auto; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     UTILITY NAV
+════════════════════════════════════════════ -->
+<nav class="util-nav" aria-label="Utility navigation">
+  <div class="util-nav__inner">
+    <a href="#" class="util-nav__link">For Patients</a>
+    <div class="util-nav__sep"></div>
+    <div class="util-member" id="memberDrop">
+      <button class="util-member__btn" aria-expanded="false" aria-haspopup="true">
+        Welcome back, Dr. Chen <span class="chev">&#9662;</span>
+      </button>
+      <div class="util-member__panel" role="menu">
+        <a href="#">My Profile</a>
+        <a href="#">ROhub <span class="ext">&#8599;</span></a>
+        <a href="#">ASTRO Academy <span class="ext">&#8599;</span></a>
+        <a href="#">Member Directory</a>
+        <a href="#">Manage Membership</a>
+        <a href="#" class="logout">Log Out</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════
+     PRIMARY NAV
+════════════════════════════════════════════ -->
+<header class="primary-nav" id="primaryNav">
+  <div class="primary-nav__inner">
+
+    <a href="#" class="nav-logo" aria-label="ASTRO home">
+      <img src="astro-logo.svg" alt="ASTRO" width="231" height="37">
+    </a>
+
+    <nav class="nav-items" aria-label="Primary navigation">
+      <div class="nav-item" data-menu="meetings">
+        <button class="nav-item__btn" aria-expanded="false" aria-haspopup="true">
+          Meetings &amp; Events
+          <svg class="chev" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 3.5L5 6.5L7.5 3.5"/></svg>
+        </button>
+      </div>
+      <div class="nav-item" data-menu="practice">
+        <button class="nav-item__btn" aria-expanded="false" aria-haspopup="true">
+          Practice
+          <svg class="chev" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 3.5L5 6.5L7.5 3.5"/></svg>
+        </button>
+      </div>
+      <div class="nav-item" data-menu="careers">
+        <button class="nav-item__btn" aria-expanded="false" aria-haspopup="true">
+          Career Pathways
+          <svg class="chev" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 3.5L5 6.5L7.5 3.5"/></svg>
+        </button>
+      </div>
+      <div class="nav-item" data-menu="publications">
+        <button class="nav-item__btn" aria-expanded="false" aria-haspopup="true">
+          Publications
+          <svg class="chev" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 3.5L5 6.5L7.5 3.5"/></svg>
+        </button>
+      </div>
+      <div class="nav-item" data-menu="advocacy">
+        <button class="nav-item__btn" aria-expanded="false" aria-haspopup="true">
+          Advocacy
+          <svg class="chev" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 3.5L5 6.5L7.5 3.5"/></svg>
+        </button>
+      </div>
+      <div class="nav-item" data-menu="about">
+        <button class="nav-item__btn" aria-expanded="false" aria-haspopup="true">
+          About ASTRO
+          <svg class="chev" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 3.5L5 6.5L7.5 3.5"/></svg>
+        </button>
+      </div>
+    </nav>
+
+    <div class="nav-right">
+      <button class="nav-search" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="10.5" cy="10.5" r="6.5"/>
+          <path d="M15.5 15.5L21 21"/>
+        </svg>
+      </button>
+      <a href="#" class="nav-cta">Become a Member</a>
+    </div>
+
+    <button class="nav-hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M3 6h18M3 12h18M3 18h18"/>
+      </svg>
+    </button>
+
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════
+     DROPDOWNS
+════════════════════════════════════════════ -->
+
+<!-- Meetings & Events -->
+<div class="drop" id="drop-meetings" role="region" aria-label="Meetings &amp; Events">
+  <div class="drop__body">
+    <div class="drop__left">
+    <div class="drop__links">
+      <a href="#">Annual Meeting</a>
+      <a href="#">Annual Refresher Course</a>
+      <a href="#">Head &amp; Neck Symposium</a>
+      <a href="#">Coding &amp; Coverage Seminar</a>
+      <a href="#">Radiopharmaceutical Symposium</a>
+      <a href="#">Advocacy Day</a>
+    </div>
+    <a href="#" class="drop__see-all">
+      Meetings &amp; Events: See All
+      <span class="drop__arrow">
+        <svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 5.5h7M6 2.5l3 3-3 3"/>
+        </svg>
+      </span>
+    </a>
+    </div>
+    <div class="drop__panel">
+      <p class="drop__panel-eyebrow">Events &amp; Education</p>
+      <h2 class="drop__panel-title">Meetings &amp; Events</h2>
+      <p class="drop__panel-desc">Connect with radiation oncology colleagues at ASTRO&rsquo;s premier conferences, symposia, and specialty educational meetings.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Practice -->
+<div class="drop" id="drop-practice" role="region" aria-label="Practice">
+  <div class="drop__body">
+    <div class="drop__left">
+    <div class="drop__links">
+      <a href="#">Learn &amp; Certify</a>
+      <a href="#">Manage Your Practice</a>
+      <a href="#">Improve Quality</a>
+      <a href="#">Educate Patients &amp; Others</a>
+    </div>
+    <a href="#" class="drop__see-all">
+      Practice: See All Resources
+      <span class="drop__arrow">
+        <svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 5.5h7M6 2.5l3 3-3 3"/>
+        </svg>
+      </span>
+    </a>
+    </div>
+    <div class="drop__panel">
+      <p class="drop__panel-eyebrow">Clinical Resources</p>
+      <h2 class="drop__panel-title">Practice</h2>
+      <p class="drop__panel-desc">Access clinical guidelines, quality improvement tools, and educational resources to support the highest standard of radiation oncology care.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Career Pathways -->
+<div class="drop" id="drop-careers" role="region" aria-label="Career Pathways">
+  <div class="drop__body">
+    <div class="drop__left">
+    <div class="drop__links">
+      <a href="#">Career Options</a>
+      <a href="#">Research Career Support (ASTRO ROCKS)</a>
+      <a href="#">Residents Association (ARRO)</a>
+      <a href="#">Physician Networking (ROhub)</a>
+      <a href="#">Mentor Connect</a>
+      <a href="#">Radiation Oncology-Biology Integration Network (ROBIN)</a>
+      <a href="#">Membership Directory</a>
+    </div>
+    <a href="#" class="drop__see-all">
+      Career Pathways: See All
+      <span class="drop__arrow">
+        <svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 5.5h7M6 2.5l3 3-3 3"/>
+        </svg>
+      </span>
+    </a>
+    </div>
+    <div class="drop__panel">
+      <p class="drop__panel-eyebrow">Grow Your Career</p>
+      <h2 class="drop__panel-title">Career Pathways</h2>
+      <p class="drop__panel-desc">From residency to leadership, find mentorship, networking, and research support to advance your career in radiation oncology.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Publications -->
+<div class="drop" id="drop-publications" role="region" aria-label="Publications">
+  <div class="drop__body">
+    <div class="drop__left">
+    <div class="drop__links">
+      <a href="#">Red Journal</a>
+      <a href="#">Advances in Radiation Oncology</a>
+      <a href="#">Practical Radiation Oncology</a>
+      <a href="#">Society News</a>
+    </div>
+    <a href="#" class="drop__see-all">
+      Publications: See All
+      <span class="drop__arrow">
+        <svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 5.5h7M6 2.5l3 3-3 3"/>
+        </svg>
+      </span>
+    </a>
+    </div>
+    <div class="drop__panel">
+      <p class="drop__panel-eyebrow">Journals &amp; News</p>
+      <h2 class="drop__panel-title">Publications</h2>
+      <p class="drop__panel-desc">Peer-reviewed journals and society updates keeping you at the forefront of radiation oncology science and clinical practice.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Advocacy -->
+<div class="drop" id="drop-advocacy" role="region" aria-label="Advocacy">
+  <div class="drop__body">
+    <div class="drop__left">
+    <div class="drop__links">
+      <a href="#">Key Issues</a>
+      <a href="#">What&rsquo;s Happening in Washington</a>
+      <a href="#">Become an Advocate</a>
+      <a href="#">ASTRO PAC</a>
+    </div>
+    <a href="#" class="drop__see-all">
+      Advocacy: See All
+      <span class="drop__arrow">
+        <svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 5.5h7M6 2.5l3 3-3 3"/>
+        </svg>
+      </span>
+    </a>
+    </div>
+    <div class="drop__panel">
+      <p class="drop__panel-eyebrow">Policy &amp; Action</p>
+      <h2 class="drop__panel-title">Advocacy</h2>
+      <p class="drop__panel-desc">Shape the policies that define radiation oncology. Stay informed, take action, and amplify your voice where it matters most.</p>
+    </div>
+  </div>
+</div>
+
+<!-- About ASTRO -->
+<div class="drop" id="drop-about" role="region" aria-label="About ASTRO">
+  <div class="drop__body">
+    <div class="drop__left">
+    <div class="drop__links">
+      <a href="#">Mission &amp; Vision</a>
+      <a href="#">What is Radiation Oncology?</a>
+      <a href="#">Board &amp; Leadership</a>
+      <a href="#">Press Room</a>
+      <a href="#">Governance</a>
+      <a href="#">Jobs at ASTRO</a>
+      <a href="#">History</a>
+    </div>
+    <a href="#" class="drop__see-all">
+      About ASTRO: See All
+      <span class="drop__arrow">
+        <svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 5.5h7M6 2.5l3 3-3 3"/>
+        </svg>
+      </span>
+    </a>
+    </div>
+    <div class="drop__panel">
+      <p class="drop__panel-eyebrow">Who We Are</p>
+      <h2 class="drop__panel-title">About ASTRO</h2>
+      <p class="drop__panel-desc">ASTRO is the leading radiation oncology society, representing professionals worldwide who deliver life-saving treatment to cancer patients.</p>
+    </div>
+  </div>
+</div>
+
+<div class="drop-overlay" id="dropOverlay"></div>
+
+<!-- ═══════════════════════════════════════════
+     MOBILE NAV
+════════════════════════════════════════════ -->
+<div class="mobile-nav" id="mobileNav" role="dialog" aria-modal="true" aria-label="Site navigation">
+  <div class="mob-head">
+    <a href="#" class="mob-logo" aria-label="ASTRO home">
+      <svg width="160" height="26" viewBox="0 0 231 37" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M23.9976 24.1548C25.2117 26.2054 27.1617 27.3188 29.5834 27.3188C32.0052 27.3188 33.647 25.6707 33.647 23.532C33.647 21.6701 32.4959 20.4938 30.3257 19.3112C27.0988 17.5436 24.677 16.361 24.677 13.2599C24.677 10.3726 27.0988 8.07666 31.1309 8.07666C32.716 8.07666 33.8294 8.20247 34.4207 8.20247C34.578 8.20247 34.7604 8.23392 35.012 8.23392H35.7857V11.4609C35.012 10.1588 33.5841 9.44166 31.6907 9.44166C28.9607 9.44166 27.5013 10.7752 27.5013 12.5805C27.5013 14.7822 29.3947 15.7131 31.8165 16.9901C34.9806 18.6696 36.5972 20.2799 36.5972 22.7017C36.5972 25.8972 33.647 28.7278 29.4891 28.7278C27.7844 28.7278 25.9791 28.2938 23.9913 27.5452V24.161L23.9976 24.1548Z" fill="#0F4C8C"/>
+        <path d="M44.2777 19.5942V18.3865C44.2777 15.8074 44.2462 13.0774 44.089 10.1273H40.7991C39.7109 10.1273 38.7485 10.2216 37.7231 10.901L38.4717 8.44775H54.2416C53.4679 9.6555 52.4425 10.0329 50.8888 10.0329L47.102 10.0644C46.9762 13.3228 46.9448 16.2415 46.9448 18.8205C46.9448 24.4378 46.9448 27.5452 47.7185 28.3504H43.4977C44.2399 27.5767 44.2714 24.7209 44.2714 19.5942" fill="#4E7E3A"/>
+        <path d="M86.1461 18.9401C86.1461 12.9517 83.6299 9.47311 79.6859 9.47311C75.7419 9.47311 73.1377 12.4547 73.1377 17.9462C73.1377 23.9094 75.7733 27.2307 80.0885 27.2307C83.7809 27.2307 86.1398 24.2491 86.1398 18.9401M69.9988 18.7891C69.9988 11.8634 73.5088 8.07666 80.0256 8.07666C86.1398 8.07666 89.2472 11.3665 89.2472 17.8204C89.2472 24.2743 85.2403 28.7153 79.1261 28.7153C73.0119 28.7153 69.9988 25.1423 69.9988 18.7828" fill="#0F4C8C"/>
+        <path d="M14.3608 8.391H10.4985C10.6558 8.69923 10.7501 9.01374 10.7501 9.35342C10.7501 9.78745 9.87578 12.7187 7.69932 17.7888C5.73673 22.3996 3.86851 25.9159 1.84302 28.3439H5.8248C5.73044 28.0357 5.66754 27.7212 5.66754 27.3752C5.66754 26.0039 6.25883 24.6075 6.94448 22.9531L8.28432 19.6822L8.78126 18.531L12.1466 10.4983L15.0716 18.531L15.5308 19.6822H15.5371L18.6822 28.3377H22.079C20.3051 25.8152 17.594 19.1852 14.3608 8.37842" fill="#0F4C8C"/>
+        <path d="M95.8396 0V36.7985" stroke="#0F4C8C" stroke-width="0.339678"/>
+        <text x="105" y="28" font-family="DM Sans, sans-serif" font-size="20" font-weight="700" fill="#0F4C8C">AMERICA</text>
+      </svg>
+    </a>
+    <button class="mob-close" id="mobileNavClose" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M18 6L6 18M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
+  <div class="mob-body">
+
+    <div class="mob-l1">
+      <button class="mob-l1__btn">Meetings &amp; Events <span class="chev">&#9662;</span></button>
+      <div class="mob-l2">
+        <a href="#">Annual Meeting</a>
+        <a href="#">Head &amp; Neck Symposium</a>
+        <a href="#">Radiopharmaceutical Symposium</a>
+        <a href="#">Annual Refresher Course</a>
+        <a href="#">Coding &amp; Coverage Seminar</a>
+        <a href="#">Advocacy Day</a>
+      </div>
+    </div>
+
+    <div class="mob-l1">
+      <button class="mob-l1__btn">Practice <span class="chev">&#9662;</span></button>
+      <div class="mob-l2">
+        <a href="#">Learn &amp; Certify</a>
+        <a href="#">Improve Quality</a>
+        <a href="#">Manage Your Practice</a>
+        <a href="#">Educate Patients &amp; Others</a>
+      </div>
+    </div>
+
+    <div class="mob-l1">
+      <button class="mob-l1__btn">Career Pathways <span class="chev">&#9662;</span></button>
+      <div class="mob-l2">
+        <a href="#">Career Options</a>
+        <a href="#">Residents Association (ARRO)</a>
+        <a href="#">Mentor Connect</a>
+        <a href="#">Membership Directory</a>
+        <a href="#">Research Career Support (ASTRO ROCKS)</a>
+        <a href="#">Physician Networking (ROhub)</a>
+        <a href="#">Radiation Oncology-Biology Integration Network (ROBIN)</a>
+      </div>
+    </div>
+
+    <div class="mob-l1">
+      <button class="mob-l1__btn">Publications <span class="chev">&#9662;</span></button>
+      <div class="mob-l2">
+        <a href="#">Red Journal</a>
+        <a href="#">Practical Radiation Oncology</a>
+        <a href="#">Advances in Radiation Oncology</a>
+        <a href="#">Society News</a>
+      </div>
+    </div>
+
+    <div class="mob-l1">
+      <button class="mob-l1__btn">Advocacy <span class="chev">&#9662;</span></button>
+      <div class="mob-l2">
+        <a href="#">Key Issues</a>
+        <a href="#">Become an Advocate</a>
+        <a href="#">What&rsquo;s Happening in Washington</a>
+        <a href="#">ASTRO PAC</a>
+      </div>
+    </div>
+
+    <div class="mob-l1">
+      <button class="mob-l1__btn">About ASTRO <span class="chev">&#9662;</span></button>
+      <div class="mob-l2">
+        <a href="#">Mission &amp; Vision</a>
+        <a href="#">Board &amp; Leadership</a>
+        <a href="#">Governance</a>
+        <a href="#">History</a>
+        <a href="#">What is Radiation Oncology?</a>
+        <a href="#">Press Room</a>
+        <a href="#">Jobs at ASTRO</a>
+      </div>
+    </div>
+
+  </div>
+  <div class="mob-footer">
+    <a href="#" class="mob-footer__cta">Become a Member</a>
+    <div class="mob-footer__links">
+      <a href="#">For Patients</a>
+      <a href="#">Log In</a>
+      <a href="#">Search</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PAGE CONTENT
+════════════════════════════════════════════ -->
+<main></main>
+
+<!-- ═══════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════════ -->
+<script>
+(function () {
+  'use strict';
+
+  const navItems   = document.querySelectorAll('.nav-item');
+  const overlay    = document.getElementById('dropOverlay');
+  let   current    = null;
+
+  function positionDrop(drop) {
+    const navRect = document.getElementById('primaryNav').getBoundingClientRect();
+    drop.style.top = navRect.bottom + 'px';
+  }
+
+  function open(menuId) {
+    const prev    = current;
+    const trigger = document.querySelector(`.nav-item[data-menu="${menuId}"]`);
+    const drop    = document.getElementById('drop-' + menuId);
+    if (!trigger || !drop) return;
+
+    if (prev && prev !== menuId) {
+      // Crossfade: deactivate outgoing
+      const prevTrigger = document.querySelector(`.nav-item[data-menu="${prev}"]`);
+      const prevDrop    = document.getElementById('drop-' + prev);
+      if (prevTrigger) {
+        prevTrigger.classList.remove('is-open');
+        prevTrigger.querySelector('.nav-item__btn').setAttribute('aria-expanded', 'false');
+      }
+      if (prevDrop) {
+        prevDrop.classList.add('is-exiting');
+        prevDrop.classList.remove('is-open');
+        setTimeout(() => prevDrop.classList.remove('is-visible', 'is-exiting'), 120);
+      }
+    } else if (!prev) {
+      overlay.classList.add('is-visible');
+    }
+
+    trigger.classList.add('is-open');
+    trigger.querySelector('.nav-item__btn').setAttribute('aria-expanded', 'true');
+    current = menuId;
+
+    positionDrop(drop);
+    drop.classList.add('is-visible');
+    requestAnimationFrame(() => drop.classList.add('is-open'));
+  }
+
+  function close(immediate) {
+    if (!current) return;
+    const trigger = document.querySelector(`.nav-item[data-menu="${current}"]`);
+    const drop    = document.getElementById('drop-' + current);
+    if (!trigger || !drop) return;
+
+    trigger.classList.remove('is-open');
+    trigger.querySelector('.nav-item__btn').setAttribute('aria-expanded', 'false');
+    overlay.classList.remove('is-visible');
+
+    if (immediate) {
+      drop.classList.remove('is-open', 'is-visible');
+      current = null;
+    } else {
+      drop.classList.remove('is-open');
+      current = null;
+      setTimeout(() => drop.classList.remove('is-visible'), 180);
+    }
+  }
+
+  navItems.forEach(item => {
+    item.querySelector('.nav-item__btn').addEventListener('click', e => {
+      e.preventDefault();
+      const id = item.dataset.menu;
+      if (current === id) { close(); } else { open(id); }
+    });
+  });
+
+  overlay.addEventListener('click', () => close());
+
+  document.addEventListener('click', e => {
+    if (!current) return;
+    const drop   = document.getElementById('drop-' + current);
+    const navBar = document.getElementById('primaryNav');
+    if (!drop.contains(e.target) && !navBar.contains(e.target)) close();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { close(); closeMember(); closeMobileNav(); }
+  });
+
+  // ── Member dropdown ──
+  const memberDrop = document.getElementById('memberDrop');
+  const memberBtn  = memberDrop.querySelector('.util-member__btn');
+
+  function closeMember() {
+    memberDrop.classList.remove('is-open');
+    memberBtn.setAttribute('aria-expanded', 'false');
+  }
+  memberBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    const isOpen = memberDrop.classList.toggle('is-open');
+    memberBtn.setAttribute('aria-expanded', String(isOpen));
+  });
+  document.addEventListener('click', e => {
+    if (!memberDrop.contains(e.target)) closeMember();
+  });
+
+  // ── Mobile nav ──
+  const mobileNav   = document.getElementById('mobileNav');
+  const hamburger   = document.getElementById('hamburgerBtn');
+  const mobileClose = document.getElementById('mobileNavClose');
+
+  function openMobileNav() {
+    mobileNav.classList.add('is-open');
+    hamburger.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMobileNav() {
+    mobileNav.classList.remove('is-open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  hamburger.addEventListener('click', openMobileNav);
+  mobileClose.addEventListener('click', closeMobileNav);
+
+  document.querySelectorAll('.mob-l1__btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const parent  = btn.parentElement;
+      const wasOpen = parent.classList.contains('is-open');
+      document.querySelectorAll('.mob-l1').forEach(el => el.classList.remove('is-open'));
+      if (!wasOpen) parent.classList.add('is-open');
+    });
+  });
+
+  // ── Figma capture helper: ?forcedrop=meetings ──
+  const params = new URLSearchParams(window.location.search);
+  const forceId = params.get('forcedrop');
+  if (forceId) {
+    setTimeout(() => {
+      open(forceId);
+      // Freeze menu open for screenshot capture
+      overlay.removeEventListener('click', () => close());
+    }, 200);
+  }
+
+})();
+</script>
+<script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+</body>
+</html>
