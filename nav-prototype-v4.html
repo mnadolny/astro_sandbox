@@ -325,6 +325,25 @@
       white-space: nowrap;
       transition: background 0.12s, color 0.12s;
     }
+    #drop-meetings,
+    #drop-practice,
+    #drop-publications,
+    #drop-advocacy {
+      min-width: unset;
+      width: max-content;
+    }
+    #drop-meetings .drop__left,
+    #drop-practice .drop__left,
+    #drop-publications .drop__left,
+    #drop-advocacy .drop__left {
+      flex: 0 0 auto;
+    }
+    #drop-meetings .drop__links,
+    #drop-practice .drop__links,
+    #drop-publications .drop__links,
+    #drop-advocacy .drop__links {
+      grid-template-columns: 1fr;
+    }
     #drop-careers .drop__links {
       display: block;
       column-count: 2;
