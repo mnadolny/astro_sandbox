@@ -305,6 +305,16 @@
     }
     .drop--mega.drop--3col .drop__body { grid-template-columns: minmax(220px, auto) minmax(220px, auto) minmax(220px, auto) 260px; }
     .drop--mega.drop--4col .drop__body { grid-template-columns: repeat(4, minmax(200px, auto)) 260px; }
+    .drop--mega.drop--no-promo .drop__body { display: block; padding: 28px 32px 24px; }
+    .drop--mega.drop--no-promo .drop__cols {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(200px, auto));
+    }
+    .drop--mega.drop--no-promo .drop__footer {
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid var(--color-alabaster);
+    }
     .drop--mega .drop__col {
       padding: 0 24px;
       border-right: 1px solid var(--color-alabaster);
@@ -335,6 +345,41 @@
     .drop--mega .drop__col-links a .ext { font-size: 11px; opacity: 0.5; margin-left: 2px; }
     .drop--mega .drop__col-links a.green-ext { color: var(--color-green); font-weight: 500; }
     .drop--mega .drop__col-links a.green-ext:hover { background: var(--color-green-50); color: var(--color-green); }
+
+    /* Podcast cards (Publications) */
+    .podcast-card {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 12px;
+      padding: 4px 0;
+      margin-bottom: 10px;
+    }
+    .podcast-card:last-of-type { margin-bottom: 0; }
+    .podcast-card__img {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-sm);
+      flex-shrink: 0;
+      object-fit: cover;
+    }
+    .podcast-card__info { display: flex; flex-direction: column; gap: 4px; }
+    .podcast-card__name {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-charcoal);
+      line-height: 1.3;
+    }
+    .podcast-card__listen {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-blue);
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      transition: color 0.12s;
+    }
+    .podcast-card__listen:hover { color: var(--color-cyan-dark); }
     .drop--mega .drop__promo {
       padding-left: 24px;
       display: flex;
@@ -850,50 +895,53 @@
   </div>
 </div>
 
-<!-- Publications (mega · 4 col + promo) -->
-<div class="drop drop--mega drop--4col" id="drop-publications" role="region" aria-label="Publications">
+<!-- Publications (mega · 4 col, no promo) -->
+<div class="drop drop--mega drop--no-promo" id="drop-publications" role="region" aria-label="Publications">
   <div class="drop__body">
-    <div class="drop__col">
-      <span class="drop__col-head">Journals</span>
-      <div class="drop__col-links">
-        <a href="#">Red Journal</a>
-        <a href="#">Practical Radiation Oncology (PRO)</a>
-        <a href="#">Advances in Radiation Oncology</a>
+    <div class="drop__cols">
+      <div class="drop__col">
+        <span class="drop__col-head">Journals</span>
+        <div class="drop__col-links">
+          <a href="#">Red Journal</a>
+          <a href="#">Practical Radiation Oncology (PRO)</a>
+          <a href="#">Advances in Radiation Oncology</a>
+        </div>
+      </div>
+      <div class="drop__col">
+        <span class="drop__col-head">Guidelines &amp; Consensus</span>
+        <div class="drop__col-links">
+          <a href="#">Clinical Practice Guidelines</a>
+          <a href="#">Consensus Statements</a>
+        </div>
+      </div>
+      <div class="drop__col">
+        <span class="drop__col-head">Society News</span>
+        <div class="drop__col-links">
+          <a href="#">ASTROgram</a>
+          <a href="#">ASTROnews</a>
+          <a href="#">ASTROblog</a>
+          <a href="#">President's Corner</a>
+        </div>
+      </div>
+      <div class="drop__col">
+        <span class="drop__col-head">Podcasts</span>
+        <div class="podcast-card">
+          <img class="podcast-card__img" src="imgs/OnTarget_logo.jpg" alt="On Target podcast">
+          <div class="podcast-card__info">
+            <span class="podcast-card__name">On Target</span>
+            <a href="#" class="podcast-card__listen">Listen Now &#8594;</a>
+          </div>
+        </div>
+        <div class="podcast-card">
+          <img class="podcast-card__img" src="imgs/RadOncReportLogo.jpg" alt="RadOnc Report podcast">
+          <div class="podcast-card__info">
+            <span class="podcast-card__name">RadOnc Report</span>
+            <a href="#" class="podcast-card__listen">Listen Now &#8594;</a>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="drop__col">
-      <span class="drop__col-head">Guidelines &amp; Consensus</span>
-      <div class="drop__col-links">
-        <a href="#">Clinical Practice Guidelines</a>
-        <a href="#">Consensus Statements</a>
-      </div>
-    </div>
-    <div class="drop__col">
-      <span class="drop__col-head">Society News</span>
-      <div class="drop__col-links">
-        <a href="#">ASTROgram</a>
-        <a href="#">ASTROnews</a>
-        <a href="#">ASTROblog</a>
-        <a href="#">President's Corner</a>
-      </div>
-    </div>
-    <div class="drop__col">
-      <span class="drop__col-head">Podcasts</span>
-      <div class="drop__col-links">
-        <a href="#">On Target</a>
-        <a href="#">RadOnc Report</a>
-      </div>
-    </div>
-    <div class="drop__promo">
-      <div class="drop__promo-card">
-        <div class="drop__promo-eyebrow">Stay Current</div>
-        <div class="drop__promo-title">Read the latest in radiation oncology</div>
-        <p class="drop__promo-desc">Peer-reviewed research, clinical commentary, and society news &mdash; delivered to your inbox.</p>
-        <a href="#" class="drop__promo-link">
-          Subscribe
-          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h7M6 3l3 3-3 3"/></svg>
-        </a>
-      </div>
+    <div class="drop__footer">
       <a href="#" class="drop__see-all">
         Publications: See All
         <span class="drop__arrow">
