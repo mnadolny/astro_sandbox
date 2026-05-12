@@ -305,16 +305,18 @@
     }
     .drop--mega.drop--3col .drop__body { grid-template-columns: minmax(220px, auto) minmax(220px, auto) minmax(220px, auto) 260px; }
     .drop--mega.drop--4col .drop__body { grid-template-columns: repeat(4, minmax(200px, auto)) 260px; }
-    .drop--mega.drop--no-promo .drop__body { display: block; padding: 28px 32px 24px; }
+    .drop--mega.drop--no-promo .drop__body { display: block; padding: 28px 32px 22px; }
     .drop--mega.drop--no-promo .drop__cols {
       display: grid;
       grid-template-columns: repeat(4, minmax(200px, auto));
     }
+    .drop--mega.drop--no-promo .drop__cols .drop__col:last-child { border-right: none; padding-right: 0; }
     .drop--mega.drop--no-promo .drop__footer {
-      margin-top: 18px;
-      padding-top: 18px;
+      margin-top: 22px;
+      padding-top: 22px;
       border-top: 1px solid var(--color-alabaster);
     }
+    .drop--mega.drop--no-promo .drop__footer .drop__see-all { margin-top: 0; }
     .drop--mega .drop__col {
       padding: 0 24px;
       border-right: 1px solid var(--color-alabaster);
