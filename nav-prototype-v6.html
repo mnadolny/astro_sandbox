@@ -328,21 +328,23 @@
     }
     .drop--mega .drop__col:first-child { padding-left: 0; }
     .drop--mega .drop__col-head {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
+      display: inline;
       font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.09em;
       color: var(--color-blue);
-      margin-bottom: 12px;
       text-decoration: none;
       padding: 4px 6px;
-      margin-left: -6px;
+      margin: 0 -6px 12px;
       border-radius: var(--radius-sm);
       transition: background 0.12s, color 0.12s;
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
     }
+    .drop--mega a.drop__col-head { display: inline; }
+    .drop--mega .drop__col + .drop__col-links,
+    .drop--mega .drop__col > .drop__col-head { /* keep heading as inline so arrow flows with last word */ }
     .drop--mega a.drop__col-head:hover {
       background: var(--color-blue-50);
       color: var(--color-cyan-dark);
@@ -350,12 +352,15 @@
     .drop--mega .drop__col-head .drop__col-head-arrow {
       width: 9px;
       height: 9px;
+      vertical-align: -1px;
+      margin-left: 4px;
       transition: transform 0.15s ease;
-      flex-shrink: 0;
     }
     .drop--mega a.drop__col-head:hover .drop__col-head-arrow {
       transform: translateX(2px);
     }
+    /* heading needs a block-level gap below since it's now inline */
+    .drop--mega .drop__col-head + .drop__col-links { margin-top: 12px; }
     .drop--mega .drop__col-links a {
       display: block;
       font-size: 14px;
