@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASTRO.org — Navigation Prototype v6 (Hybrid · Linked Headings)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-blue:         #0E4C8C;
+      --color-blue-dark:    #0A3A6B;
+      --color-blue-50:      #E6F0FA;
+      --color-cyan:         #3ABEB6;
+      --color-cyan-dark:    #2A9E97;
+      --color-cyan-50:      #E3F3EF;
+      --color-green:        #4E7E3A;
+      --color-green-50:     #EAF1E5;
+      --color-plum:         #C74090;
+      --color-charcoal:     #58595B;
+      --color-granite:      #979291;
+      --color-alabaster:    #E5E6E5;
+      --color-white:        #FFFFFF;
+      --color-light-bg:     #F4F6F8;
+
+      --nav-height:        68px;
+      --util-height:       38px;
+      --container-max:     1504px;
+      --radius-sm:         4px;
+      --radius-md:         8px;
+      --radius-lg:         12px;
+      --radius-pill:       999px;
+      --font-primary:      'DM Sans', system-ui, -apple-system, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-primary);
+      color: var(--color-charcoal);
+      background: var(--color-light-bg);
+      -webkit-font-smoothing: antialiased;
+    }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    button { background: none; border: none; cursor: pointer; font-family: inherit; }
+
+    /* ════════════════════════════════════
+       UTILITY NAV
+    ════════════════════════════════════ */
+    .util-nav {
+      height: var(--util-height);
+      background: var(--color-white);
+      border-bottom: 1px solid var(--color-alabaster);
+      position: relative;
+      z-index: 1000;
+    }
+    .util-nav__inner {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 20px;
+    }
+    .util-nav__link {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-charcoal);
+      transition: color 0.15s;
+      white-space: nowrap;
+    }
+    .util-nav__link:hover { color: var(--color-blue); }
+    .util-nav__link--accent { font-weight: 600; color: var(--color-plum); }
+    .util-nav__link--accent:hover { color: #A83578; }
+    .util-nav__ext { font-size: 11px; opacity: 0.7; margin-left: 1px; }
+    .util-nav__sep {
+      width: 1px;
+      height: 14px;
+      background: var(--color-alabaster);
+      flex-shrink: 0;
+    }
+
+    /* Utility dropdown (About ASTRO + Member) */
+    .util-drop { position: relative; display: flex; align-items: center; }
+    .util-drop__btn {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-charcoal);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.15s;
+      white-space: nowrap;
+    }
+    .util-drop__btn:hover { color: var(--color-blue); }
+    .util-drop__btn .chev { font-size: 9px; opacity: 0.5; transition: transform 0.2s; }
+    .util-drop.is-open .chev { transform: rotate(180deg); }
+    .util-drop__panel {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: calc(100% + 8px);
+      background: var(--color-white);
+      min-width: 220px;
+      border-radius: var(--radius-md);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.13);
+      border: 1px solid var(--color-alabaster);
+      z-index: 2000;
+      overflow: hidden;
+    }
+    .util-drop.is-open .util-drop__panel { display: block; }
+    .util-drop__panel a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 9px 14px;
+      font-size: 13px;
+      color: var(--color-charcoal);
+      border-bottom: 1px solid var(--color-alabaster);
+      transition: background 0.1s, color 0.1s;
+    }
+    .util-drop__panel a:last-child { border-bottom: none; }
+    .util-drop__panel a:hover { background: var(--color-blue-50); color: var(--color-blue); }
+    .util-drop__panel a.logout { color: var(--color-plum); font-weight: 600; }
+    .util-drop__panel a .ext { font-size: 10px; opacity: 0.45; }
+
+    /* ════════════════════════════════════
+       PRIMARY NAV
+    ════════════════════════════════════ */
+    .primary-nav {
+      height: var(--nav-height);
+      background: var(--color-white);
+      border-bottom: 3px solid var(--color-blue);
+      position: sticky;
+      top: 0;
+      z-index: 900;
+    }
+    .primary-nav__inner {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 100%;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 24px;
+    }
+    .nav-logo img { height: 42px; width: auto; display: block; }
+
+    .nav-items {
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      height: 100%;
+    }
+    .nav-item {
+      display: flex;
+      align-items: stretch;
+      position: relative;
+    }
+    .nav-item__btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 0 16px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--color-charcoal);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: color 0.15s;
+      position: relative;
+    }
+    .nav-item__btn::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 16px;
+      right: 16px;
+      height: 3px;
+      background: var(--color-blue);
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform 0.2s ease;
+    }
+    .nav-item__btn:hover { color: var(--color-blue); }
+    .nav-item__btn:hover::after { transform: scaleX(1); }
+    .nav-item.is-open .nav-item__btn { color: var(--color-blue); }
+    .nav-item.is-open .nav-item__btn::after { transform: scaleX(1); }
+    .nav-item__btn .chev {
+      width: 10px;
+      height: 10px;
+      opacity: 0.35;
+      flex-shrink: 0;
+      transition: transform 0.2s, opacity 0.15s;
+    }
+    .nav-item.is-open .nav-item__btn .chev { transform: rotate(180deg); opacity: 0.65; }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-self: end;
+    }
+    .nav-search {
+      height: 36px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 10px;
+      border-radius: var(--radius-pill);
+      color: var(--color-charcoal);
+      font-size: 14px;
+      font-weight: 500;
+      transition: background 0.15s, color 0.15s;
+    }
+    .nav-search:hover { background: var(--color-blue-50); color: var(--color-blue); }
+    .nav-search svg { width: 18px; height: 18px; flex-shrink: 0; }
+    .nav-cta {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--color-white);
+      background: var(--color-blue);
+      padding: 8px 20px;
+      border-radius: var(--radius-pill);
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+    .nav-cta:hover { background: var(--color-blue-dark); }
+
+    .nav-hamburger {
+      display: none;
+      width: 40px;
+      height: 40px;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-charcoal);
+    }
+    .nav-hamburger svg { width: 24px; height: 24px; }
+
+    /* ════════════════════════════════════
+       DROPDOWN SHELL — shared by slim + mega
+    ════════════════════════════════════ */
+    .drop {
+      position: fixed;
+      left: 50%;
+      background: var(--color-white);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+      border-radius: 0 0 var(--radius-md) var(--radius-md);
+      z-index: 850;
+      display: none;
+      opacity: 0;
+      transform: translateX(-50%) translateY(-6px);
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+    .drop.is-visible { display: block; }
+    .drop.is-open { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .drop.is-exiting { opacity: 0; transform: translateX(-50%) translateY(0); transition: opacity 0.12s ease; }
+
+    /* ────────── SLIM VARIANT (single column + promo card) ────────── */
+    .drop--slim { width: max-content; min-width: 620px; max-width: 760px; }
+    .drop--slim .drop__body {
+      display: flex;
+      align-items: stretch;
+      padding: 28px 32px;
+      gap: 0;
+    }
+    .drop--slim .drop__left {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      padding-right: 28px;
+      border-right: 1px solid var(--color-alabaster);
+      min-width: 280px;
+    }
+    .drop--slim .drop__links { display: grid; grid-template-columns: 1fr; align-content: start; }
+    .drop--slim .drop__links a {
+      display: block;
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--color-charcoal);
+      padding: 8px;
+      margin: 0 -8px;
+      border-radius: var(--radius-sm);
+      line-height: 1.35;
+      white-space: nowrap;
+      transition: background 0.12s, color 0.12s;
+    }
+    .drop--slim .drop__links a:hover { background: var(--color-blue-50); color: var(--color-blue); }
+    .drop--slim .drop__promo {
+      width: 260px;
+      flex-shrink: 0;
+      padding-left: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* ────────── MEGA VARIANT (multi-column + promo card) ────────── */
+    .drop--mega { min-width: 880px; max-width: 1180px; }
+    .drop--mega .drop__body {
+      display: grid;
+      column-gap: 0;
+      padding: 28px 32px;
+    }
+    .drop--mega.drop--3col .drop__body { grid-template-columns: minmax(220px, auto) minmax(220px, auto) minmax(220px, auto) 260px; }
+    .drop--mega.drop--4col .drop__body { grid-template-columns: repeat(4, minmax(200px, auto)) 260px; }
+    .drop--mega.drop--no-promo .drop__body { display: block; padding: 28px 32px; }
+    .drop--mega.drop--no-promo .drop__cols {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(200px, auto));
+    }
+    .drop--mega.drop--no-promo .drop__cols .drop__col:last-child { border-right: none; padding-right: 0; }
+
+    /* Shared footer — always sits at the bottom of every dropdown */
+    .drop__footer {
+      border-top: 1px solid var(--color-alabaster);
+      padding: 16px 32px 18px;
+    }
+    .drop__footer .drop__see-all { margin: 0; }
+    .drop--mega .drop__col {
+      padding: 0 24px;
+      border-right: 1px solid var(--color-alabaster);
+      min-width: 180px;
+    }
+    .drop--mega .drop__col:first-child { padding-left: 0; }
+    .drop--mega .drop__col-head {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--color-blue);
+      margin-bottom: 12px;
+      text-decoration: none;
+      padding: 4px 6px;
+      margin-left: -6px;
+      border-radius: var(--radius-sm);
+      transition: background 0.12s, color 0.12s;
+    }
+    .drop--mega a.drop__col-head:hover {
+      background: var(--color-blue-50);
+      color: var(--color-cyan-dark);
+    }
+    .drop--mega .drop__col-head .drop__col-head-arrow {
+      width: 9px;
+      height: 9px;
+      transition: transform 0.15s ease;
+      flex-shrink: 0;
+    }
+    .drop--mega a.drop__col-head:hover .drop__col-head-arrow {
+      transform: translateX(2px);
+    }
+    .drop--mega .drop__col-links a {
+      display: block;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--color-charcoal);
+      padding: 7px 10px;
+      margin: 0 -10px;
+      border-radius: var(--radius-sm);
+      line-height: 1.4;
+      transition: background 0.12s, color 0.12s;
+    }
+    .drop--mega .drop__col-links a:hover { background: var(--color-blue-50); color: var(--color-blue); }
+    .drop--mega .drop__col-links a .ext { font-size: 11px; opacity: 0.5; margin-left: 2px; }
+    .drop--mega .drop__col-links a.green-ext { color: var(--color-green); font-weight: 500; }
+    .drop--mega .drop__col-links a.green-ext:hover { background: var(--color-green-50); color: var(--color-green); }
+
+    /* Podcast cards (Publications) */
+    .podcast-card {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 12px;
+      padding: 4px 0;
+      margin-bottom: 10px;
+    }
+    .podcast-card:last-of-type { margin-bottom: 0; }
+    .podcast-card__img {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-sm);
+      flex-shrink: 0;
+      object-fit: cover;
+    }
+    .podcast-card__info { display: flex; flex-direction: column; gap: 4px; }
+    .podcast-card__name {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-charcoal);
+      line-height: 1.3;
+    }
+    .podcast-card__listen {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-blue);
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      transition: color 0.12s;
+    }
+    .podcast-card__listen:hover { color: var(--color-cyan-dark); }
+    .drop--mega .drop__promo {
+      padding-left: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-right: none;
+    }
+
+    /* ────────── PROMO CARD (shared) ────────── */
+    .drop__promo-card {
+      background: linear-gradient(180deg, #F4F8FC 0%, var(--color-blue-50) 100%);
+      border-radius: var(--radius-lg);
+      padding: 22px 22px 20px;
+    }
+    .drop__promo-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-cyan-dark);
+      margin-bottom: 8px;
+    }
+    .drop__promo-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--color-blue);
+      line-height: 1.22;
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
+    }
+    .drop__promo-desc {
+      font-size: 13.5px;
+      line-height: 1.5;
+      color: var(--color-charcoal);
+      margin-bottom: 14px;
+    }
+    .drop__promo-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--color-blue);
+      transition: color 0.12s;
+    }
+    .drop__promo-link:hover { color: var(--color-cyan-dark); }
+    .drop__promo-link svg { width: 12px; height: 12px; }
+
+    /* See-all link (slim sits below links; mega sits in promo column below card) */
+    .drop__see-all {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--color-blue);
+      margin-top: 16px;
+      transition: color 0.12s;
+    }
+    .drop--mega .drop__see-all { margin-top: 18px; padding-left: 0; }
+    .drop__footer .drop__see-all { margin-top: 0 !important; }
+    .drop__see-all:hover { color: var(--color-cyan-dark); }
+    .drop__see-all:hover .drop__arrow { background: var(--color-cyan-dark); }
+    .drop__arrow {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--color-blue);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.12s;
+    }
+    .drop__arrow svg { width: 11px; height: 11px; color: var(--color-white); }
+
+    /* Overlay */
+    .drop-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(14,76,140,0.06);
+      z-index: 849;
+    }
+    .drop-overlay.is-visible { display: block; }
+
+    /* ════════════════════════════════════
+       MOBILE NAV
+    ════════════════════════════════════ */
+    .mobile-nav {
+      position: fixed;
+      inset: 0;
+      background: var(--color-white);
+      z-index: 2000;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .mobile-nav.is-open { display: flex; }
+    .mob-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      height: 56px;
+      border-bottom: 1px solid var(--color-alabaster);
+      flex-shrink: 0;
+    }
+    .mob-logo img { height: 32px; width: auto; }
+    .mob-close {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-charcoal);
+    }
+    .mob-close svg { width: 20px; height: 20px; }
+    .mob-body { flex: 1; overflow-y: auto; }
+
+    .mob-l1__btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 15px 20px;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--color-charcoal);
+      border-bottom: 1px solid var(--color-alabaster);
+      text-align: left;
+    }
+    .mob-l1__btn .chev { font-size: 10px; opacity: 0.35; transition: transform 0.2s; }
+    .mob-l1.is-open .mob-l1__btn { color: var(--color-blue); font-weight: 600; }
+    .mob-l1.is-open .mob-l1__btn .chev { transform: rotate(180deg); opacity: 0.6; }
+    .mob-l2 {
+      display: none;
+      background: var(--color-light-bg);
+      border-bottom: 1px solid var(--color-alabaster);
+    }
+    .mob-l1.is-open .mob-l2 { display: block; }
+    .mob-group__title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-blue);
+      padding: 14px 20px 6px 24px;
+    }
+    .mob-l2 a {
+      display: block;
+      font-size: 15px;
+      color: var(--color-charcoal);
+      padding: 10px 20px 10px 32px;
+      border-bottom: 1px solid var(--color-alabaster);
+      transition: background 0.1s, color 0.1s;
+    }
+    .mob-l2 a:last-child { border-bottom: none; }
+    .mob-l2 a:hover { background: var(--color-cyan-50); color: var(--color-blue); }
+    .mob-footer {
+      padding: 20px;
+      border-top: 1px solid var(--color-alabaster);
+      flex-shrink: 0;
+    }
+    .mob-footer__cta {
+      display: block;
+      background: var(--color-blue);
+      color: var(--color-white);
+      text-align: center;
+      padding: 13px;
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: var(--radius-pill);
+      margin-bottom: 14px;
+      transition: background 0.15s;
+    }
+    .mob-footer__cta:hover { background: var(--color-blue-dark); }
+    .mob-footer__links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 16px;
+      justify-content: center;
+    }
+    .mob-footer__links a { font-size: 13px; color: var(--color-granite); transition: color 0.12s; }
+    .mob-footer__links a:hover { color: var(--color-blue); }
+
+    /* Focus + responsive */
+    :focus-visible { outline: 2px solid var(--color-cyan); outline-offset: 2px; }
+    @media (max-width: 1180px) {
+      .nav-item__btn { padding: 0 12px; font-size: 14px; }
+      .drop--mega.drop--4col .drop__body { grid-template-columns: repeat(2, 1fr) 240px; row-gap: 24px; }
+      .drop--mega.drop--3col .drop__body { grid-template-columns: repeat(3, 1fr) 240px; }
+    }
+    @media (max-width: 900px) {
+      .nav-items, .nav-right { display: none; }
+      .nav-hamburger { display: flex; }
+      .util-nav { display: none; }
+      .primary-nav__inner { grid-template-columns: 1fr auto; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- UTILITY NAV -->
+<nav class="util-nav" aria-label="Utility navigation">
+  <div class="util-nav__inner">
+    <a href="#" class="util-nav__link util-nav__link--accent">Speed of Light Foundation <span class="util-nav__ext" aria-hidden="true">&#8599;</span></a>
+    <div class="util-nav__sep"></div>
+    <a href="#" class="util-nav__link">For Patients &amp; Families</a>
+    <div class="util-nav__sep"></div>
+
+    <div class="util-drop" id="aboutDrop">
+      <button class="util-drop__btn" aria-expanded="false" aria-haspopup="true">
+        About ASTRO <span class="chev">&#9662;</span>
+      </button>
+      <div class="util-drop__panel" role="menu">
+        <a href="#">About ASTRO</a>
+        <a href="#">Membership</a>
+        <a href="#">What is Radiation Oncology?</a>
+        <a href="#">Board &amp; Leadership</a>
+        <a href="#">Governance</a>
+        <a href="#">History</a>
+        <a href="#">Press Room</a>
+        <a href="#">Industry Partnerships</a>
+        <a href="#">Jobs at ASTRO</a>
+      </div>
+    </div>
+
+    <div class="util-nav__sep"></div>
+
+    <div class="util-drop" id="memberDrop">
+      <button class="util-drop__btn" aria-expanded="false" aria-haspopup="true">
+        Welcome back, Dr. Chen <span class="chev">&#9662;</span>
+      </button>
+      <div class="util-drop__panel" role="menu">
+        <a href="#">My Profile</a>
+        <a href="#">ROhub <span class="ext">&#8599;</span></a>
+        <a href="#">ASTRO Academy <span class="ext">&#8599;</span></a>
+        <a href="#">Member Directory</a>
+        <a href="#">Manage Membership</a>
+        <a href="#" class="logout">Log Out</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- PRIMARY NAV -->
+<header class="primary-nav" id="primaryNav">
+  <div class="primary-nav__inner">
+
+    <a href="#" class="nav-logo" aria-label="ASTRO home">
+      <img src="astro-logo.svg" alt="ASTRO" width="231" height="37">
+    </a>
+
+    <nav class="nav-items" aria-label="Primary navigation">
+      <div class="nav-item" data-menu="meetings">
+        <button class="nav-item__btn" aria-expanded="false" aria-haspopup="true">
+          Meetings
+          <svg class="chev" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 3.5L5 6.5L7.5 3.5"/></svg>
+        </button>
+      </div>
+      <div class="nav-item" data-menu="education">
+        <button class="nav-item__btn" aria-expanded="false" aria-haspopup="true">
+          Education
+          <svg class="chev" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 3.5L5 6.5L7.5 3.5"/></svg>
+        </button>
+      </div>
+      <div class="nav-item" data-menu="practice">
+        <button class="nav-item__btn" aria-expanded="false" aria-haspopup="true">
+          Practice
+          <svg class="chev" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 3.5L5 6.5L7.5 3.5"/></svg>
+        </button>
+      </div>
+      <div class="nav-item" data-menu="career">
+        <button class="nav-item__btn" aria-expanded="false" aria-haspopup="true">
+          Career
+          <svg class="chev" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 3.5L5 6.5L7.5 3.5"/></svg>
+        </button>
+      </div>
+      <div class="nav-item" data-menu="publications">
+        <button class="nav-item__btn" aria-expanded="false" aria-haspopup="true">
+          Publications
+          <svg class="chev" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 3.5L5 6.5L7.5 3.5"/></svg>
+        </button>
+      </div>
+      <div class="nav-item" data-menu="advocacy">
+        <button class="nav-item__btn" aria-expanded="false" aria-haspopup="true">
+          Advocacy
+          <svg class="chev" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 3.5L5 6.5L7.5 3.5"/></svg>
+        </button>
+      </div>
+    </nav>
+
+    <div class="nav-right">
+      <button class="nav-search" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="10.5" cy="10.5" r="6.5"/>
+          <path d="M15.5 15.5L21 21"/>
+        </svg>
+        Search
+      </button>
+      <a href="#" class="nav-cta">Become a Member</a>
+    </div>
+
+    <button class="nav-hamburger" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════
+     DROPDOWNS — SLIM
+════════════════════════════════════════════ -->
+
+<!-- Meetings (slim) -->
+<div class="drop drop--slim" id="drop-meetings" role="region" aria-label="Meetings">
+  <div class="drop__body">
+    <div class="drop__left">
+      <div class="drop__links">
+        <a href="#">Annual Meeting</a>
+        <a href="#">Annual Refresher Course</a>
+        <a href="#">Head &amp; Neck Symposium</a>
+        <a href="#">Coding &amp; Coverage Seminar</a>
+        <a href="#">Radiopharmaceutical Symposium</a>
+        <a href="#">Advocacy Day</a>
+      </div>
+    </div>
+    <div class="drop__promo">
+      <div class="drop__promo-card">
+        <div class="drop__promo-eyebrow">Save the Date</div>
+        <div class="drop__promo-title">ASTRO 2026 Annual Meeting</div>
+        <p class="drop__promo-desc">Join us in San Diego, September 13&ndash;16 for the premier radiation oncology event of the year.</p>
+        <a href="#" class="drop__promo-link">
+          Register Now
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h7M6 3l3 3-3 3"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="drop__footer">
+    <a href="#" class="drop__see-all">
+      See All Meetings &amp; Events
+      <span class="drop__arrow">
+        <svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg>
+      </span>
+    </a>
+  </div>
+</div>
+
+<!-- Education (slim) -->
+<div class="drop drop--slim" id="drop-education" role="region" aria-label="Education">
+  <div class="drop__body">
+    <div class="drop__left">
+      <div class="drop__links">
+        <a href="#">Journals</a>
+        <a href="#">Guidelines &amp; Consensus Documents</a>
+        <a href="#">Meetings Calendar</a>
+        <a href="#">eContouring</a>
+        <a href="#">Radiopharmaceutical Therapy</a>
+        <a href="#">Functional Radiation Medicine</a>
+      </div>
+    </div>
+    <div class="drop__promo">
+      <div class="drop__promo-card">
+        <div class="drop__promo-eyebrow">Learn On Demand</div>
+        <div class="drop__promo-title">ASTRO Academy</div>
+        <p class="drop__promo-desc">Hundreds of courses, on-demand sessions, and self-assessment activities &mdash; all in one learning hub.</p>
+        <a href="#" class="drop__promo-link">
+          Browse Catalog
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h7M6 3l3 3-3 3"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="drop__footer">
+    <a href="#" class="drop__see-all">
+      See All Educational Resources
+      <span class="drop__arrow">
+        <svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg>
+      </span>
+    </a>
+  </div>
+</div>
+
+<!-- Advocacy (slim) -->
+<div class="drop drop--slim" id="drop-advocacy" role="region" aria-label="Advocacy">
+  <div class="drop__body">
+    <div class="drop__left">
+      <div class="drop__links">
+        <a href="#">Advocacy Day 2026</a>
+        <a href="#">ASTRO PAC</a>
+        <a href="#">Key Issues</a>
+        <a href="#">Become an Advocate</a>
+        <a href="#">Donate Now</a>
+      </div>
+    </div>
+    <div class="drop__promo">
+      <div class="drop__promo-card">
+        <div class="drop__promo-eyebrow">Washington Update</div>
+        <div class="drop__promo-title">What's Happening in Washington</div>
+        <p class="drop__promo-desc">Stay informed on the federal policy issues shaping radiation oncology practice and reimbursement.</p>
+        <a href="#" class="drop__promo-link">
+          Get the Newsletter
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h7M6 3l3 3-3 3"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="drop__footer">
+    <a href="#" class="drop__see-all">
+      See All Advocacy Resources
+      <span class="drop__arrow">
+        <svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg>
+      </span>
+    </a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     DROPDOWNS — MEGA
+════════════════════════════════════════════ -->
+
+<!-- Practice (mega · 3 col + promo) -->
+<div class="drop drop--mega drop--3col" id="drop-practice" role="region" aria-label="Practice">
+  <div class="drop__body">
+    <div class="drop__col">
+      <a href="#" class="drop__col-head">Manage Your Practice<svg class="drop__col-head-arrow" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg></a>
+      <div class="drop__col-links">
+        <a href="#">APEx Accreditation</a>
+        <a href="#">Reimbursement</a>
+      </div>
+    </div>
+    <div class="drop__col">
+      <a href="#" class="drop__col-head">Improve Quality &amp; Safety<svg class="drop__col-head-arrow" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg></a>
+      <div class="drop__col-links">
+        <a href="#">Incident Learning System (RO-ILS)</a>
+        <a href="#">Safety Is No Accident</a>
+        <a href="#">Data Standards</a>
+        <a href="#">Quality Measures</a>
+        <a href="#">Disaster Management</a>
+      </div>
+    </div>
+    <div class="drop__col">
+      <a href="#" class="drop__col-head">Educate Patients &amp; Others<svg class="drop__col-head-arrow" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg></a>
+      <div class="drop__col-links">
+        <a href="#">Patient Materials</a>
+        <a href="#">Radiation Therapy Presentations</a>
+        <a href="#" class="green-ext">Speed of Light Foundation <span class="ext">&#8599;</span></a>
+      </div>
+    </div>
+    <div class="drop__promo">
+      <div class="drop__promo-card">
+        <div class="drop__promo-eyebrow">Practice Resources</div>
+        <div class="drop__promo-title">Product Catalog</div>
+        <p class="drop__promo-desc">Discover ASTRO's library of clinical, quality, and educational products built for your practice.</p>
+        <a href="#" class="drop__promo-link">
+          Explore Catalog
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h7M6 3l3 3-3 3"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Career (mega · 3 col + promo) -->
+<div class="drop drop--mega drop--3col" id="drop-career" role="region" aria-label="Career">
+  <div class="drop__body">
+    <div class="drop__col">
+      <a href="#" class="drop__col-head">Career Support<svg class="drop__col-head-arrow" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg></a>
+      <div class="drop__col-links">
+        <a href="#">Explore Radiation Oncology Careers</a>
+        <a href="#">Residents Association (ARRO)</a>
+        <a href="#">Medical Students</a>
+        <a href="#">Career Center</a>
+      </div>
+    </div>
+    <div class="drop__col">
+      <a href="#" class="drop__col-head">Networking<svg class="drop__col-head-arrow" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg></a>
+      <div class="drop__col-links">
+        <a href="#">Membership Directory</a>
+        <a href="#">ROHub <span class="ext">&#8599;</span></a>
+        <a href="#">International Membership</a>
+        <a href="#">Network at Meetings</a>
+        <a href="#">Research Career Support (ASTRO ROCKS)</a>
+        <a href="#">Radiation Oncology&ndash;Biology Integration Network (ROBIN)</a>
+      </div>
+    </div>
+    <div class="drop__col">
+      <a href="#" class="drop__col-head">Get Involved<svg class="drop__col-head-arrow" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg></a>
+      <div class="drop__col-links">
+        <a href="#">Volunteer Committees</a>
+        <a href="#">Interest Groups</a>
+        <a href="#">Advocacy</a>
+      </div>
+    </div>
+    <div class="drop__promo">
+      <div class="drop__promo-card">
+        <div class="drop__promo-eyebrow">For Every Stage</div>
+        <div class="drop__promo-title">Mentor Connect</div>
+        <p class="drop__promo-desc">Pair with experienced radiation oncologists who can help guide the next steps in your career.</p>
+        <a href="#" class="drop__promo-link">
+          Find a Mentor
+          <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h7M6 3l3 3-3 3"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Publications (mega · 4 col, no promo) -->
+<div class="drop drop--mega drop--no-promo" id="drop-publications" role="region" aria-label="Publications">
+  <div class="drop__body">
+    <div class="drop__cols">
+      <div class="drop__col">
+        <a href="#" class="drop__col-head">Journals<svg class="drop__col-head-arrow" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg></a>
+        <div class="drop__col-links">
+          <a href="#">Red Journal</a>
+          <a href="#">Practical Radiation Oncology (PRO)</a>
+          <a href="#">Advances in Radiation Oncology</a>
+        </div>
+      </div>
+      <div class="drop__col">
+        <a href="#" class="drop__col-head">Guidelines &amp; Consensus Documents<svg class="drop__col-head-arrow" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg></a>
+        <div class="drop__col-links">
+          <a href="#">Clinical Practice Guidelines</a>
+          <a href="#">Consensus Documents</a>
+        </div>
+      </div>
+      <div class="drop__col">
+        <a href="#" class="drop__col-head">Society News<svg class="drop__col-head-arrow" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg></a>
+        <div class="drop__col-links">
+          <a href="#">ASTROgram Newsletter</a>
+          <a href="#">ASTROnews Magazine</a>
+          <a href="#">ASTROblog</a>
+          <a href="#">President's Corner</a>
+        </div>
+      </div>
+      <div class="drop__col">
+        <a href="#" class="drop__col-head">Podcasts<svg class="drop__col-head-arrow" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg></a>
+        <div class="podcast-card">
+          <img class="podcast-card__img" src="imgs/OnTarget_logo.jpg" alt="On Target podcast">
+          <div class="podcast-card__info">
+            <span class="podcast-card__name">On Target</span>
+            <a href="#" class="podcast-card__listen">Listen Now &#8594;</a>
+          </div>
+        </div>
+        <div class="podcast-card">
+          <img class="podcast-card__img" src="imgs/RadOncReportLogo.jpg" alt="RadOnc Report podcast">
+          <div class="podcast-card__info">
+            <span class="podcast-card__name">RadOnc Report</span>
+            <a href="#" class="podcast-card__listen">Listen Now &#8594;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="drop-overlay" id="dropOverlay"></div>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobileNav" role="dialog" aria-modal="true" aria-label="Site navigation">
+  <div class="mob-head">
+    <a href="#" class="mob-logo" aria-label="ASTRO home">
+      <img src="astro-logo.svg" alt="ASTRO" width="160" height="26">
+    </a>
+    <button class="mob-close" id="mobileNavClose" aria-label="Close menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="mob-body">
+
+    <div class="mob-l1">
+      <button class="mob-l1__btn">Meetings <span class="chev">&#9662;</span></button>
+      <div class="mob-l2">
+        <a href="#">Annual Meeting</a>
+        <a href="#">Annual Refresher Course</a>
+        <a href="#">Head &amp; Neck Symposium</a>
+        <a href="#">Coding &amp; Coverage Seminar</a>
+        <a href="#">Radiopharmaceutical Symposium</a>
+        <a href="#">Advocacy Day</a>
+      </div>
+    </div>
+
+    <div class="mob-l1">
+      <button class="mob-l1__btn">Education <span class="chev">&#9662;</span></button>
+      <div class="mob-l2">
+        <a href="#">Journals</a>
+        <a href="#">Guidelines &amp; Consensus Documents</a>
+        <a href="#">Meetings Calendar</a>
+        <a href="#">eContouring</a>
+        <a href="#">Radiopharmaceutical Therapy</a>
+        <a href="#">Functional Radiation Medicine</a>
+      </div>
+    </div>
+
+    <div class="mob-l1">
+      <button class="mob-l1__btn">Practice <span class="chev">&#9662;</span></button>
+      <div class="mob-l2">
+        <div class="mob-group__title">Manage Your Practice</div>
+        <a href="#">APEx Accreditation</a>
+        <a href="#">Reimbursement</a>
+        <div class="mob-group__title">Improve Quality &amp; Safety</div>
+        <a href="#">Incident Learning System (RO-ILS)</a>
+        <a href="#">Safety Is No Accident</a>
+        <a href="#">Data Standards</a>
+        <a href="#">Quality Measures</a>
+        <a href="#">Disaster Management</a>
+        <div class="mob-group__title">Educate Patients &amp; Others</div>
+        <a href="#">Patient Materials</a>
+        <a href="#">Radiation Therapy Presentations</a>
+        <a href="#">Speed of Light Foundation</a>
+      </div>
+    </div>
+
+    <div class="mob-l1">
+      <button class="mob-l1__btn">Career <span class="chev">&#9662;</span></button>
+      <div class="mob-l2">
+        <div class="mob-group__title">Career Support</div>
+        <a href="#">Explore Radiation Oncology Careers</a>
+        <a href="#">Residents Association (ARRO)</a>
+        <a href="#">Medical Students</a>
+        <a href="#">Career Center</a>
+        <div class="mob-group__title">Networking</div>
+        <a href="#">Membership Directory</a>
+        <a href="#">ROHub</a>
+        <a href="#">International Membership</a>
+        <a href="#">Network at Meetings</a>
+        <a href="#">Research Career Support (ASTRO ROCKS)</a>
+        <a href="#">Radiation Oncology&ndash;Biology Integration Network (ROBIN)</a>
+        <div class="mob-group__title">Get Involved</div>
+        <a href="#">Volunteer Committees</a>
+        <a href="#">Mentor Connect</a>
+        <a href="#">Advocacy</a>
+      </div>
+    </div>
+
+    <div class="mob-l1">
+      <button class="mob-l1__btn">Publications <span class="chev">&#9662;</span></button>
+      <div class="mob-l2">
+        <div class="mob-group__title">Journals</div>
+        <a href="#">Red Journal</a>
+        <a href="#">Practical Radiation Oncology (PRO)</a>
+        <a href="#">Advances in Radiation Oncology</a>
+        <div class="mob-group__title">Guidelines &amp; Consensus Documents</div>
+        <a href="#">Clinical Practice Guidelines</a>
+        <a href="#">Consensus Documents</a>
+        <div class="mob-group__title">Society News</div>
+        <a href="#">ASTROgram Newsletter</a>
+        <a href="#">ASTROnews Magazine</a>
+        <a href="#">ASTROblog</a>
+        <a href="#">President's Corner</a>
+        <div class="mob-group__title">Podcasts</div>
+        <a href="#">On Target</a>
+        <a href="#">RadOnc Report</a>
+      </div>
+    </div>
+
+    <div class="mob-l1">
+      <button class="mob-l1__btn">Advocacy <span class="chev">&#9662;</span></button>
+      <div class="mob-l2">
+        <a href="#">Advocacy Day 2026</a>
+        <a href="#">ASTRO PAC</a>
+        <a href="#">Key Issues</a>
+        <a href="#">Become an Advocate</a>
+        <a href="#">Donate Now</a>
+      </div>
+    </div>
+
+    <div class="mob-l1">
+      <button class="mob-l1__btn">About ASTRO <span class="chev">&#9662;</span></button>
+      <div class="mob-l2">
+        <a href="#">About ASTRO</a>
+        <a href="#">Membership</a>
+        <a href="#">What is Radiation Oncology?</a>
+        <a href="#">Board &amp; Leadership</a>
+        <a href="#">Governance</a>
+        <a href="#">History</a>
+        <a href="#">Press Room</a>
+        <a href="#">Industry Partnerships</a>
+        <a href="#">Jobs at ASTRO</a>
+      </div>
+    </div>
+
+  </div>
+  <div class="mob-footer">
+    <a href="#" class="mob-footer__cta">Become a Member</a>
+    <div class="mob-footer__links">
+      <a href="#">For Patients &amp; Families</a>
+      <a href="#">Log In</a>
+      <a href="#">Search</a>
+    </div>
+  </div>
+</div>
+
+<main></main>
+
+<script>
+(function () {
+  'use strict';
+
+  const navItems = document.querySelectorAll('.nav-item');
+  const overlay  = document.getElementById('dropOverlay');
+  let   current  = null;
+
+  function positionDrop(drop) {
+    const navRect = document.getElementById('primaryNav').getBoundingClientRect();
+    drop.style.top = navRect.bottom + 'px';
+  }
+
+  function open(menuId) {
+    const prev    = current;
+    const trigger = document.querySelector(`.nav-item[data-menu="${menuId}"]`);
+    const drop    = document.getElementById('drop-' + menuId);
+    if (!trigger || !drop) return;
+
+    if (prev && prev !== menuId) {
+      const prevTrigger = document.querySelector(`.nav-item[data-menu="${prev}"]`);
+      const prevDrop    = document.getElementById('drop-' + prev);
+      if (prevTrigger) {
+        prevTrigger.classList.remove('is-open');
+        prevTrigger.querySelector('.nav-item__btn').setAttribute('aria-expanded', 'false');
+      }
+      if (prevDrop) {
+        prevDrop.classList.add('is-exiting');
+        prevDrop.classList.remove('is-open');
+        setTimeout(() => prevDrop.classList.remove('is-visible', 'is-exiting'), 120);
+      }
+    } else if (!prev) {
+      overlay.classList.add('is-visible');
+    }
+
+    trigger.classList.add('is-open');
+    trigger.querySelector('.nav-item__btn').setAttribute('aria-expanded', 'true');
+    current = menuId;
+
+    positionDrop(drop);
+    drop.classList.add('is-visible');
+    requestAnimationFrame(() => drop.classList.add('is-open'));
+  }
+
+  function close(immediate) {
+    if (!current) return;
+    const trigger = document.querySelector(`.nav-item[data-menu="${current}"]`);
+    const drop    = document.getElementById('drop-' + current);
+    if (!trigger || !drop) return;
+
+    trigger.classList.remove('is-open');
+    trigger.querySelector('.nav-item__btn').setAttribute('aria-expanded', 'false');
+    overlay.classList.remove('is-visible');
+
+    if (immediate) {
+      drop.classList.remove('is-open', 'is-visible');
+      current = null;
+    } else {
+      drop.classList.remove('is-open');
+      current = null;
+      setTimeout(() => drop.classList.remove('is-visible'), 180);
+    }
+  }
+
+  navItems.forEach(item => {
+    item.querySelector('.nav-item__btn').addEventListener('click', e => {
+      e.preventDefault();
+      const id = item.dataset.menu;
+      if (current === id) close(); else open(id);
+    });
+  });
+
+  overlay.addEventListener('click', () => close());
+  document.addEventListener('click', e => {
+    if (!current) return;
+    const drop   = document.getElementById('drop-' + current);
+    const navBar = document.getElementById('primaryNav');
+    if (!drop.contains(e.target) && !navBar.contains(e.target)) close();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { close(); closeUtilDrops(); closeMobileNav(); }
+  });
+
+  // ── Utility dropdowns (About + Member) ──
+  const utilDrops = document.querySelectorAll('.util-drop');
+  function closeUtilDrops(except) {
+    utilDrops.forEach(d => {
+      if (d !== except) {
+        d.classList.remove('is-open');
+        d.querySelector('.util-drop__btn').setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+  utilDrops.forEach(drop => {
+    const btn = drop.querySelector('.util-drop__btn');
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const isOpen = drop.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', String(isOpen));
+      if (isOpen) closeUtilDrops(drop);
+    });
+  });
+  document.addEventListener('click', e => {
+    let inside = false;
+    utilDrops.forEach(d => { if (d.contains(e.target)) inside = true; });
+    if (!inside) closeUtilDrops();
+  });
+
+  // ── Mobile nav ──
+  const mobileNav   = document.getElementById('mobileNav');
+  const hamburger   = document.getElementById('hamburgerBtn');
+  const mobileClose = document.getElementById('mobileNavClose');
+
+  function openMobileNav() {
+    mobileNav.classList.add('is-open');
+    hamburger.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMobileNav() {
+    mobileNav.classList.remove('is-open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+  hamburger.addEventListener('click', openMobileNav);
+  mobileClose.addEventListener('click', closeMobileNav);
+
+  document.querySelectorAll('.mob-l1__btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const parent  = btn.parentElement;
+      const wasOpen = parent.classList.contains('is-open');
+      document.querySelectorAll('.mob-l1').forEach(el => el.classList.remove('is-open'));
+      if (!wasOpen) parent.classList.add('is-open');
+    });
+  });
+
+  // Figma capture helper: ?forcedrop=meetings
+  const params  = new URLSearchParams(window.location.search);
+  const forceId = params.get('forcedrop');
+  if (forceId) setTimeout(() => open(forceId), 200);
+})();
+</script>
+<script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+</body>
+</html>
