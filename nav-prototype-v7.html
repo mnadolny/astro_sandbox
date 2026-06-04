@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ASTRO.org — Navigation Prototype v7 (Hybrid · Per-Column See All)</title>
+  <title>ASTRO.org — Navigation Prototype v7 (IA Update)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet">
@@ -126,6 +126,89 @@
     .util-drop__panel a:hover { background: var(--color-blue-50); color: var(--color-blue); }
     .util-drop__panel a.logout { color: var(--color-plum); font-weight: 600; }
     .util-drop__panel a .ext { font-size: 10px; opacity: 0.45; }
+
+    /* About ASTRO — two-column wide panel with card */
+    .util-drop__panel--wide {
+      left: 0;
+      right: auto;
+      min-width: 0;
+      width: max-content;
+      padding: 24px;
+      grid-template-columns: max-content max-content;
+      gap: 0;
+    }
+    .util-drop.is-open .util-drop__panel--wide { display: grid; }
+    .util-drop__panel--wide .util-col:first-child {
+      padding-right: 32px;
+      border-right: 1px solid var(--color-alabaster);
+    }
+    .util-drop__panel--wide .util-col:last-child { padding-left: 32px; }
+
+    /* About card — compact */
+    .util-drop__panel--wide a.util-about-promo {
+      display: block;
+      position: relative;
+      overflow: hidden;
+      margin-top: 18px;
+      max-width: 168px;
+      padding: 14px 16px;
+      background: linear-gradient(180deg, #F4F8FC 0%, var(--color-blue-50) 100%);
+      border-radius: var(--radius-md);
+      border-bottom: none;
+    }
+    .util-about-promo::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(14, 76, 140, 0.07);
+      opacity: 0;
+      transition: opacity 0.22s ease;
+      pointer-events: none;
+    }
+    .util-drop__panel--wide a.util-about-promo:hover::before { opacity: 1; }
+    .util-about-promo__eyebrow,
+    .util-about-promo__title { position: relative; z-index: 1; }
+    .util-about-promo__eyebrow {
+      display: block;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-cyan-dark);
+      margin-bottom: 5px;
+    }
+    .util-about-promo__title {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.25;
+      color: var(--color-blue);
+      letter-spacing: -0.01em;
+    }
+    .util-about-promo__arrow { width: 12px; height: 12px; margin-left: 6px; vertical-align: baseline; display: inline-block; transition: transform 0.12s; }
+    .util-about-promo:hover .util-about-promo__arrow { transform: translateX(2px); }
+    .util-col__head {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-blue);
+      margin-bottom: 6px;
+    }
+    .util-drop__panel--wide a.util-col__link {
+      display: block;
+      justify-content: flex-start;
+      padding: 7px 0;
+      font-size: 13px;
+      border-bottom: none;
+      border-radius: 0;
+      text-decoration: underline;
+      text-decoration-color: transparent;
+      text-underline-offset: 3px;
+      text-decoration-thickness: 1.5px;
+      transition: color 0.15s ease, text-decoration-color 0.2s ease;
+    }
+    .util-drop__panel--wide a.util-col__link:hover { background: none; color: var(--color-blue); text-decoration-color: currentColor; }
 
     /* ════════════════════════════════════
        PRIMARY NAV
@@ -306,12 +389,15 @@
       column-gap: 0;
       padding: 28px 32px;
     }
+    .drop--mega.drop--2col .drop__body { grid-template-columns: minmax(240px, auto) minmax(240px, auto) 260px; }
     .drop--mega.drop--3col .drop__body { grid-template-columns: minmax(220px, auto) minmax(220px, auto) minmax(220px, auto) 260px; }
     .drop--mega.drop--4col .drop__body { grid-template-columns: repeat(4, minmax(200px, auto)) 260px; }
     .drop--mega.drop--no-promo .drop__body { display: block; padding: 28px 32px; }
+    .drop--mega.drop--no-promo .drop__col { padding: 0 18px; }
+    .drop--mega.drop--no-promo .drop__col:first-child { padding-left: 0; }
     .drop--mega.drop--no-promo .drop__cols {
       display: grid;
-      grid-template-columns: repeat(4, minmax(200px, auto));
+      grid-template-columns: repeat(4, minmax(220px, auto));
     }
     .drop--mega.drop--no-promo .drop__cols .drop__col:last-child { border-right: none; padding-right: 0; }
 
@@ -325,30 +411,45 @@
       padding: 0 24px;
       border-right: 1px solid var(--color-alabaster);
       min-width: 180px;
-      display: flex;
-      flex-direction: column;
     }
-    .drop--mega .drop__col-see-all {
-      display: block;
-      padding: 7px 10px;
-      margin: 6px -10px 0;
-      font-size: 14px;
-      font-weight: 400;
-      color: var(--color-blue);
-      text-decoration: none;
-      transition: color 0.12s;
-    }
-    .drop--mega .drop__col-see-all:hover { color: var(--color-cyan-dark); }
     .drop--mega .drop__col:first-child { padding-left: 0; }
     .drop--mega .drop__col-head {
-      display: block;
+      display: inline;
       font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.09em;
+      letter-spacing: 0.07em;
+      line-height: 1.4;
       color: var(--color-blue);
-      margin-bottom: 12px;
+      text-decoration: none;
+      padding: 3px 4px;
+      margin: 0 -4px 12px;
+      border-radius: var(--radius-sm);
+      transition: background 0.12s, color 0.12s;
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+      text-wrap: balance;
     }
+    .drop--mega .drop__col-head .nowrap { white-space: nowrap; }
+    .drop--mega a.drop__col-head { display: inline; }
+    .drop--mega .drop__col + .drop__col-links,
+    .drop--mega .drop__col > .drop__col-head { /* keep heading as inline so arrow flows with last word */ }
+    .drop--mega a.drop__col-head:hover {
+      background: var(--color-blue-50);
+      color: var(--color-cyan-dark);
+    }
+    .drop--mega .drop__col-head .drop__col-head-arrow {
+      width: 9px;
+      height: 9px;
+      vertical-align: -1px;
+      margin-left: 4px;
+      transition: transform 0.15s ease;
+    }
+    .drop--mega a.drop__col-head:hover .drop__col-head-arrow {
+      transform: translateX(2px);
+    }
+    /* heading needs a block-level gap below since it's now inline */
+    .drop--mega .drop__col-head + .drop__col-links { margin-top: 12px; }
     .drop--mega .drop__col-links a {
       display: block;
       font-size: 14px;
@@ -452,10 +553,8 @@
       display: inline-flex;
       align-items: center;
       gap: 9px;
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.09em;
+      font-size: 14px;
+      font-weight: 600;
       color: var(--color-blue);
       margin-top: 16px;
       transition: color 0.12s;
@@ -593,6 +692,7 @@
       .nav-item__btn { padding: 0 12px; font-size: 14px; }
       .drop--mega.drop--4col .drop__body { grid-template-columns: repeat(2, 1fr) 240px; row-gap: 24px; }
       .drop--mega.drop--3col .drop__body { grid-template-columns: repeat(3, 1fr) 240px; }
+      .drop--mega.drop--2col .drop__body { grid-template-columns: repeat(2, 1fr) 240px; }
     }
     @media (max-width: 900px) {
       .nav-items, .nav-right { display: none; }
@@ -607,28 +707,39 @@
 <!-- UTILITY NAV -->
 <nav class="util-nav" aria-label="Utility navigation">
   <div class="util-nav__inner">
-    <a href="#" class="util-nav__link util-nav__link--accent">Speed of Light Foundation <span class="util-nav__ext" aria-hidden="true">&#8599;</span></a>
-    <div class="util-nav__sep"></div>
-    <a href="#" class="util-nav__link">For Patients &amp; Families</a>
-    <div class="util-nav__sep"></div>
-
     <div class="util-drop" id="aboutDrop">
       <button class="util-drop__btn" aria-expanded="false" aria-haspopup="true">
         About ASTRO <span class="chev">&#9662;</span>
       </button>
-      <div class="util-drop__panel" role="menu">
-        <a href="#">About ASTRO</a>
-        <a href="#">Membership</a>
-        <a href="#">What is Radiation Oncology?</a>
-        <a href="#">Board &amp; Leadership</a>
-        <a href="#">Governance</a>
-        <a href="#">History</a>
-        <a href="#">Press Room</a>
-        <a href="#">Industry Partnerships</a>
-        <a href="#">Jobs at ASTRO</a>
+      <div class="util-drop__panel util-drop__panel--wide" role="menu">
+        <div class="util-col">
+          <div class="util-col__head">About ASTRO</div>
+          <a href="#" class="util-col__link">About ASTRO</a>
+          <a href="#" class="util-col__link">History</a>
+          <a href="#" class="util-col__link">Membership</a>
+          <a href="#" class="util-col__link">Board &amp; Leadership</a>
+          <a href="#" class="util-col__link">Governance</a>
+          <a href="#" class="util-col__link">Press Room</a>
+          <a href="#" class="util-col__link">Jobs at ASTRO</a>
+        </div>
+        <div class="util-col">
+          <div class="util-col__head">Get Involved</div>
+          <a href="#" class="util-col__link">Volunteer Committees</a>
+          <a href="#" class="util-col__link">Interest Groups</a>
+          <a href="#" class="util-col__link">Industry Partnerships</a>
+          <a href="#" class="util-about-promo">
+            <span class="util-about-promo__eyebrow">New to the Field?</span>
+            <span class="util-about-promo__title">What is Radiation Oncology?<svg class="util-about-promo__arrow" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h7M6 3l3 3-3 3"/></svg></span>
+          </a>
+        </div>
       </div>
     </div>
 
+    <div class="util-nav__sep"></div>
+
+    <a href="#" class="util-nav__link util-nav__link--accent">Speed of Light Foundation <span class="util-nav__ext" aria-hidden="true">&#8599;</span></a>
+    <div class="util-nav__sep"></div>
+    <a href="#" class="util-nav__link">For Patients &amp; Families</a>
     <div class="util-nav__sep"></div>
 
     <div class="util-drop" id="memberDrop">
@@ -755,12 +866,12 @@
   <div class="drop__body">
     <div class="drop__left">
       <div class="drop__links">
-        <a href="#">Journals</a>
-        <a href="#">Guidelines &amp; Consensus Documents</a>
-        <a href="#">Meetings Calendar</a>
+        <a href="#">ASTRO Academy</a>
+        <a href="#">Continuing Certification</a>
         <a href="#">eContouring</a>
-        <a href="#">Radiopharmaceutical Therapy</a>
         <a href="#">Functional Radiation Medicine</a>
+        <a href="#">Radiopharmaceutical Therapy</a>
+        <a href="#">Explore More Topics</a>
       </div>
     </div>
     <div class="drop__promo">
@@ -769,7 +880,7 @@
         <div class="drop__promo-title">ASTRO Academy</div>
         <p class="drop__promo-desc">Hundreds of courses, on-demand sessions, and self-assessment activities &mdash; all in one learning hub.</p>
         <a href="#" class="drop__promo-link">
-          Browse Catalog
+          Browse Courses
           <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h7M6 3l3 3-3 3"/></svg>
         </a>
       </div>
@@ -827,32 +938,30 @@
 <div class="drop drop--mega drop--3col" id="drop-practice" role="region" aria-label="Practice">
   <div class="drop__body">
     <div class="drop__col">
-      <span class="drop__col-head">Manage Your Practice</span>
+      <a href="#" class="drop__col-head">Manage Your <span class="nowrap">Practice<svg class="drop__col-head-arrow" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg></span></a>
       <div class="drop__col-links">
         <a href="#">APEx Accreditation</a>
+        <a href="#">Product Catalog</a>
         <a href="#">Reimbursement</a>
       </div>
-      <a href="#" class="drop__col-see-all">See all Manage Your Practice resources</a>
     </div>
     <div class="drop__col">
-      <span class="drop__col-head">Improve Quality &amp; Safety</span>
+      <a href="#" class="drop__col-head">Improve Quality &amp; <span class="nowrap">Safety<svg class="drop__col-head-arrow" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg></span></a>
       <div class="drop__col-links">
-        <a href="#">Incident Learning System (RO-ILS)</a>
-        <a href="#">Safety Is No Accident</a>
         <a href="#">Data Standards</a>
-        <a href="#">Quality Measures</a>
         <a href="#">Disaster Management</a>
+        <a href="#">Incident Learning System (RO-ILS)</a>
+        <a href="#">Quality Measures</a>
+        <a href="#">Safety Is No Accident</a>
       </div>
-      <a href="#" class="drop__col-see-all">See all Quality &amp; Safety resources</a>
     </div>
     <div class="drop__col">
-      <span class="drop__col-head">Educate Patients &amp; Others</span>
+      <a href="#" class="drop__col-head">Educate Patients &amp; <span class="nowrap">Others<svg class="drop__col-head-arrow" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg></span></a>
       <div class="drop__col-links">
         <a href="#">Patient Materials</a>
         <a href="#">Radiation Therapy Presentations</a>
         <a href="#" class="green-ext">Speed of Light Foundation <span class="ext">&#8599;</span></a>
       </div>
-      <a href="#" class="drop__col-see-all">See all Patient Education resources</a>
     </div>
     <div class="drop__promo">
       <div class="drop__promo-card">
@@ -866,41 +975,39 @@
       </div>
     </div>
   </div>
+  <div class="drop__footer">
+    <a href="#" class="drop__see-all">
+      See All Practice Resources
+      <span class="drop__arrow">
+        <svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg>
+      </span>
+    </a>
+  </div>
 </div>
 
 <!-- Career (mega · 3 col + promo) -->
-<div class="drop drop--mega drop--3col" id="drop-career" role="region" aria-label="Career">
+<div class="drop drop--mega drop--2col" id="drop-career" role="region" aria-label="Career">
   <div class="drop__body">
     <div class="drop__col">
-      <span class="drop__col-head">Career Support</span>
+      <a href="#" class="drop__col-head">Career <span class="nowrap">Support<svg class="drop__col-head-arrow" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg></span></a>
       <div class="drop__col-links">
-        <a href="#">Explore Radiation Oncology Careers</a>
-        <a href="#">Residents Association (ARRO)</a>
-        <a href="#">Medical Students</a>
         <a href="#">Career Center</a>
+        <a href="#">Explore Radiation Oncology Careers</a>
+        <a href="#">Medical Students</a>
+        <a href="#">Mentor Connect</a>
+        <a href="#">Residents Association (ARRO)</a>
       </div>
-      <a href="#" class="drop__col-see-all">See all Career Support resources</a>
     </div>
     <div class="drop__col">
-      <span class="drop__col-head">Networking</span>
+      <a href="#" class="drop__col-head">Networking<svg class="drop__col-head-arrow" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg></a>
       <div class="drop__col-links">
-        <a href="#">Membership Directory</a>
-        <a href="#">ROHub <span class="ext">&#8599;</span></a>
         <a href="#">International Membership</a>
+        <a href="#">Membership Directory</a>
         <a href="#">Network at Meetings</a>
-        <a href="#">Research Career Support (ASTRO ROCKS)</a>
         <a href="#">Radiation Oncology&ndash;Biology Integration Network (ROBIN)</a>
+        <a href="#">Research Career Support (ASTRO ROCKS)</a>
+        <a href="#">ROHub <span class="ext">&#8599;</span></a>
       </div>
-      <a href="#" class="drop__col-see-all">See all Networking resources</a>
-    </div>
-    <div class="drop__col">
-      <span class="drop__col-head">Get Involved</span>
-      <div class="drop__col-links">
-        <a href="#">Volunteer Committees</a>
-        <a href="#">Interest Groups</a>
-        <a href="#">Advocacy</a>
-      </div>
-      <a href="#" class="drop__col-see-all">See all ways to Get Involved</a>
     </div>
     <div class="drop__promo">
       <div class="drop__promo-card">
@@ -914,6 +1021,14 @@
       </div>
     </div>
   </div>
+  <div class="drop__footer">
+    <a href="#" class="drop__see-all">
+      See All Career Resources
+      <span class="drop__arrow">
+        <svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg>
+      </span>
+    </a>
+  </div>
 </div>
 
 <!-- Publications (mega · 4 col, no promo) -->
@@ -921,50 +1036,55 @@
   <div class="drop__body">
     <div class="drop__cols">
       <div class="drop__col">
-        <span class="drop__col-head">Journals</span>
+        <a href="#" class="drop__col-head">Journals<svg class="drop__col-head-arrow" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg></a>
         <div class="drop__col-links">
-          <a href="#">Red Journal</a>
-          <a href="#">Practical Radiation Oncology (PRO)</a>
           <a href="#">Advances in Radiation Oncology</a>
+          <a href="#">International Journal of Radiation Oncology &bull; Biology &bull; Physics (Red Journal)</a>
+          <a href="#">Practical Radiation Oncology (PRO)</a>
         </div>
-        <a href="#" class="drop__col-see-all">See all Journals</a>
       </div>
       <div class="drop__col">
-        <span class="drop__col-head">Guidelines &amp; Consensus Documents</span>
+        <a href="#" class="drop__col-head">Guidelines &amp; Consensus <span class="nowrap">Documents<svg class="drop__col-head-arrow" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg></span></a>
         <div class="drop__col-links">
           <a href="#">Clinical Practice Guidelines</a>
           <a href="#">Consensus Documents</a>
         </div>
-        <a href="#" class="drop__col-see-all">See all Guidelines &amp; Consensus Documents</a>
       </div>
       <div class="drop__col">
-        <span class="drop__col-head">Society News</span>
+        <a href="#" class="drop__col-head">Society <span class="nowrap">News<svg class="drop__col-head-arrow" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg></span></a>
         <div class="drop__col-links">
+          <a href="#">ASTROblog</a>
           <a href="#">ASTROgram Newsletter</a>
           <a href="#">ASTROnews Magazine</a>
-          <a href="#">ASTROblog</a>
           <a href="#">President's Corner</a>
         </div>
-        <a href="#" class="drop__col-see-all">See all Society News</a>
       </div>
       <div class="drop__col">
-        <span class="drop__col-head">Podcasts</span>
+        <a href="#" class="drop__col-head">Podcasts<svg class="drop__col-head-arrow" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg></a>
         <div class="podcast-card">
           <img class="podcast-card__img" src="imgs/OnTarget_logo.jpg" alt="On Target podcast">
           <div class="podcast-card__info">
             <span class="podcast-card__name">On Target</span>
-            <a href="#" class="podcast-card__listen">Listen Now &#8594;</a>
+            <a href="#" class="podcast-card__listen">Listen Now</a>
           </div>
         </div>
         <div class="podcast-card">
           <img class="podcast-card__img" src="imgs/RadOncReportLogo.jpg" alt="RadOnc Report podcast">
           <div class="podcast-card__info">
             <span class="podcast-card__name">RadOnc Report</span>
-            <a href="#" class="podcast-card__listen">Listen Now &#8594;</a>
+            <a href="#" class="podcast-card__listen">Listen Now</a>
           </div>
         </div>
       </div>
     </div>
+  </div>
+  <div class="drop__footer">
+    <a href="#" class="drop__see-all">
+      See All Publications
+      <span class="drop__arrow">
+        <svg viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg>
+      </span>
+    </a>
   </div>
 </div>
 
@@ -997,12 +1117,12 @@
     <div class="mob-l1">
       <button class="mob-l1__btn">Education <span class="chev">&#9662;</span></button>
       <div class="mob-l2">
-        <a href="#">Journals</a>
-        <a href="#">Guidelines &amp; Consensus Documents</a>
-        <a href="#">Meetings Calendar</a>
+        <a href="#">ASTRO Academy</a>
+        <a href="#">Continuing Certification</a>
         <a href="#">eContouring</a>
-        <a href="#">Radiopharmaceutical Therapy</a>
         <a href="#">Functional Radiation Medicine</a>
+        <a href="#">Radiopharmaceutical Therapy</a>
+        <a href="#">Explore More Topics</a>
       </div>
     </div>
 
@@ -1011,13 +1131,14 @@
       <div class="mob-l2">
         <div class="mob-group__title">Manage Your Practice</div>
         <a href="#">APEx Accreditation</a>
+        <a href="#">Product Catalog</a>
         <a href="#">Reimbursement</a>
         <div class="mob-group__title">Improve Quality &amp; Safety</div>
-        <a href="#">Incident Learning System (RO-ILS)</a>
-        <a href="#">Safety Is No Accident</a>
         <a href="#">Data Standards</a>
-        <a href="#">Quality Measures</a>
         <a href="#">Disaster Management</a>
+        <a href="#">Incident Learning System (RO-ILS)</a>
+        <a href="#">Quality Measures</a>
+        <a href="#">Safety Is No Accident</a>
         <div class="mob-group__title">Educate Patients &amp; Others</div>
         <a href="#">Patient Materials</a>
         <a href="#">Radiation Therapy Presentations</a>
@@ -1029,21 +1150,18 @@
       <button class="mob-l1__btn">Career <span class="chev">&#9662;</span></button>
       <div class="mob-l2">
         <div class="mob-group__title">Career Support</div>
-        <a href="#">Explore Radiation Oncology Careers</a>
-        <a href="#">Residents Association (ARRO)</a>
-        <a href="#">Medical Students</a>
         <a href="#">Career Center</a>
-        <div class="mob-group__title">Networking</div>
-        <a href="#">Membership Directory</a>
-        <a href="#">ROHub</a>
-        <a href="#">International Membership</a>
-        <a href="#">Network at Meetings</a>
-        <a href="#">Research Career Support (ASTRO ROCKS)</a>
-        <a href="#">Radiation Oncology&ndash;Biology Integration Network (ROBIN)</a>
-        <div class="mob-group__title">Get Involved</div>
-        <a href="#">Volunteer Committees</a>
+        <a href="#">Explore Radiation Oncology Careers</a>
+        <a href="#">Medical Students</a>
         <a href="#">Mentor Connect</a>
-        <a href="#">Advocacy</a>
+        <a href="#">Residents Association (ARRO)</a>
+        <div class="mob-group__title">Networking</div>
+        <a href="#">International Membership</a>
+        <a href="#">Membership Directory</a>
+        <a href="#">Network at Meetings</a>
+        <a href="#">Radiation Oncology&ndash;Biology Integration Network (ROBIN)</a>
+        <a href="#">Research Career Support (ASTRO ROCKS)</a>
+        <a href="#">ROHub</a>
       </div>
     </div>
 
@@ -1051,16 +1169,16 @@
       <button class="mob-l1__btn">Publications <span class="chev">&#9662;</span></button>
       <div class="mob-l2">
         <div class="mob-group__title">Journals</div>
-        <a href="#">Red Journal</a>
-        <a href="#">Practical Radiation Oncology (PRO)</a>
         <a href="#">Advances in Radiation Oncology</a>
+        <a href="#">International Journal of Radiation Oncology &bull; Biology &bull; Physics (Red Journal)</a>
+        <a href="#">Practical Radiation Oncology (PRO)</a>
         <div class="mob-group__title">Guidelines &amp; Consensus Documents</div>
         <a href="#">Clinical Practice Guidelines</a>
         <a href="#">Consensus Documents</a>
         <div class="mob-group__title">Society News</div>
+        <a href="#">ASTROblog</a>
         <a href="#">ASTROgram Newsletter</a>
         <a href="#">ASTROnews Magazine</a>
-        <a href="#">ASTROblog</a>
         <a href="#">President's Corner</a>
         <div class="mob-group__title">Podcasts</div>
         <a href="#">On Target</a>
@@ -1082,15 +1200,19 @@
     <div class="mob-l1">
       <button class="mob-l1__btn">About ASTRO <span class="chev">&#9662;</span></button>
       <div class="mob-l2">
+        <div class="mob-group__title">About ASTRO</div>
         <a href="#">About ASTRO</a>
+        <a href="#">History</a>
         <a href="#">Membership</a>
-        <a href="#">What is Radiation Oncology?</a>
         <a href="#">Board &amp; Leadership</a>
         <a href="#">Governance</a>
-        <a href="#">History</a>
         <a href="#">Press Room</a>
-        <a href="#">Industry Partnerships</a>
         <a href="#">Jobs at ASTRO</a>
+        <div class="mob-group__title">Get Involved</div>
+        <a href="#">Volunteer Committees</a>
+        <a href="#">Interest Groups</a>
+        <a href="#">Industry Partnerships</a>
+        <a href="#">What is Radiation Oncology?</a>
       </div>
     </div>
 
