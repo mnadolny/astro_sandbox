@@ -18,6 +18,7 @@
       --color-green:        #4E7E3A;
       --color-green-50:     #EAF1E5;
       --color-plum:         #C74090;
+      --color-plum-50:      #FBEAF4;
       --color-charcoal:     #58595B;
       --color-granite:      #979291;
       --color-alabaster:    #E5E6E5;
@@ -465,6 +466,10 @@
     .drop--mega .drop__col-links a .ext { font-size: 11px; opacity: 0.5; margin-left: 2px; }
     .drop--mega .drop__col-links a.green-ext { color: var(--color-green); font-weight: 500; }
     .drop--mega .drop__col-links a.green-ext:hover { background: var(--color-green-50); color: var(--color-green); }
+    .drop--mega .drop__col-links a.plum-ext { color: var(--color-plum); font-weight: 500; }
+    .drop--mega .drop__col-links a.plum-ext:hover { background: var(--color-plum-50); color: var(--color-plum); }
+    .drop__links a.advocacy-donate { color: var(--color-plum); font-weight: 700; }
+    .drop__links a.advocacy-donate:hover { background: var(--color-plum-50); color: var(--color-plum); }
 
     /* Podcast cards (Publications) */
     .podcast-card {
@@ -728,7 +733,6 @@
           <a href="#" class="util-col__link">Interest Groups</a>
           <a href="#" class="util-col__link">Industry Partnerships</a>
           <a href="#" class="util-about-promo">
-            <span class="util-about-promo__eyebrow">New to the Field?</span>
             <span class="util-about-promo__title">What is Radiation Oncology?<svg class="util-about-promo__arrow" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h7M6 3l3 3-3 3"/></svg></span>
           </a>
         </div>
@@ -901,11 +905,12 @@
   <div class="drop__body">
     <div class="drop__left">
       <div class="drop__links">
+        <a href="#">Become an Advocate</a>
         <a href="#">Advocacy Day 2026</a>
         <a href="#">ASTRO PAC</a>
         <a href="#">Key Issues</a>
-        <a href="#">Become an Advocate</a>
-        <a href="#">Donate Now</a>
+        <a href="#">What's Happening in Washington</a>
+        <a href="#" class="advocacy-donate">Donate Now</a>
       </div>
     </div>
     <div class="drop__promo">
@@ -960,7 +965,7 @@
       <div class="drop__col-links">
         <a href="#">Patient Materials</a>
         <a href="#">Radiation Therapy Presentations</a>
-        <a href="#" class="green-ext">Speed of Light Foundation <span class="ext">&#8599;</span></a>
+        <a href="#" class="plum-ext">Speed of Light Foundation <span class="ext">&#8599;</span></a>
       </div>
     </div>
     <div class="drop__promo">
