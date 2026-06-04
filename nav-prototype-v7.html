@@ -1328,7 +1328,10 @@
       e.stopPropagation();
       const isOpen = drop.classList.toggle('is-open');
       btn.setAttribute('aria-expanded', String(isOpen));
-      if (isOpen) closeUtilDrops(drop);
+      if (isOpen) {
+        closeUtilDrops(drop);  // close the other utility dropdown
+        close();               // close any open primary-nav dropdown
+      }
     });
   });
   document.addEventListener('click', e => {
