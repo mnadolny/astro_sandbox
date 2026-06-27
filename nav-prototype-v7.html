@@ -623,6 +623,65 @@
       color: var(--color-charcoal);
     }
     .mob-close svg { width: 20px; height: 20px; }
+
+    /* Prominent search + log-in bar, sits above the menu list */
+    .mob-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--color-alabaster);
+      flex-shrink: 0;
+    }
+    .mob-search {
+      flex: 1 1 auto;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      height: 46px;
+      padding: 0 16px;
+      background: var(--color-light-bg);
+      border: 1.5px solid var(--color-alabaster);
+      border-radius: var(--radius-pill);
+      transition: border-color 0.15s, background 0.15s;
+      min-width: 0;
+    }
+    .mob-search:focus-within {
+      border-color: var(--color-blue);
+      background: var(--color-white);
+    }
+    .mob-search svg { width: 19px; height: 19px; color: var(--color-granite); flex-shrink: 0; }
+    .mob-search input {
+      flex: 1 1 auto;
+      min-width: 0;
+      border: none;
+      background: none;
+      outline: none;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--color-charcoal);
+    }
+    .mob-search input::placeholder { color: var(--color-granite); font-weight: 400; }
+    .mob-login {
+      flex-shrink: 0;
+      height: 46px;
+      padding: 0 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      background: var(--color-blue);
+      color: var(--color-white);
+      font-size: 15px;
+      font-weight: 700;
+      border-radius: var(--radius-pill);
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+    .mob-login svg { width: 17px; height: 17px; }
+    .mob-login:hover { background: var(--color-blue-dark); }
+
     .mob-body { flex: 1; overflow-y: auto; }
 
     .mob-l1__btn {
@@ -646,14 +705,28 @@
       border-bottom: 1px solid var(--color-alabaster);
     }
     .mob-l1.is-open .mob-l2 { display: block; }
-    .mob-group__title {
+    .mob-l2 .mob-group__title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
       font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--color-blue);
       padding: 14px 20px 6px 24px;
+      border-bottom: none;
+      background: none;
+      transition: color 0.12s;
     }
+    .mob-l2 a.mob-group__title:hover { background: none; color: var(--color-cyan-dark); }
+    .mob-group__title-arrow {
+      width: 9px;
+      height: 9px;
+      flex-shrink: 0;
+      transition: transform 0.15s ease;
+    }
+    .mob-l2 a.mob-group__title:hover .mob-group__title-arrow { transform: translateX(2px); }
     .mob-l2 a {
       display: block;
       font-size: 15px;
@@ -1105,6 +1178,22 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
     </button>
   </div>
+  <div class="mob-top">
+    <label class="mob-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="10.5" cy="10.5" r="6.5"/>
+        <path d="M15.5 15.5L21 21"/>
+      </svg>
+      <input type="search" placeholder="Search ASTRO.org" aria-label="Search ASTRO.org">
+    </label>
+    <a href="#" class="mob-login">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+        <path d="M10 17l5-5-5-5M15 12H3"/>
+      </svg>
+      Log In
+    </a>
+  </div>
   <div class="mob-body">
 
     <div class="mob-l1">
@@ -1134,17 +1223,17 @@
     <div class="mob-l1">
       <button class="mob-l1__btn">Practice <span class="chev">&#9662;</span></button>
       <div class="mob-l2">
-        <div class="mob-group__title">Manage Your Practice</div>
+        <a href="#" class="mob-group__title">Manage Your Practice<svg class="mob-group__title-arrow" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg></a>
         <a href="#">APEx Accreditation</a>
         <a href="#">Product Catalog</a>
         <a href="#">Reimbursement</a>
-        <div class="mob-group__title">Improve Quality &amp; Safety</div>
+        <a href="#" class="mob-group__title">Improve Quality &amp; Safety<svg class="mob-group__title-arrow" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg></a>
         <a href="#">Data Standards</a>
         <a href="#">Disaster Management</a>
         <a href="#">Incident Learning System (RO-ILS)</a>
         <a href="#">Quality Measures</a>
         <a href="#">Safety Is No Accident</a>
-        <div class="mob-group__title">Educate Patients &amp; Others</div>
+        <a href="#" class="mob-group__title">Educate Patients &amp; Others<svg class="mob-group__title-arrow" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg></a>
         <a href="#">Patient Materials</a>
         <a href="#">Radiation Therapy Presentations</a>
         <a href="#">Speed of Light Foundation</a>
@@ -1154,13 +1243,13 @@
     <div class="mob-l1">
       <button class="mob-l1__btn">Career <span class="chev">&#9662;</span></button>
       <div class="mob-l2">
-        <div class="mob-group__title">Career Support</div>
+        <a href="#" class="mob-group__title">Career Support<svg class="mob-group__title-arrow" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg></a>
         <a href="#">Career Center</a>
         <a href="#">Explore Radiation Oncology Careers</a>
         <a href="#">Medical Students</a>
         <a href="#">Mentor Connect</a>
         <a href="#">Residents Association (ARRO)</a>
-        <div class="mob-group__title">Networking</div>
+        <a href="#" class="mob-group__title">Networking<svg class="mob-group__title-arrow" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg></a>
         <a href="#">International Membership</a>
         <a href="#">Membership Directory</a>
         <a href="#">Network at Meetings</a>
@@ -1173,19 +1262,19 @@
     <div class="mob-l1">
       <button class="mob-l1__btn">Publications <span class="chev">&#9662;</span></button>
       <div class="mob-l2">
-        <div class="mob-group__title">Journals</div>
+        <a href="#" class="mob-group__title">Journals<svg class="mob-group__title-arrow" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg></a>
         <a href="#">Advances in Radiation Oncology</a>
         <a href="#">International Journal of Radiation Oncology &bull; Biology &bull; Physics (Red Journal)</a>
         <a href="#">Practical Radiation Oncology (PRO)</a>
-        <div class="mob-group__title">Guidelines &amp; Consensus Documents</div>
+        <a href="#" class="mob-group__title">Guidelines &amp; Consensus Documents<svg class="mob-group__title-arrow" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg></a>
         <a href="#">Clinical Practice Guidelines</a>
         <a href="#">Consensus Documents</a>
-        <div class="mob-group__title">Society News</div>
+        <a href="#" class="mob-group__title">Society News<svg class="mob-group__title-arrow" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg></a>
         <a href="#">ASTROblog</a>
         <a href="#">ASTROgram Newsletter</a>
         <a href="#">ASTROnews Magazine</a>
         <a href="#">President's Corner</a>
-        <div class="mob-group__title">Podcasts</div>
+        <a href="#" class="mob-group__title">Podcasts<svg class="mob-group__title-arrow" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg></a>
         <a href="#">On Target</a>
         <a href="#">RadOnc Report</a>
       </div>
@@ -1205,7 +1294,7 @@
     <div class="mob-l1">
       <button class="mob-l1__btn">About ASTRO <span class="chev">&#9662;</span></button>
       <div class="mob-l2">
-        <div class="mob-group__title">About ASTRO</div>
+        <a href="#" class="mob-group__title">About ASTRO<svg class="mob-group__title-arrow" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg></a>
         <a href="#">About ASTRO</a>
         <a href="#">History</a>
         <a href="#">Membership</a>
@@ -1213,7 +1302,7 @@
         <a href="#">Governance</a>
         <a href="#">Press Room</a>
         <a href="#">Jobs at ASTRO</a>
-        <div class="mob-group__title">Get Involved</div>
+        <a href="#" class="mob-group__title">Get Involved<svg class="mob-group__title-arrow" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg></a>
         <a href="#">Volunteer Committees</a>
         <a href="#">Interest Groups</a>
         <a href="#">Industry Partnerships</a>
@@ -1226,8 +1315,8 @@
     <a href="#" class="mob-footer__cta">Become a Member</a>
     <div class="mob-footer__links">
       <a href="#">For Patients &amp; Families</a>
-      <a href="#">Log In</a>
-      <a href="#">Search</a>
+      <a href="#">About ASTRO</a>
+      <a href="#">Speed of Light Foundation</a>
     </div>
   </div>
 </div>
