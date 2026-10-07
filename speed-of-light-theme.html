@@ -101,6 +101,17 @@ code, pre { font-family: var(--mono); font-size: 0.875em; }
 .hero-strip { display: flex; height: 14px; border-radius: 999px; overflow: hidden; max-width: 560px; margin-top: 4px; }
 .hero-strip i { display: block; height: 100%; }
 
+/* ---------- Changes ---------- */
+.changes { display: grid; gap: 10px; }
+.change { display: grid; grid-template-columns: minmax(0, 220px) auto minmax(0, 1fr); gap: 6px 20px; align-items: center; padding: 14px 18px; border: 1px solid var(--alabaster); border-radius: 10px; }
+.change-role { font-weight: 800; color: var(--brand-dark); font-size: 15px; line-height: 1.3; }
+.change-note { font-size: 14px; line-height: 1.5; }
+.fromto { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11.5px; color: var(--body); white-space: nowrap; }
+.fromto i { width: 24px; height: 24px; border-radius: 6px; border: 1px solid rgba(0, 0, 0, 0.1); display: inline-block; }
+.fromto .x { position: relative; }
+.fromto .x::after { content: ""; position: absolute; left: -3px; right: -3px; top: 50%; height: 2px; background: var(--body); transform: rotate(-45deg); }
+@media (max-width: 720px) { .change { grid-template-columns: minmax(0, 1fr); } }
+
 /* ---------- Token reference ---------- */
 .token-group { display: grid; gap: 12px; margin-bottom: 34px; }
 .token-group h3 { font-size: 18px; }
@@ -306,6 +317,64 @@ pre.tokens-css .c { color: var(--accent-on-dark); }
     </div>
   </header>
 </div>
+
+<!-- =============== CHANGES =============== -->
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow chrome">Changes</span>
+      <h2>What changed from the dev's proposal</h2>
+      <p class="note">Everything else in the dev's palette carries over as written.</p>
+    </div>
+    <div class="changes">
+      <div class="change">
+        <span class="change-role">Green removed</span>
+        <span class="fromto"><i class="x" style="background:#4F7E2A"></i></span>
+        <span class="change-note">#4F7E2A is no longer in the theme. Pink and green sat on opposite sides of the color wheel at the same strength and clashed wherever they met.</span>
+      </div>
+      <div class="change">
+        <span class="change-role">Secondary button</span>
+        <span class="fromto"><i style="background:#4F7E2A"></i>→<i style="background:#fff;box-shadow:inset 0 0 0 3px #004B8D"></i>blue outline</span>
+        <span class="change-note">White with a brand-blue border and text. Fills brand blue on hover.</span>
+      </div>
+      <div class="change">
+        <span class="change-role">Donate button</span>
+        <span class="fromto"><i style="background:#4F7E2A"></i>→<i style="background:#BA1F7B"></i>#BA1F7B</span>
+        <span class="change-note">Raspberry with white text (5.88:1). Darkens to #931961 on hover. It's the only solid raspberry button.</span>
+      </div>
+      <div class="change">
+        <span class="change-role">Raspberry tint</span>
+        <span class="fromto"><i style="background:#EFE8E7"></i>→<i style="background:#F8EAF2"></i>#F8EAF2</span>
+        <span class="change-note">A true pale pink in place of the beige-looking tint, so accent panels read as part of the raspberry family.</span>
+      </div>
+      <div class="change">
+        <span class="change-role">Search button</span>
+        <span class="fromto"><i style="background:#EC8EC6"></i>→<i style="background:#fff;display:inline-grid;place-items:center"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5.25" stroke="#004B8D" stroke-width="2.5"/><path d="M11 11l3.5 3.5" stroke="#004B8D" stroke-width="2.5" stroke-linecap="round"/></svg></i>blue icon</span>
+        <span class="change-note">Brand-blue icon with no fill, darkening to dark blue on hover. The pink fill is gone from the header.</span>
+      </div>
+      <div class="change">
+        <span class="change-role">Success message</span>
+        <span class="fromto"><i style="background:#E5EBEF"></i><i style="background:#003764"></i>new</span>
+        <span class="change-note">The ticket didn't name one. Success is dark blue text on pale blue with a check icon.</span>
+      </div>
+      <div class="change">
+        <span class="change-role">Body text size</span>
+        <span class="fromto" style="font-family:var(--font);font-size:13px;font-weight:700;color:var(--brand-dark)">16px → 18px</span>
+        <span class="change-note">Body text is 18px with a 1.6 line height (1.5 in cards and panels), and small text never drops below 15px. Many of the site's readers are older.</span>
+      </div>
+      <div class="change">
+        <span class="change-role">H3 and card titles</span>
+        <span class="fromto" style="font-family:var(--font);font-size:13px;font-weight:700;color:var(--brand-dark)">20px regular</span>
+        <span class="change-note">H3s and content-card titles are 20px at regular weight, not extra bold. Card descriptions and due dates below them are 15px.</span>
+      </div>
+      <div class="change">
+        <span class="change-role">Lighter accent role</span>
+        <span class="fromto"><i style="background:#F2B1D7"></i>defined</span>
+        <span class="change-note">The ticket listed #F2B1D7 without a job. It's now the text-highlight underlay and the hover state for light-pink controls.</span>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- =============== IN CONTEXT =============== -->
 <section class="sec">
