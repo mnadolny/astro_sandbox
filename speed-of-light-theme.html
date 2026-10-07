@@ -13,7 +13,7 @@
    Deliberately single-theme (light) because the page shows literal brand colors. */
 :root {
   color-scheme: light;
-  /* Final palette: option A, blue + raspberry */
+  /* Final palette: blue + raspberry */
   --brand: #004B8D;
   --brand-dark: #003764;
   --pale-blue: #E5EBEF;
@@ -25,7 +25,7 @@
   --accent-light: #F2B1D7;
   --accent-on-dark: #F6C8E3;
   --focus: #E35AAB;
-  /* Unchanged ASTRO neutrals */
+  /* Neutrals shared with ASTRO */
   --body: #58595B;
   --granite: #979291;
   --alabaster: #E5E6E5;
@@ -92,6 +92,7 @@ code, pre { font-family: var(--mono); font-size: 0.875em; }
 
 /* ---------- Intro ---------- */
 .intro { padding-block: 40px 36px; display: grid; gap: 12px; }
+.doc-logo { display: block; height: 80px; width: auto; margin-bottom: 12px; }
 .intro h1 { font-size: clamp(32px, 5vw, 46px); font-weight: 900; letter-spacing: -0.01em; }
 .intro p { max-width: 66ch; font-size: 17px; }
 .meta { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -118,26 +119,13 @@ code, pre { font-family: var(--mono); font-size: 0.875em; }
 .tokens { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
 .tok { border: 1px solid var(--alabaster); border-radius: 10px; overflow: hidden; display: grid; grid-template-rows: 76px auto; background: var(--white); }
 .tok-chip { display: flex; align-items: flex-end; justify-content: space-between; padding: 10px 12px; font-size: 12px; font-weight: 800; }
-.tok-chip .badge { font-size: 10px; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; background: var(--white); color: var(--brand-dark); border-radius: 999px; padding: 2px 8px; }
 .tok-meta { padding: 10px 12px 12px; display: grid; gap: 2px; align-content: start; }
 .tok-name { font-weight: 800; color: var(--brand-dark); font-size: 14.5px; line-height: 1.3; }
 .tok-var { font-family: var(--mono); font-size: 11.5px; color: var(--body); overflow-wrap: anywhere; }
 .tok-hex { font-family: var(--mono); font-size: 12.5px; color: var(--brand-dark); font-weight: 600; }
 .tok-use { font-size: 13px; line-height: 1.45; margin-top: 4px; }
-.removed { display: flex; gap: 14px; align-items: center; padding: 12px 16px; border: 1px dashed var(--alabaster); border-radius: 10px; font-size: 14px; max-width: 70ch; }
-.removed i { width: 32px; height: 32px; border-radius: 8px; background: #4F7E2A; flex: none; position: relative; opacity: 0.55; }
-.removed i::after { content: ""; position: absolute; left: -4px; right: -4px; top: 50%; height: 2px; background: var(--body); transform: rotate(-45deg); }
 
-/* ---------- Rules ---------- */
-.rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
-.rule { border: 1px solid var(--alabaster); border-radius: 10px; padding: 18px 20px; display: grid; gap: 8px; align-content: start; }
-.rule h3 { font-size: 16px; }
-.rule p { font-size: 14.5px; }
-.rule-demo { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding-top: 4px; }
-.do, .dont { font-size: 10px; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 999px; padding: 2px 8px; }
-.do { background: var(--ok-bg); color: var(--ok-fg); }
-.dont { background: var(--warn-bg); color: var(--warn-fg); }
-.mini { display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; border-radius: 999px; padding: 6px 12px; }
+.neutral-note { font-size: 14.5px; background: var(--light-bg); border-radius: 8px; padding: 12px 16px; max-width: 72ch; }
 
 /* ---------- Site header mock ---------- */
 .frame { border: 1px solid var(--alabaster); border-radius: 10px; overflow: hidden; background: var(--white); }
@@ -230,8 +218,17 @@ code, pre { font-family: var(--mono); font-size: 0.875em; }
 
 
 .search-btn:hover { color: var(--brand-dark); }
+.sol-logo img { display: block; height: 56px; width: auto; }
 .panel-accent { border-top: 0; }
 .card-top::after { content: none; }
+.hero-dark p, .hero-fade p { font-size: 20px; line-height: 1.5; }
+.card-body { gap: 8px; padding: 18px 20px 22px; }
+.card-title { margin: 0; font-size: 20px; font-weight: 400; line-height: 1.3; color: var(--brand-dark); }
+.card-title a { color: inherit; text-decoration: none; }
+.card-title a:hover { color: var(--r-link-hover); text-decoration: underline; text-decoration-thickness: 1px; }
+.card-desc { font-size: 15px; line-height: 1.5; color: var(--body); }
+.card-due { font-size: 15px; line-height: 1.5; font-weight: 700; color: var(--body); margin-top: 4px; }
+.panel p, .links-demo { font-size: 17px; line-height: 1.5; }
 .highlight { background: var(--r-text-hl); padding: 0.08em 0.35em; border-radius: 4px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 
 /* ---------- Type ---------- */
@@ -269,6 +266,9 @@ td.num { font-variant-numeric: tabular-nums; font-weight: 800; color: var(--bran
 footer { padding-block: 32px 48px; border-top: 1px solid var(--alabaster); font-size: 13px; color: var(--body); }
 
 
+.t-body { font-size: 18px; line-height: 1.6; }
+.t-h3 { font-size: 20px; font-weight: 400; line-height: 1.3; }
+.t-small { font-size: 15px; }
 
 .res { display: inline-block; font-size: 11px; font-weight: 900; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
 .res.pass { background: var(--ok-bg); color: var(--ok-fg); }
@@ -280,12 +280,6 @@ footer { padding-block: 32px 48px; border-top: 1px solid var(--alabaster); font-
 .copy-btn:hover { background: var(--brand); color: var(--white); }
 pre.tokens-css { background: var(--brand-dark); color: #DCE4EC; border-radius: 10px; padding: 18px 20px; margin: 0; overflow-x: auto; line-height: 1.6; font-size: 13px; max-height: 560px; }
 pre.tokens-css .c { color: var(--accent-on-dark); }
-
-/* ---------- Questions ---------- */
-.questions { display: grid; gap: 10px; max-width: 76ch; margin: 0; padding: 0; list-style: none; }
-.questions li { border: 1px solid var(--alabaster); border-radius: 10px; padding: 14px 18px; display: grid; gap: 4px; font-size: 14.5px; }
-.questions strong { color: var(--brand-dark); font-size: 15.5px; }
-.carry { font-size: 10px; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; color: var(--body); }
 
 @media (max-width: 640px) {
   .nav { margin-left: 0; width: 100%; }
@@ -299,14 +293,14 @@ pre.tokens-css .c { color: var(--accent-on-dark); }
 <body>
 <div class="wrap">
   <header class="intro">
+    <img class="doc-logo" src="imgs/sol-logo.png" alt="Speed of Light, The ASTRO Foundation" width="145" height="101">
     <span class="eyebrow chrome">Speed of Light Foundation · theme for review</span>
     <h1>Speed of Light theme</h1>
     <div class="meta">
       <span class="status-pill">Final draft for review</span>
-      <span>Based on option A · Blue + raspberry</span>
       <span>October 8, 2026</span>
     </div>
-    <p>The Speed of Light theme uses the two colors in the Foundation's logo: ASTRO blue does the structural work, and raspberry is the accent. Green is no longer part of the theme. Donate is the one solid raspberry button, so it stands out on every page. Body and headings use Nunito.</p>
+    <p>The Speed of Light theme uses the two colors in the Foundation's logo: ASTRO blue does the structural work, and raspberry is the accent. Donate is the one solid raspberry button, so it stands out on every page. Body and headings use Nunito, with body text at 18px for easier reading.</p>
     <div class="hero-strip" aria-hidden="true">
       <i style="background:#003764;flex:5"></i><i style="background:#004B8D;flex:4"></i><i style="background:#E5EBEF;flex:3"></i><i style="background:#FFFFFF;flex:4"></i><i style="background:#FDF1F8;flex:2"></i><i style="background:#F8EAF2;flex:2"></i><i style="background:#F6C8E3;flex:1"></i><i style="background:#EC8EC6;flex:1"></i><i style="background:#BA1F7B;flex:2"></i><i style="background:#931961;flex:1"></i>
     </div>
@@ -353,6 +347,16 @@ pre.tokens-css .c { color: var(--accent-on-dark); }
         <span class="change-note">The ticket didn't name one. Success is dark blue text on pale blue with a check icon.</span>
       </div>
       <div class="change">
+        <span class="change-role">Body text size</span>
+        <span class="fromto" style="font-family:var(--font);font-size:13px;font-weight:700;color:var(--brand-dark)">16px → 18px</span>
+        <span class="change-note">Body text is 18px with a 1.6 line height (1.5 in cards and panels), and small text never drops below 15px. Many of the site's readers are older.</span>
+      </div>
+      <div class="change">
+        <span class="change-role">H3 and card titles</span>
+        <span class="fromto" style="font-family:var(--font);font-size:13px;font-weight:700;color:var(--brand-dark)">20px regular</span>
+        <span class="change-note">H3s and content-card titles are 20px at regular weight, not extra bold. Card descriptions and due dates below them are 15px.</span>
+      </div>
+      <div class="change">
         <span class="change-role">Lighter accent role</span>
         <span class="fromto"><i style="background:#F2B1D7"></i>defined</span>
         <span class="change-note">The ticket listed #F2B1D7 without a job. It's now the text-highlight underlay and the hover state for light-pink controls.</span>
@@ -372,15 +376,11 @@ pre.tokens-css .c { color: var(--accent-on-dark); }
 
     <div class="hero-grid">
       <div>
-        <div class="frame-label">Speed of Light header + dark hero <em>(logo is a type placeholder)</em></div>
+        <div class="frame-label">Speed of Light header + dark hero</div>
         <div class="frame">
           <div class="site-header">
             <div class="main-bar">
-              <a href="#" class="sol-logo" aria-label="Speed of Light, The ASTRO Foundation">
-                <span class="sol-speed">Speed of</span>
-                <span class="sol-light">Li<span class="sol-g">g</span>ht</span>
-                <span class="sol-found">The ASTRO Foundation</span>
-              </a>
+              <a href="#" class="sol-logo"><img src="imgs/sol-logo.png" alt="Speed of Light, The ASTRO Foundation" width="145" height="101"></a>
               <nav class="nav" aria-label="Mock primary navigation">
                 <a href="#" aria-current="page">Research &amp; Education <span class="chev" aria-hidden="true"></span></a>
                 <a href="#">Patient Resources <span class="chev" aria-hidden="true"></span></a>
@@ -509,9 +509,9 @@ pre.tokens-css .c { color: var(--accent-on-dark); }
         <div class="card">
           <div class="card-top" role="img" aria-label="Placeholder image"></div>
           <div class="card-body">
-            <span class="eyebrow">News</span>
-            <h5><a href="#">Speed of Light – The ASTRO Foundation awards $2.4 million to accelerate radiation medicine research</a></h5>
-            <span class="card-meta">Foundation news · Research</span>
+            <h3 class="card-title"><a href="#">ASTRO-ACS Clinician Scientist Development Grant</a></h3>
+            <p class="card-desc">Investing in practicing radiation oncologists who want to conduct cancer research and care for patients.</p>
+            <p class="card-due">Applications Due December 1, 2026</p>
           </div>
         </div>
       </div>
@@ -559,13 +559,13 @@ font-family: ui-monospace,
         <div class="tok"><div class="tok-chip" style="background:#EC8EC6;color:#003764">Aa</div><div class="tok-meta"><span class="tok-name">Light accent fill</span><span class="tok-var">--sol-color-accent-fill</span><span class="tok-hex">#EC8EC6</span><span class="tok-use">Checked checkboxes, alert pill. Always with dark blue text or marks.</span></div></div>
         <div class="tok"><div class="tok-chip" style="background:#F2B1D7;color:#003764">Aa</div><div class="tok-meta"><span class="tok-name">Lighter accent</span><span class="tok-var">--sol-color-accent-light</span><span class="tok-hex">#F2B1D7</span><span class="tok-use">Text-highlight underlay, hover for light-pink controls.</span></div></div>
         <div class="tok"><div class="tok-chip" style="background:#003764;color:#F6C8E3"><span>Aa</span><span style="width:26px;height:26px;border-radius:50%;background:#F6C8E3;display:block"></span></div><div class="tok-meta"><span class="tok-name">Accent on dark</span><span class="tok-var">--sol-color-accent-on-dark</span><span class="tok-hex">#F6C8E3</span><span class="tok-use">Eyebrows and highlighted words on dark blue.</span></div></div>
-        <div class="tok"><div class="tok-chip" style="background:#F8EAF2;color:#931961">Aa <span class="badge">Changed</span></div><div class="tok-meta"><span class="tok-name">Raspberry tint</span><span class="tok-var">--sol-color-accent-tint</span><span class="tok-hex">#F8EAF2</span><span class="tok-use">Pale accent panels, such as the More News card.</span></div></div>
+        <div class="tok"><div class="tok-chip" style="background:#F8EAF2;color:#931961">Aa</div><div class="tok-meta"><span class="tok-name">Raspberry tint</span><span class="tok-var">--sol-color-accent-tint</span><span class="tok-hex">#F8EAF2</span><span class="tok-use">Pale accent panels, such as the More News card.</span></div></div>
         <div class="tok"><div class="tok-chip" style="background:linear-gradient(180deg,#FDF1F8,#fff);color:#BA1F7B">Aa</div><div class="tok-meta"><span class="tok-name">Palest accent</span><span class="tok-var">--sol-color-accent-palest</span><span class="tok-hex">#FDF1F8</span><span class="tok-use">Top of the light hero fade.</span></div></div>
       </div>
     </div>
 
     <div class="token-group">
-      <h3>Neutrals, unchanged from ASTRO</h3>
+      <h3>Neutrals, shared with ASTRO</h3>
       <div class="tokens">
         <div class="tok"><div class="tok-chip" style="background:#58595B;color:#fff">Aa</div><div class="tok-meta"><span class="tok-name">Charcoal</span><span class="tok-var">--sol-color-text</span><span class="tok-hex">#58595B</span><span class="tok-use">Body text, captions, small labels.</span></div></div>
         <div class="tok"><div class="tok-chip" style="background:#979291;color:#fff">Aa</div><div class="tok-meta"><span class="tok-name">Granite</span><span class="tok-var">--sol-color-text-muted</span><span class="tok-hex">#979291</span><span class="tok-use">Large text and icons only (3.07:1 on white).</span></div></div>
@@ -576,46 +576,7 @@ font-family: ui-monospace,
       </div>
     </div>
 
-    <div class="removed"><i aria-hidden="true"></i><span><strong style="color:var(--brand-dark)">Removed: green #4F7E2A.</strong> Red, amber and the visited-link violet stay as they are in ASTRO. Their values aren't in this repo, so they aren't listed here.</span></div>
-  </div>
-</section>
-
-<!-- =============== RULES =============== -->
-<section class="sec">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="eyebrow chrome">Usage</span>
-      <h2>Rules that keep it working</h2>
-    </div>
-    <div class="rules">
-      <div class="rule">
-        <h3>One raspberry button per view</h3>
-        <p>Donate is the only solid raspberry button. Every other action is solid blue or a blue outline.</p>
-        <div class="rule-demo"><span class="do">Do</span><span class="mini" style="background:#004B8D;color:#fff">Apply</span><span class="mini" style="background:#BA1F7B;color:#fff">Donate</span></div>
-        <div class="rule-demo"><span class="dont">Don't</span><span class="mini" style="background:#BA1F7B;color:#fff">Apply</span><span class="mini" style="background:#BA1F7B;color:#fff">Donate</span></div>
-      </div>
-      <div class="rule">
-        <h3>Raspberry text stays small</h3>
-        <p>Use it for eyebrows, list markers, link hover, short highlighted words and short card headings. Body copy and page headings stay charcoal and dark blue.</p>
-      </div>
-      <div class="rule">
-        <h3>Dark blue on light pink</h3>
-        <p>Any text or icon on the light accent fill uses dark blue. White and charcoal fall below 4.5:1.</p>
-        <div class="rule-demo"><span class="do">Do</span><span class="mini" style="background:#EC8EC6;color:#003764">Due Nov 23</span><span class="dont">Don't</span><span class="mini" style="background:#EC8EC6;color:#fff">Due Nov 23</span></div>
-      </div>
-      <div class="rule">
-        <h3>Give light pink controls an edge</h3>
-        <p>The light accent fill is only 2.27:1 against white. Checkboxes need a dark blue border and check mark.</p>
-      </div>
-      <div class="rule">
-        <h3>Offset the focus ring</h3>
-        <p>Keep a 2px gap between the ring and the element. Touching brand blue, the ring drops to 2.64:1. Inside a raspberry-tint panel it sits at 2.86:1, so keep focusable items there on a white card or check them by hand.</p>
-      </div>
-      <div class="rule">
-        <h3>Granite is for large text</h3>
-        <p>Granite is 3.07:1 on white. Use charcoal for captions, dates and other small text.</p>
-      </div>
-    </div>
+    <p class="neutral-note">Red, amber and the visited-link violet also come from ASTRO. Their values aren't listed here yet.</p>
   </div>
 </section>
 
@@ -625,17 +586,17 @@ font-family: ui-monospace,
     <div class="sec-head">
       <span class="eyebrow chrome">Typography</span>
       <h2>Nunito everywhere, system mono for code</h2>
-      <p class="note">One family carries both headings and body. The size scale below is illustrative. The ticket only sets the families.</p>
+      <p class="note">One family carries both headings and body. Body text is 18px with a 1.6 line height, because many of the site's readers are older. Cards and panels use 1.5. Small text never goes below 15px. Heading sizes are illustrative.</p>
     </div>
     <div class="type-grid">
       <div class="specimen">
         <div class="spec-row"><span class="tag">Display<br>900</span><span class="t-display">Speed of Light</span></div>
         <div class="spec-row"><span class="tag">H1<br>800</span><span class="t-h1">Research gives hope</span></div>
         <div class="spec-row"><span class="tag">H2<br>800</span><span class="t-h2">Funding opportunities</span></div>
-        <div class="spec-row"><span class="tag">H3<br>800</span><span class="t-h3">ACS–ASTRO Clinician Scientist Development Grant</span></div>
+        <div class="spec-row"><span class="tag">H3<br>400 / 20</span><span class="t-h3">ACS–ASTRO Clinician Scientist Development Grant</span></div>
         <div class="spec-row"><span class="tag">Eyebrow<br>800 caps</span><span class="eyebrow">Research · Grants &amp; awards</span></div>
-        <div class="spec-row"><span class="tag">Body<br>400 / 16</span><p class="t-body">Speed of Light – The ASTRO Foundation funds research and education so that patients can receive high-quality, innovative radiation treatments that improve their quality of life.</p></div>
-        <div class="spec-row"><span class="tag">Small<br>400 / 13</span><span class="t-small">Letters of intent due November 23, 2026 · Full proposals due February 22, 2027</span></div>
+        <div class="spec-row"><span class="tag">Body<br>400 / 18<br>line 1.6</span><p class="t-body">Speed of Light – The ASTRO Foundation funds research and education so that patients can receive high-quality, innovative radiation treatments that improve their quality of life.</p></div>
+        <div class="spec-row"><span class="tag">Small<br>400 / 15</span><span class="t-small">Letters of intent due November 23, 2026 · Full proposals due February 22, 2027</span></div>
       </div>
       <div class="font-cards">
         <div class="font-card">
@@ -729,7 +690,7 @@ font-family: ui-monospace,
   --sol-color-accent-tint: #F8EAF2;
   --sol-color-accent-palest: #FDF1F8;
 
-  <span class="c">/* Neutrals, unchanged from ASTRO */</span>
+  <span class="c">/* Neutrals, shared with ASTRO */</span>
   --sol-color-text: #58595B;
   --sol-color-text-muted: #979291;
   --sol-color-border: #E5E6E5;
@@ -773,30 +734,19 @@ font-family: ui-monospace,
   <span class="c">/* Type */</span>
   --sol-font-sans: 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --sol-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+  --sol-font-size-body: 1.125rem;    <span class="c">/* 18px */</span>
+  --sol-line-height-body: 1.6;
+  --sol-line-height-tight: 1.5;      <span class="c">/* cards, panels, hero intros */</span>
+  --sol-font-size-lead: 1.25rem;     <span class="c">/* 20px, hero intros */</span>
+  --sol-font-size-small: 0.9375rem;  <span class="c">/* 15px, minimum; card descriptions and dates */</span>
+  --sol-font-size-h3: 1.25rem;       <span class="c">/* 20px, also content-card titles */</span>
+  --sol-font-weight-h3: 400;
 }</pre>
   </div>
 </section>
 
-<!-- =============== QUESTIONS =============== -->
-<section class="sec">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="eyebrow chrome">Before sign-off</span>
-      <h2>Open questions</h2>
-    </div>
-    <ul class="questions">
-      <li><strong>Can the Foundation drop ASTRO green?</strong>Check that ASTRO's brand guidelines don't require the parent green on Foundation pages.</li>
-      <li><strong>Does a raspberry Donate button match fundraising materials?</strong>Emails, print and donation-platform pages should use the same Donate color.</li>
-      <li><strong>Which templates get which hero?</strong>The dark hero and the pale-pink fade are both new. Decide where each one is used.</li>
-      <li><strong>Red, amber and visited-link violet</strong>These carry over from ASTRO. Add their values to the token file once confirmed.</li>
-      <li><span class="carry">Live site, unrelated to palette</span><strong>Hero and newsletter images stop short on wide screens</strong>On the current homepage, both background images end at about 80% of the page width.</li>
-      <li><span class="carry">Live site, unrelated to palette</span><strong>Hero caption bar contrast</strong>White text on the gray caption bar is about 3.1:1, which fails AA for the small subtitle lines.</li>
-    </ul>
-  </div>
-</section>
-
 <footer>
-  <div class="wrap">Speed of Light theme · final draft for review · based on the dev's ticket palette with option A changes · contrast figures use the WCAG 2.1 relative-luminance formula.</div>
+  <div class="wrap">Speed of Light theme · final draft for review · contrast figures use the WCAG 2.1 relative-luminance formula.</div>
 </footer>
 
 <script>
