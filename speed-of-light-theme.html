@@ -51,7 +51,7 @@
   --r-focus-dark: var(--focus);
   --r-search-bg: transparent; --r-search-fg: var(--brand); --r-search-hover: transparent;
   --r-check-bg: var(--accent-fill); --r-check-border: var(--brand-dark); --r-check-mark: var(--brand-dark);
-  --r-pill-bg: var(--accent-fill); --r-pill-fg: var(--brand-dark); --r-pill-tag-bg: var(--brand-dark);
+  --r-pill-bg: var(--accent-light); --r-pill-fg: var(--brand-dark); --r-pill-tag-bg: var(--brand-dark);
   --r-accent-panel: var(--rasp-tint);
   --r-hero-fade: var(--accent-palest);
   --r-card-rule: var(--rasp);
@@ -350,7 +350,7 @@ pre.tokens-css .c { color: var(--accent-on-dark); }
       <div class="change">
         <span class="change-role">Lighter accent role</span>
         <span class="fromto"><i style="background:#F2B1D7"></i>defined</span>
-        <span class="change-note">The ticket listed #F2B1D7 without a job. It's now the text-highlight underlay and the hover state for light-pink controls.</span>
+        <span class="change-note">The ticket listed #F2B1D7 without a job. It's now the alert pill background, the text-highlight underlay and the hover state for light-pink controls.</span>
       </div>
     </div>
   </div>
@@ -538,8 +538,8 @@ font-family: ui-monospace,
         <div class="tok"><div class="tok-chip" style="background:#BA1F7B;color:#fff">Aa</div><div class="tok-meta"><span class="tok-name">Raspberry</span><span class="tok-var">--sol-color-accent</span><span class="tok-hex">#BA1F7B</span><span class="tok-use">Donate button, eyebrows, list markers, link hover, highlighted words, active menu marker.</span></div></div>
         <div class="tok"><div class="tok-chip" style="background:#931961;color:#fff">Aa</div><div class="tok-meta"><span class="tok-name">Dark raspberry</span><span class="tok-var">--sol-color-accent-dark</span><span class="tok-hex">#931961</span><span class="tok-use">Hover for Donate and other raspberry elements.</span></div></div>
         <div class="tok"><div class="tok-chip" style="background:#E35AAB;color:#fff">Aa</div><div class="tok-meta"><span class="tok-name">Focus ring</span><span class="tok-var">--sol-color-focus</span><span class="tok-hex">#E35AAB</span><span class="tok-use">Keyboard focus outline, always with a 2px offset.</span></div></div>
-        <div class="tok"><div class="tok-chip" style="background:#EC8EC6;color:#003764">Aa</div><div class="tok-meta"><span class="tok-name">Light accent fill</span><span class="tok-var">--sol-color-accent-fill</span><span class="tok-hex">#EC8EC6</span><span class="tok-use">Checked checkboxes, alert pill. Always with dark blue text or marks.</span></div></div>
-        <div class="tok"><div class="tok-chip" style="background:#F2B1D7;color:#003764">Aa</div><div class="tok-meta"><span class="tok-name">Lighter accent</span><span class="tok-var">--sol-color-accent-light</span><span class="tok-hex">#F2B1D7</span><span class="tok-use">Text-highlight underlay, hover for light-pink controls.</span></div></div>
+        <div class="tok"><div class="tok-chip" style="background:#EC8EC6;color:#003764">Aa</div><div class="tok-meta"><span class="tok-name">Light accent fill</span><span class="tok-var">--sol-color-accent-fill</span><span class="tok-hex">#EC8EC6</span><span class="tok-use">Checked checkboxes. Always with a dark blue border and check mark.</span></div></div>
+        <div class="tok"><div class="tok-chip" style="background:#F2B1D7;color:#003764">Aa</div><div class="tok-meta"><span class="tok-name">Lighter accent</span><span class="tok-var">--sol-color-accent-light</span><span class="tok-hex">#F2B1D7</span><span class="tok-use">Alert pill, text-highlight underlay, hover for light-pink controls.</span></div></div>
         <div class="tok"><div class="tok-chip" style="background:#003764;color:#F6C8E3"><span>Aa</span><span style="width:26px;height:26px;border-radius:50%;background:#F6C8E3;display:block"></span></div><div class="tok-meta"><span class="tok-name">Accent on dark</span><span class="tok-var">--sol-color-accent-on-dark</span><span class="tok-hex">#F6C8E3</span><span class="tok-use">Eyebrows and highlighted words on dark blue.</span></div></div>
         <div class="tok"><div class="tok-chip" style="background:#F8EAF2;color:#931961">Aa</div><div class="tok-meta"><span class="tok-name">Raspberry tint</span><span class="tok-var">--sol-color-accent-tint</span><span class="tok-hex">#F8EAF2</span><span class="tok-use">Pale accent panels, such as the More News card.</span></div></div>
         <div class="tok"><div class="tok-chip" style="background:linear-gradient(180deg,#FDF1F8,#fff);color:#BA1F7B">Aa</div><div class="tok-meta"><span class="tok-name">Palest accent</span><span class="tok-var">--sol-color-accent-palest</span><span class="tok-hex">#FDF1F8</span><span class="tok-use">Top of the light hero fade.</span></div></div>
@@ -627,8 +627,8 @@ font-family: ui-monospace,
           <tr><td>Dark blue on pale blue (chips)</td><td><span class="sample" style="background:#E5EBEF;color:#003764">Chip</span></td><td class="num">10.09:1</td><td><span class="res pass">AAA</span></td></tr>
           <tr><td>Body text on pale blue</td><td><span class="sample" style="background:#E5EBEF;color:#58595B">Panel</span></td><td class="num">5.83:1</td><td><span class="res pass">AA</span></td></tr>
           <tr><td>Body text on raspberry tint</td><td><span class="sample" style="background:#F8EAF2;color:#58595B">Panel</span></td><td class="num">6.02:1</td><td><span class="res pass">AA</span></td></tr>
-          <tr><td>Dark blue on light accent fill</td><td><span class="sample" style="background:#EC8EC6;color:#003764">Pill</span></td><td class="num">5.35:1</td><td><span class="res pass">AA</span></td></tr>
-          <tr><td>Dark blue on lighter accent (highlight)</td><td><span class="sample" style="background:#F2B1D7;color:#003764">Highlight</span></td><td class="num">6.96:1</td><td><span class="res pass">AA</span></td></tr>
+          <tr><td>Dark blue check mark on light accent fill</td><td><span class="sample" style="background:#EC8EC6;color:#003764">&#10003;</span></td><td class="num">5.35:1</td><td><span class="res pass">AA (UI)</span></td></tr>
+          <tr><td>Dark blue on lighter accent (alert pill, highlight)</td><td><span class="sample" style="background:#F2B1D7;color:#003764">Pill</span></td><td class="num">6.96:1</td><td><span class="res pass">AA</span></td></tr>
           <tr><td>Accent on dark, on dark blue</td><td><span class="sample" style="background:#003764;color:#F6C8E3">Eyebrow</span></td><td class="num">8.26:1</td><td><span class="res pass">AAA</span></td></tr>
           <tr><td>Brand blue search icon on white</td><td><span class="sample" style="background:#fff;color:#004B8D;border:1px solid #E5E6E5"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true" style="vertical-align:-2px"><circle cx="7" cy="7" r="5.25" stroke="currentColor" stroke-width="2"/><path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Search</span></td><td class="num">8.78:1</td><td><span class="res pass">AA (UI)</span></td></tr>
           <tr><td>Focus ring against white</td><td><span class="sample" style="background:#fff;color:#58595B;outline:3px solid #E35AAB;outline-offset:1px">Ring</span></td><td class="num">3.32:1</td><td><span class="res pass">AA (UI)</span></td></tr>
@@ -703,6 +703,8 @@ font-family: ui-monospace,
   --sol-control-accent-bg: var(--sol-color-accent-fill);
   --sol-control-accent-hover-bg: var(--sol-color-accent-light);
   --sol-control-accent-fg: var(--sol-color-brand-dark);
+  --sol-alert-pill-bg: var(--sol-color-accent-light);
+  --sol-alert-pill-fg: var(--sol-color-brand-dark);
 
   --sol-panel-info-bg: var(--sol-color-brand-pale);
   --sol-panel-accent-bg: var(--sol-color-accent-tint);
