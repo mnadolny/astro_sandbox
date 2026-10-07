@@ -287,53 +287,6 @@ pre.tokens-css .c { color: var(--accent-on-dark); }
 .questions strong { color: var(--brand-dark); font-size: 15.5px; }
 .carry { font-size: 10px; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; color: var(--body); }
 
-/* ---------- Today vs proposed ---------- */
-.pairs { display: grid; gap: 44px; }
-.pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px 24px; align-items: start; }
-.pair--wide { grid-template-columns: minmax(0, 1fr); }
-.pair-title { grid-column: 1 / -1; font-size: 18px; }
-.pair-notes { grid-column: 1 / -1; margin: 0; padding-left: 1.2em; font-size: 14px; display: grid; gap: 2px; }
-.pair-notes li::marker { color: var(--body); }
-.ex-fig { margin: 0; display: grid; gap: 6px; min-width: 0; }
-.ex-fig img { display: block; width: 100%; height: auto; border: 1px solid var(--alabaster); border-radius: 8px; }
-.ex-tag { font-size: 11px; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; color: var(--body); }
-.ex-tag--new { color: var(--brand-dark); }
-.ex { border: 1px solid var(--alabaster); border-radius: 8px; overflow: hidden; background: var(--white); font-size: 11px; line-height: 1.45; color: var(--body); }
-.ex.site-header { border-bottom: 4px solid var(--brand); }
-.ex .main-bar { padding: 10px 14px; }
-.ex .sol-light { font-size: 26px; }
-.ex .nav { font-size: 11px; gap: 4px 16px; }
-.ex-h { margin: 0 0 10px; text-align: center; font-size: 14px; font-weight: 700; color: var(--brand-dark); }
-.btn-xs { font-size: 10.5px; padding: 6px 12px; border-width: 1.5px; }
-.ex-impact { padding: 14px 14px 16px; }
-.ex-impact-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr); gap: 16px; align-items: center; }
-.ex-stats { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px 10px; }
-.ex-stat { grid-column: span 2; display: grid; gap: 2px; align-content: start; padding-bottom: 8px; border-bottom: 1px solid var(--alabaster); }
-.ex-stat--half { grid-column: span 3; }
-.ex-stat b { font-size: 13px; font-weight: 800; color: var(--brand-dark); }
-.ex-stat span { font-size: 8.5px; line-height: 1.35; }
-.ex-impact-cta { display: grid; gap: 10px; }
-.ex-lead { font-size: 12px; font-weight: 800; line-height: 1.3; color: var(--brand-dark); }
-.ex-band { background: var(--pale-blue); padding: 14px; }
-.ex-news { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; align-items: start; }
-.ex-fund { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; align-items: start; }
-.ex-card { background: var(--white); border-radius: 4px; overflow: hidden; display: grid; gap: 4px; padding-bottom: 8px; }
-.ex-card img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; }
-.ex-card p { margin: 0; padding-inline: 6px; text-align: center; font-size: 9px; font-weight: 700; line-height: 1.3; color: var(--brand-dark); }
-.ex-card--left p { text-align: left; }
-.ex-card span { padding-inline: 6px; font-size: 7.5px; line-height: 1.35; }
-.ex-card em { padding-inline: 6px; font-style: normal; font-size: 7.5px; font-weight: 800; line-height: 1.35; color: var(--brand-dark); }
-.ex-fund .ex-card img { aspect-ratio: 4 / 3; }
-.ex-more { background: var(--rasp-tint); border-radius: 4px; padding: 8px; display: grid; gap: 5px; align-content: start; }
-.ex-more b { font-size: 9px; font-weight: 800; color: var(--rasp); line-height: 1.3; }
-.ex-more span { font-size: 7.5px; line-height: 1.35; }
-.ex-more .btn { justify-self: end; font-size: 9px; padding: 4px 9px; }
-@media (max-width: 860px) { .pair { grid-template-columns: minmax(0, 1fr); } }
-@media (max-width: 520px) {
-  .ex-news { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .ex-impact-grid { grid-template-columns: minmax(0, 1fr); }
-}
-
 @media (max-width: 640px) {
   .nav { margin-left: 0; width: 100%; }
   .spec-row { grid-template-columns: minmax(0, 1fr); gap: 4px; }
@@ -366,7 +319,7 @@ pre.tokens-css .c { color: var(--accent-on-dark); }
     <div class="sec-head">
       <span class="eyebrow chrome">Changes</span>
       <h2>What changed from the dev's proposal</h2>
-      <p class="note">Everything else in the dev's palette carries over as written. See <a href="#today">today vs. proposed</a> for how these land on the real homepage.</p>
+      <p class="note">Everything else in the dev's palette carries over as written.</p>
     </div>
     <div class="changes">
       <div class="change">
@@ -403,91 +356,6 @@ pre.tokens-css .c { color: var(--accent-on-dark); }
         <span class="change-role">Lighter accent role</span>
         <span class="fromto"><i style="background:#F2B1D7"></i>defined</span>
         <span class="change-note">The ticket listed #F2B1D7 without a job. It's now the text-highlight underlay and the hover state for light-pink controls.</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- =============== TODAY VS PROPOSED =============== -->
-<section class="sec" id="today">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="eyebrow chrome">Real examples</span>
-      <h2>Today vs. proposed on the homepage</h2>
-      <p class="note">Each "Today" image is cropped from a full-page screenshot of the live Speed of Light homepage, so it's low resolution. "Proposed" rebuilds the same section with the final theme. Layout and copy stay the same; only colors change.</p>
-    </div>
-
-    <div class="pairs">
-      <div class="pair pair--wide">
-        <h3 class="pair-title">Header</h3>
-        <figure class="ex-fig"><figcaption class="ex-tag">Today</figcaption><img src="imgs/sol-today-header.png" alt="Live Speed of Light header with a green Donate button" loading="lazy"></figure>
-        <figure class="ex-fig"><figcaption class="ex-tag ex-tag--new">Proposed</figcaption>
-          <div class="ex site-header">
-            <div class="main-bar">
-              <span class="sol-logo"><span class="sol-speed">Speed of</span><span class="sol-light">Li<span class="sol-g">g</span>ht</span><span class="sol-found">The ASTRO Foundation</span></span>
-              <span class="nav"><a href="#">Research &amp; Education <span class="chev" aria-hidden="true"></span></a><a href="#">Patient Resources <span class="chev" aria-hidden="true"></span></a><a href="#">About Us <span class="chev" aria-hidden="true"></span></a><a href="#">Get Involved <span class="chev" aria-hidden="true"></span></a></span>
-              <span class="hdr-actions"><button type="button" class="search-btn" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5.25" stroke="currentColor" stroke-width="2"/><path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button><a href="#" class="btn btn-donate btn-hdr">Donate</a></span>
-            </div>
-          </div>
-        </figure>
-        <ul class="pair-notes"><li>Donate goes from a green rectangle to a raspberry pill.</li><li>Search stays a plain blue icon, as it is today.</li><li>The brand-blue rule is added under the header.</li></ul>
-      </div>
-
-      <div class="pair">
-        <h3 class="pair-title">Our Impact</h3>
-        <figure class="ex-fig"><figcaption class="ex-tag">Today</figcaption><img src="imgs/sol-today-impact.png" alt="Live Our Impact section with blue Donate Now and outline More Ways to Give buttons" loading="lazy"></figure>
-        <figure class="ex-fig"><figcaption class="ex-tag ex-tag--new">Proposed</figcaption>
-          <div class="ex ex-impact">
-            <h4 class="ex-h">Our Impact</h4>
-            <div class="ex-impact-grid">
-              <div class="ex-stats">
-                <div class="ex-stat ex-stat--half"><b>$15.8 million</b><span>awarded to 150+ teams of investigators</span></div>
-                <div class="ex-stat ex-stat--half"><b>$90+ million</b><span>in follow-on funding demonstrating the impact and scalability of funded research</span></div>
-                <div class="ex-stat"><b>245</b><span>presentations and posters to disseminate findings and amplify solutions</span></div>
-                <div class="ex-stat"><b>22</b><span>new tools, programs and resources supporting patients and healthcare providers</span></div>
-                <div class="ex-stat"><b>127</b><span>peer-reviewed papers published to advance knowledge and impact</span></div>
-              </div>
-              <div class="ex-impact-cta">
-                <p class="ex-lead">Helping millions of people treated with radiation therapy receive the highest quality care and improved outcomes.</p>
-                <div class="btn-row"><a href="#" class="btn btn-donate btn-xs">Donate Now</a><a href="#" class="btn btn-secondary btn-xs">More Ways to Give</a></div>
-              </div>
-            </div>
-          </div>
-        </figure>
-        <ul class="pair-notes"><li>Donate Now goes from blue to raspberry, matching the header.</li><li>More Ways to Give becomes a full brand-blue outline.</li><li>Heading and stats move to dark blue.</li></ul>
-      </div>
-
-      <div class="pair">
-        <h3 class="pair-title">News and Updates</h3>
-        <figure class="ex-fig"><figcaption class="ex-tag">Today</figcaption><img src="imgs/sol-today-news.png" alt="Live News and Updates band with a beige More News card and raspberry Read More button" loading="lazy"></figure>
-        <figure class="ex-fig"><figcaption class="ex-tag ex-tag--new">Proposed</figcaption>
-          <div class="ex ex-band">
-            <h4 class="ex-h">News and Updates</h4>
-            <div class="ex-news">
-              <div class="ex-card"><img src="imgs/sol-photo-news-1.jpg" alt=""><p>Volunteer for the Foundation by October 16</p></div>
-              <div class="ex-card"><img src="imgs/sol-photo-news-2.jpg" alt=""><p>Honoring Excellence: 2026 Speed of Light and ARRO Publication Award Winners</p></div>
-              <div class="ex-card"><img src="imgs/sol-photo-news-3.jpg" alt=""><p>Speed of Light – The ASTRO Foundation Awards $2.4 Million to Accelerate Radiation Medicine Research</p></div>
-              <div class="ex-more"><b>More News and Updates</b><span>Stay connected to the latest news, breakthroughs, events, and stories of impact powered by Speed of Light – The ASTRO Foundation.</span><a href="#" class="btn btn-primary btn-xs">Read More</a></div>
-            </div>
-          </div>
-        </figure>
-        <ul class="pair-notes"><li>The More News card goes from beige with a pink top line to pale pink with no line.</li><li>Read More becomes brand blue, so Donate stays the only raspberry button.</li><li>Card titles move to dark blue.</li></ul>
-      </div>
-
-      <div class="pair">
-        <h3 class="pair-title">Funding Opportunities</h3>
-        <figure class="ex-fig"><figcaption class="ex-tag">Today</figcaption><img src="imgs/sol-today-funding.png" alt="Live Funding Opportunities cards with blue titles" loading="lazy"></figure>
-        <figure class="ex-fig"><figcaption class="ex-tag ex-tag--new">Proposed</figcaption>
-          <div class="ex ex-band">
-            <h4 class="ex-h">Funding Opportunities</h4>
-            <div class="ex-fund">
-              <div class="ex-card ex-card--left"><img src="imgs/sol-photo-fund-1.jpg" alt=""><p>Innovation Awards</p><span>Accelerating research on radiation therapy that advances strategic priorities for the field and improves outcomes for patients.</span><em>Letters of Intent Due November 23, 2026<br>Full Proposals Due February 22, 2027</em></div>
-              <div class="ex-card ex-card--left"><img src="imgs/sol-photo-fund-2.jpg" alt=""><p>ACS-ASTRO Dr. Felix Feng Clinician Scientist Development Grant</p><span>Supporting practicing radiation oncologists pursuing research questions relevant to improving health across the cancer continuum.</span><em>Applications Due December 1, 2026</em></div>
-              <div class="ex-card ex-card--left"><img src="imgs/sol-photo-fund-3.jpg" alt=""><p>ASTRO-ACS Clinician Scientist Development Grant</p><span>Investing in practicing radiation oncologists who want to conduct cancer research and care for patients.</span><em>Applications Due December 1, 2026</em></div>
-            </div>
-          </div>
-        </figure>
-        <ul class="pair-notes"><li>Section heading and card titles move to dark blue.</li><li>Due dates use dark blue instead of gray.</li><li>Pale blue band is unchanged.</li></ul>
       </div>
     </div>
   </div>
