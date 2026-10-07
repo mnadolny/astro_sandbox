@@ -292,12 +292,6 @@ footer { padding-block: 32px 48px; border-top: 1px solid var(--alabaster); font-
 pre.tokens-css { background: var(--brand-dark); color: #DCE4EC; border-radius: 10px; padding: 18px 20px; margin: 0; overflow-x: auto; line-height: 1.6; font-size: 13px; max-height: 560px; }
 pre.tokens-css .c { color: var(--accent-on-dark); }
 
-/* ---------- Questions ---------- */
-.questions { display: grid; gap: 10px; max-width: 76ch; margin: 0; padding: 0; list-style: none; }
-.questions li { border: 1px solid var(--alabaster); border-radius: 10px; padding: 14px 18px; display: grid; gap: 4px; font-size: 14.5px; }
-.questions strong { color: var(--brand-dark); font-size: 15.5px; }
-.carry { font-size: 10px; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; color: var(--body); }
-
 @media (max-width: 640px) {
   .nav { margin-left: 0; width: 100%; }
   .spec-row { grid-template-columns: minmax(0, 1fr); gap: 4px; }
@@ -806,24 +800,6 @@ font-family: ui-monospace,
   --sol-font-size-h3: 1.25rem;       <span class="c">/* 20px, also content-card titles */</span>
   --sol-font-weight-h3: 400;
 }</pre>
-  </div>
-</section>
-
-<!-- =============== QUESTIONS =============== -->
-<section class="sec">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="eyebrow chrome">Before sign-off</span>
-      <h2>Open questions</h2>
-    </div>
-    <ul class="questions">
-      <li><strong>Can the Foundation drop ASTRO green?</strong>Check that ASTRO's brand guidelines don't require the parent green on Foundation pages.</li>
-      <li><strong>Does a raspberry Donate button match fundraising materials?</strong>Emails, print and donation-platform pages should use the same Donate color.</li>
-      <li><strong>Which templates get which hero?</strong>The dark hero and the pale-pink fade are both new. Decide where each one is used.</li>
-      <li><strong>Red, amber and visited-link violet</strong>These carry over from ASTRO. Add their values to the token file once confirmed.</li>
-      <li><span class="carry">Live site, unrelated to palette</span><strong>Hero and newsletter images stop short on wide screens</strong>On the current homepage, both background images end at about 80% of the page width.</li>
-      <li><span class="carry">Live site, unrelated to palette</span><strong>Hero caption bar contrast</strong>White text on the gray caption bar is about 3.1:1, which fails AA for the small subtitle lines.</li>
-    </ul>
   </div>
 </section>
 
