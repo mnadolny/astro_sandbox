@@ -1,0 +1,62 @@
+/* Speed of Light theme · final draft for review · October 8, 2026 */
+:root {
+  /* Blues */
+  --sol-color-brand-dark: #003764;
+  --sol-color-brand: #004B8D;
+  --sol-color-brand-pale: #E5EBEF;
+
+  /* Raspberry accent */
+  --sol-color-accent: #BA1F7B;
+  --sol-color-accent-dark: #931961;
+  --sol-color-focus: #E35AAB;
+  --sol-color-accent-fill: #EC8EC6;
+  --sol-color-accent-light: #F2B1D7;
+  --sol-color-accent-on-dark: #F6C8E3;
+  --sol-color-accent-tint: #F8EAF2;
+  --sol-color-accent-palest: #FDF1F8;
+
+  /* Neutrals, unchanged from ASTRO */
+  --sol-color-text: #58595B;
+  --sol-color-text-muted: #979291;
+  --sol-color-border: #E5E6E5;
+  --sol-color-bg-alt: #F4F6F8;
+  --sol-color-cream: #FBF5E5;
+  --sol-color-white: #FFFFFF;
+
+  /* Roles */
+  --sol-heading: var(--sol-color-brand-dark);
+  --sol-link: var(--sol-color-brand);
+  --sol-link-hover: var(--sol-color-accent);
+  --sol-eyebrow: var(--sol-color-accent);
+  --sol-eyebrow-on-dark: var(--sol-color-accent-on-dark);
+  --sol-header-rule: var(--sol-color-brand);
+
+  --sol-button-primary-bg: var(--sol-color-brand);
+  --sol-button-primary-hover-bg: var(--sol-color-brand-dark);
+  --sol-button-secondary-border: var(--sol-color-brand);
+  --sol-button-secondary-text: var(--sol-color-brand);
+  --sol-button-secondary-hover-bg: var(--sol-color-brand);
+  --sol-button-donate-bg: var(--sol-color-accent);
+  --sol-button-donate-hover-bg: var(--sol-color-accent-dark);
+
+  --sol-search-icon: var(--sol-color-brand);
+  --sol-search-icon-hover: var(--sol-color-brand-dark);
+  --sol-search-bg: transparent;
+
+  --sol-control-accent-bg: var(--sol-color-accent-fill);
+  --sol-control-accent-hover-bg: var(--sol-color-accent-light);
+  --sol-control-accent-fg: var(--sol-color-brand-dark);
+
+  --sol-panel-info-bg: var(--sol-color-brand-pale);
+  --sol-panel-accent-bg: var(--sol-color-accent-tint);
+  --sol-hero-fade: var(--sol-color-accent-palest);
+  --sol-success-bg: var(--sol-color-brand-pale);
+  --sol-success-fg: var(--sol-color-brand-dark);
+
+  --sol-focus-ring: 3px solid var(--sol-color-focus);
+  --sol-focus-offset: 2px;
+
+  /* Type */
+  --sol-font-sans: 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --sol-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+}
