@@ -15,7 +15,7 @@
   --sol-color-accent-tint: #F8EAF2;
   --sol-color-accent-palest: #FDF1F8;
 
-  /* Neutrals, unchanged from ASTRO */
+  /* Neutrals, shared with ASTRO */
   --sol-color-text: #58595B;
   --sol-color-text-muted: #979291;
   --sol-color-border: #E5E6E5;

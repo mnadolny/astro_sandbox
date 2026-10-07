@@ -13,7 +13,7 @@
    Deliberately single-theme (light) because the page shows literal brand colors. */
 :root {
   color-scheme: light;
-  /* Final palette: option A, blue + raspberry */
+  /* Final palette: blue + raspberry */
   --brand: #004B8D;
   --brand-dark: #003764;
   --pale-blue: #E5EBEF;
@@ -25,7 +25,7 @@
   --accent-light: #F2B1D7;
   --accent-on-dark: #F6C8E3;
   --focus: #E35AAB;
-  /* Unchanged ASTRO neutrals */
+  /* Neutrals shared with ASTRO */
   --body: #58595B;
   --granite: #979291;
   --alabaster: #E5E6E5;
@@ -101,17 +101,6 @@ code, pre { font-family: var(--mono); font-size: 0.875em; }
 .hero-strip { display: flex; height: 14px; border-radius: 999px; overflow: hidden; max-width: 560px; margin-top: 4px; }
 .hero-strip i { display: block; height: 100%; }
 
-/* ---------- Changes ---------- */
-.changes { display: grid; gap: 10px; }
-.change { display: grid; grid-template-columns: minmax(0, 220px) auto minmax(0, 1fr); gap: 6px 20px; align-items: center; padding: 14px 18px; border: 1px solid var(--alabaster); border-radius: 10px; }
-.change-role { font-weight: 800; color: var(--brand-dark); font-size: 15px; line-height: 1.3; }
-.change-note { font-size: 14px; line-height: 1.5; }
-.fromto { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11.5px; color: var(--body); white-space: nowrap; }
-.fromto i { width: 24px; height: 24px; border-radius: 6px; border: 1px solid rgba(0, 0, 0, 0.1); display: inline-block; }
-.fromto .x { position: relative; }
-.fromto .x::after { content: ""; position: absolute; left: -3px; right: -3px; top: 50%; height: 2px; background: var(--body); transform: rotate(-45deg); }
-@media (max-width: 720px) { .change { grid-template-columns: minmax(0, 1fr); } }
-
 /* ---------- Token reference ---------- */
 .token-group { display: grid; gap: 12px; margin-bottom: 34px; }
 .token-group h3 { font-size: 18px; }
@@ -119,15 +108,13 @@ code, pre { font-family: var(--mono); font-size: 0.875em; }
 .tokens { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
 .tok { border: 1px solid var(--alabaster); border-radius: 10px; overflow: hidden; display: grid; grid-template-rows: 76px auto; background: var(--white); }
 .tok-chip { display: flex; align-items: flex-end; justify-content: space-between; padding: 10px 12px; font-size: 12px; font-weight: 800; }
-.tok-chip .badge { font-size: 10px; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; background: var(--white); color: var(--brand-dark); border-radius: 999px; padding: 2px 8px; }
 .tok-meta { padding: 10px 12px 12px; display: grid; gap: 2px; align-content: start; }
 .tok-name { font-weight: 800; color: var(--brand-dark); font-size: 14.5px; line-height: 1.3; }
 .tok-var { font-family: var(--mono); font-size: 11.5px; color: var(--body); overflow-wrap: anywhere; }
 .tok-hex { font-family: var(--mono); font-size: 12.5px; color: var(--brand-dark); font-weight: 600; }
 .tok-use { font-size: 13px; line-height: 1.45; margin-top: 4px; }
-.removed { display: flex; gap: 14px; align-items: center; padding: 12px 16px; border: 1px dashed var(--alabaster); border-radius: 10px; font-size: 14px; max-width: 70ch; }
-.removed i { width: 32px; height: 32px; border-radius: 8px; background: #4F7E2A; flex: none; position: relative; opacity: 0.55; }
-.removed i::after { content: ""; position: absolute; left: -4px; right: -4px; top: 50%; height: 2px; background: var(--body); transform: rotate(-45deg); }
+
+.neutral-note { font-size: 14.5px; background: var(--light-bg); border-radius: 8px; padding: 12px 16px; max-width: 72ch; }
 
 /* ---------- Rules ---------- */
 .rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
@@ -311,73 +298,14 @@ pre.tokens-css .c { color: var(--accent-on-dark); }
     <h1>Speed of Light theme</h1>
     <div class="meta">
       <span class="status-pill">Final draft for review</span>
-      <span>Based on option A · Blue + raspberry</span>
       <span>October 8, 2026</span>
     </div>
-    <p>The Speed of Light theme uses the two colors in the Foundation's logo: ASTRO blue does the structural work, and raspberry is the accent. Green is no longer part of the theme. Donate is the one solid raspberry button, so it stands out on every page. Body and headings use Nunito, with body text at 18px for easier reading.</p>
+    <p>The Speed of Light theme uses the two colors in the Foundation's logo: ASTRO blue does the structural work, and raspberry is the accent. Donate is the one solid raspberry button, so it stands out on every page. Body and headings use Nunito, with body text at 18px for easier reading.</p>
     <div class="hero-strip" aria-hidden="true">
       <i style="background:#003764;flex:5"></i><i style="background:#004B8D;flex:4"></i><i style="background:#E5EBEF;flex:3"></i><i style="background:#FFFFFF;flex:4"></i><i style="background:#FDF1F8;flex:2"></i><i style="background:#F8EAF2;flex:2"></i><i style="background:#F6C8E3;flex:1"></i><i style="background:#EC8EC6;flex:1"></i><i style="background:#BA1F7B;flex:2"></i><i style="background:#931961;flex:1"></i>
     </div>
   </header>
 </div>
-
-<!-- =============== CHANGES =============== -->
-<section class="sec">
-  <div class="wrap">
-    <div class="sec-head">
-      <span class="eyebrow chrome">Changes</span>
-      <h2>What changed from the dev's proposal</h2>
-      <p class="note">Everything else in the dev's palette carries over as written.</p>
-    </div>
-    <div class="changes">
-      <div class="change">
-        <span class="change-role">Green removed</span>
-        <span class="fromto"><i class="x" style="background:#4F7E2A"></i></span>
-        <span class="change-note">#4F7E2A is no longer in the theme. Pink and green sat on opposite sides of the color wheel at the same strength and clashed wherever they met.</span>
-      </div>
-      <div class="change">
-        <span class="change-role">Secondary button</span>
-        <span class="fromto"><i style="background:#4F7E2A"></i>→<i style="background:#fff;box-shadow:inset 0 0 0 3px #004B8D"></i>blue outline</span>
-        <span class="change-note">White with a brand-blue border and text. Fills brand blue on hover.</span>
-      </div>
-      <div class="change">
-        <span class="change-role">Donate button</span>
-        <span class="fromto"><i style="background:#4F7E2A"></i>→<i style="background:#BA1F7B"></i>#BA1F7B</span>
-        <span class="change-note">Raspberry with white text (5.88:1). Darkens to #931961 on hover. It's the only solid raspberry button.</span>
-      </div>
-      <div class="change">
-        <span class="change-role">Raspberry tint</span>
-        <span class="fromto"><i style="background:#EFE8E7"></i>→<i style="background:#F8EAF2"></i>#F8EAF2</span>
-        <span class="change-note">A true pale pink in place of the beige-looking tint, so accent panels read as part of the raspberry family.</span>
-      </div>
-      <div class="change">
-        <span class="change-role">Search button</span>
-        <span class="fromto"><i style="background:#EC8EC6"></i>→<i style="background:#fff;display:inline-grid;place-items:center"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5.25" stroke="#004B8D" stroke-width="2.5"/><path d="M11 11l3.5 3.5" stroke="#004B8D" stroke-width="2.5" stroke-linecap="round"/></svg></i>blue icon</span>
-        <span class="change-note">Brand-blue icon with no fill, darkening to dark blue on hover. The pink fill is gone from the header.</span>
-      </div>
-      <div class="change">
-        <span class="change-role">Success message</span>
-        <span class="fromto"><i style="background:#E5EBEF"></i><i style="background:#003764"></i>new</span>
-        <span class="change-note">The ticket didn't name one. Success is dark blue text on pale blue with a check icon.</span>
-      </div>
-      <div class="change">
-        <span class="change-role">Body text size</span>
-        <span class="fromto" style="font-family:var(--font);font-size:13px;font-weight:700;color:var(--brand-dark)">16px → 18px</span>
-        <span class="change-note">Body text is 18px with a 1.6 line height (1.5 in cards and panels), and small text never drops below 15px. Many of the site's readers are older.</span>
-      </div>
-      <div class="change">
-        <span class="change-role">H3 and card titles</span>
-        <span class="fromto" style="font-family:var(--font);font-size:13px;font-weight:700;color:var(--brand-dark)">20px regular</span>
-        <span class="change-note">H3s and content-card titles are 20px at regular weight, not extra bold. Card descriptions and due dates below them are 15px.</span>
-      </div>
-      <div class="change">
-        <span class="change-role">Lighter accent role</span>
-        <span class="fromto"><i style="background:#F2B1D7"></i>defined</span>
-        <span class="change-note">The ticket listed #F2B1D7 without a job. It's now the text-highlight underlay and the hover state for light-pink controls.</span>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- =============== IN CONTEXT =============== -->
 <section class="sec">
@@ -573,13 +501,13 @@ font-family: ui-monospace,
         <div class="tok"><div class="tok-chip" style="background:#EC8EC6;color:#003764">Aa</div><div class="tok-meta"><span class="tok-name">Light accent fill</span><span class="tok-var">--sol-color-accent-fill</span><span class="tok-hex">#EC8EC6</span><span class="tok-use">Checked checkboxes, alert pill. Always with dark blue text or marks.</span></div></div>
         <div class="tok"><div class="tok-chip" style="background:#F2B1D7;color:#003764">Aa</div><div class="tok-meta"><span class="tok-name">Lighter accent</span><span class="tok-var">--sol-color-accent-light</span><span class="tok-hex">#F2B1D7</span><span class="tok-use">Text-highlight underlay, hover for light-pink controls.</span></div></div>
         <div class="tok"><div class="tok-chip" style="background:#003764;color:#F6C8E3"><span>Aa</span><span style="width:26px;height:26px;border-radius:50%;background:#F6C8E3;display:block"></span></div><div class="tok-meta"><span class="tok-name">Accent on dark</span><span class="tok-var">--sol-color-accent-on-dark</span><span class="tok-hex">#F6C8E3</span><span class="tok-use">Eyebrows and highlighted words on dark blue.</span></div></div>
-        <div class="tok"><div class="tok-chip" style="background:#F8EAF2;color:#931961">Aa <span class="badge">Changed</span></div><div class="tok-meta"><span class="tok-name">Raspberry tint</span><span class="tok-var">--sol-color-accent-tint</span><span class="tok-hex">#F8EAF2</span><span class="tok-use">Pale accent panels, such as the More News card.</span></div></div>
+        <div class="tok"><div class="tok-chip" style="background:#F8EAF2;color:#931961">Aa</div><div class="tok-meta"><span class="tok-name">Raspberry tint</span><span class="tok-var">--sol-color-accent-tint</span><span class="tok-hex">#F8EAF2</span><span class="tok-use">Pale accent panels, such as the More News card.</span></div></div>
         <div class="tok"><div class="tok-chip" style="background:linear-gradient(180deg,#FDF1F8,#fff);color:#BA1F7B">Aa</div><div class="tok-meta"><span class="tok-name">Palest accent</span><span class="tok-var">--sol-color-accent-palest</span><span class="tok-hex">#FDF1F8</span><span class="tok-use">Top of the light hero fade.</span></div></div>
       </div>
     </div>
 
     <div class="token-group">
-      <h3>Neutrals, unchanged from ASTRO</h3>
+      <h3>Neutrals, shared with ASTRO</h3>
       <div class="tokens">
         <div class="tok"><div class="tok-chip" style="background:#58595B;color:#fff">Aa</div><div class="tok-meta"><span class="tok-name">Charcoal</span><span class="tok-var">--sol-color-text</span><span class="tok-hex">#58595B</span><span class="tok-use">Body text, captions, small labels.</span></div></div>
         <div class="tok"><div class="tok-chip" style="background:#979291;color:#fff">Aa</div><div class="tok-meta"><span class="tok-name">Granite</span><span class="tok-var">--sol-color-text-muted</span><span class="tok-hex">#979291</span><span class="tok-use">Large text and icons only (3.07:1 on white).</span></div></div>
@@ -590,7 +518,7 @@ font-family: ui-monospace,
       </div>
     </div>
 
-    <div class="removed"><i aria-hidden="true"></i><span><strong style="color:var(--brand-dark)">Removed: green #4F7E2A.</strong> Red, amber and the visited-link violet stay as they are in ASTRO. Their values aren't in this repo, so they aren't listed here.</span></div>
+    <p class="neutral-note">Red, amber and the visited-link violet also come from ASTRO. Their values aren't listed here yet.</p>
   </div>
 </section>
 
@@ -747,7 +675,7 @@ font-family: ui-monospace,
   --sol-color-accent-tint: #F8EAF2;
   --sol-color-accent-palest: #FDF1F8;
 
-  <span class="c">/* Neutrals, unchanged from ASTRO */</span>
+  <span class="c">/* Neutrals, shared with ASTRO */</span>
   --sol-color-text: #58595B;
   --sol-color-text-muted: #979291;
   --sol-color-border: #E5E6E5;
@@ -803,7 +731,7 @@ font-family: ui-monospace,
 </section>
 
 <footer>
-  <div class="wrap">Speed of Light theme · final draft for review · based on the dev's ticket palette with option A changes · contrast figures use the WCAG 2.1 relative-luminance formula.</div>
+  <div class="wrap">Speed of Light theme · final draft for review · contrast figures use the WCAG 2.1 relative-luminance formula.</div>
 </footer>
 
 <script>
