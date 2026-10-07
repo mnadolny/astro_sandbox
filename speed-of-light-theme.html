@@ -232,6 +232,8 @@ code, pre { font-family: var(--mono); font-size: 0.875em; }
 .search-btn:hover { color: var(--brand-dark); }
 .panel-accent { border-top: 0; }
 .card-top::after { content: none; }
+.hero-dark p, .hero-fade p { font-size: 20px; line-height: 1.6; }
+.panel p, .links-demo { font-size: 17px; line-height: 1.65; }
 .highlight { background: var(--r-text-hl); padding: 0.08em 0.35em; border-radius: 4px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 
 /* ---------- Type ---------- */
@@ -269,6 +271,8 @@ td.num { font-variant-numeric: tabular-nums; font-weight: 800; color: var(--bran
 footer { padding-block: 32px 48px; border-top: 1px solid var(--alabaster); font-size: 13px; color: var(--body); }
 
 
+.t-body { font-size: 18px; line-height: 1.7; }
+.t-small { font-size: 15px; }
 
 .res { display: inline-block; font-size: 11px; font-weight: 900; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
 .res.pass { background: var(--ok-bg); color: var(--ok-fg); }
@@ -306,7 +310,7 @@ pre.tokens-css .c { color: var(--accent-on-dark); }
       <span>Based on option A · Blue + raspberry</span>
       <span>October 8, 2026</span>
     </div>
-    <p>The Speed of Light theme uses the two colors in the Foundation's logo: ASTRO blue does the structural work, and raspberry is the accent. Green is no longer part of the theme. Donate is the one solid raspberry button, so it stands out on every page. Body and headings use Nunito.</p>
+    <p>The Speed of Light theme uses the two colors in the Foundation's logo: ASTRO blue does the structural work, and raspberry is the accent. Green is no longer part of the theme. Donate is the one solid raspberry button, so it stands out on every page. Body and headings use Nunito, with body text at 18px for easier reading.</p>
     <div class="hero-strip" aria-hidden="true">
       <i style="background:#003764;flex:5"></i><i style="background:#004B8D;flex:4"></i><i style="background:#E5EBEF;flex:3"></i><i style="background:#FFFFFF;flex:4"></i><i style="background:#FDF1F8;flex:2"></i><i style="background:#F8EAF2;flex:2"></i><i style="background:#F6C8E3;flex:1"></i><i style="background:#EC8EC6;flex:1"></i><i style="background:#BA1F7B;flex:2"></i><i style="background:#931961;flex:1"></i>
     </div>
@@ -351,6 +355,11 @@ pre.tokens-css .c { color: var(--accent-on-dark); }
         <span class="change-role">Success message</span>
         <span class="fromto"><i style="background:#E5EBEF"></i><i style="background:#003764"></i>new</span>
         <span class="change-note">The ticket didn't name one. Success is dark blue text on pale blue with a check icon.</span>
+      </div>
+      <div class="change">
+        <span class="change-role">Body text size</span>
+        <span class="fromto" style="font-family:var(--font);font-size:13px;font-weight:700;color:var(--brand-dark)">16px → 18px</span>
+        <span class="change-note">Body text is 18px with a 1.7 line height, and small text never drops below 15px. Many of the site's readers are older.</span>
       </div>
       <div class="change">
         <span class="change-role">Lighter accent role</span>
@@ -612,6 +621,10 @@ font-family: ui-monospace,
         <p>Keep a 2px gap between the ring and the element. Touching brand blue, the ring drops to 2.64:1. Inside a raspberry-tint panel it sits at 2.86:1, so keep focusable items there on a white card or check them by hand.</p>
       </div>
       <div class="rule">
+        <h3>Body text is 18px</h3>
+        <p>Set running text at 18px with a 1.7 line height. Captions, dates and other small text stay at 15px or larger. Many readers are older, so don't shrink text to fit a layout.</p>
+      </div>
+      <div class="rule">
         <h3>Granite is for large text</h3>
         <p>Granite is 3.07:1 on white. Use charcoal for captions, dates and other small text.</p>
       </div>
@@ -625,7 +638,7 @@ font-family: ui-monospace,
     <div class="sec-head">
       <span class="eyebrow chrome">Typography</span>
       <h2>Nunito everywhere, system mono for code</h2>
-      <p class="note">One family carries both headings and body. The size scale below is illustrative. The ticket only sets the families.</p>
+      <p class="note">One family carries both headings and body. Body text is 18px with a 1.7 line height, because many of the site's readers are older. Small text never goes below 15px. Heading sizes are illustrative.</p>
     </div>
     <div class="type-grid">
       <div class="specimen">
@@ -634,8 +647,8 @@ font-family: ui-monospace,
         <div class="spec-row"><span class="tag">H2<br>800</span><span class="t-h2">Funding opportunities</span></div>
         <div class="spec-row"><span class="tag">H3<br>800</span><span class="t-h3">ACS–ASTRO Clinician Scientist Development Grant</span></div>
         <div class="spec-row"><span class="tag">Eyebrow<br>800 caps</span><span class="eyebrow">Research · Grants &amp; awards</span></div>
-        <div class="spec-row"><span class="tag">Body<br>400 / 16</span><p class="t-body">Speed of Light – The ASTRO Foundation funds research and education so that patients can receive high-quality, innovative radiation treatments that improve their quality of life.</p></div>
-        <div class="spec-row"><span class="tag">Small<br>400 / 13</span><span class="t-small">Letters of intent due November 23, 2026 · Full proposals due February 22, 2027</span></div>
+        <div class="spec-row"><span class="tag">Body<br>400 / 18<br>line 1.7</span><p class="t-body">Speed of Light – The ASTRO Foundation funds research and education so that patients can receive high-quality, innovative radiation treatments that improve their quality of life.</p></div>
+        <div class="spec-row"><span class="tag">Small<br>400 / 15</span><span class="t-small">Letters of intent due November 23, 2026 · Full proposals due February 22, 2027</span></div>
       </div>
       <div class="font-cards">
         <div class="font-card">
@@ -773,6 +786,10 @@ font-family: ui-monospace,
   <span class="c">/* Type */</span>
   --sol-font-sans: 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --sol-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+  --sol-font-size-body: 1.125rem;    <span class="c">/* 18px */</span>
+  --sol-line-height-body: 1.7;
+  --sol-font-size-lead: 1.25rem;     <span class="c">/* 20px, hero intros */</span>
+  --sol-font-size-small: 0.9375rem;  <span class="c">/* 15px, minimum */</span>
 }</pre>
   </div>
 </section>
