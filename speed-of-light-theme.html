@@ -233,6 +233,12 @@ code, pre { font-family: var(--mono); font-size: 0.875em; }
 .panel-accent { border-top: 0; }
 .card-top::after { content: none; }
 .hero-dark p, .hero-fade p { font-size: 20px; line-height: 1.5; }
+.card-body { gap: 8px; padding: 18px 20px 22px; }
+.card-title { margin: 0; font-size: 20px; font-weight: 400; line-height: 1.3; color: var(--brand-dark); }
+.card-title a { color: inherit; text-decoration: none; }
+.card-title a:hover { color: var(--r-link-hover); text-decoration: underline; text-decoration-thickness: 1px; }
+.card-desc { font-size: 15px; line-height: 1.5; color: var(--body); }
+.card-due { font-size: 15px; line-height: 1.5; font-weight: 700; color: var(--body); margin-top: 4px; }
 .panel p, .links-demo { font-size: 17px; line-height: 1.5; }
 .highlight { background: var(--r-text-hl); padding: 0.08em 0.35em; border-radius: 4px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 
@@ -272,6 +278,7 @@ footer { padding-block: 32px 48px; border-top: 1px solid var(--alabaster); font-
 
 
 .t-body { font-size: 18px; line-height: 1.6; }
+.t-h3 { font-size: 20px; font-weight: 400; line-height: 1.3; }
 .t-small { font-size: 15px; }
 
 .res { display: inline-block; font-size: 11px; font-weight: 900; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
@@ -360,6 +367,11 @@ pre.tokens-css .c { color: var(--accent-on-dark); }
         <span class="change-role">Body text size</span>
         <span class="fromto" style="font-family:var(--font);font-size:13px;font-weight:700;color:var(--brand-dark)">16px → 18px</span>
         <span class="change-note">Body text is 18px with a 1.6 line height (1.5 in cards and panels), and small text never drops below 15px. Many of the site's readers are older.</span>
+      </div>
+      <div class="change">
+        <span class="change-role">H3 and card titles</span>
+        <span class="fromto" style="font-family:var(--font);font-size:13px;font-weight:700;color:var(--brand-dark)">20px regular</span>
+        <span class="change-note">H3s and content-card titles are 20px at regular weight, not extra bold. Card descriptions and due dates below them are 15px.</span>
       </div>
       <div class="change">
         <span class="change-role">Lighter accent role</span>
@@ -518,9 +530,9 @@ pre.tokens-css .c { color: var(--accent-on-dark); }
         <div class="card">
           <div class="card-top" role="img" aria-label="Placeholder image"></div>
           <div class="card-body">
-            <span class="eyebrow">News</span>
-            <h5><a href="#">Speed of Light – The ASTRO Foundation awards $2.4 million to accelerate radiation medicine research</a></h5>
-            <span class="card-meta">Foundation news · Research</span>
+            <h3 class="card-title"><a href="#">Innovation Awards</a></h3>
+            <p class="card-desc">Accelerating research on radiation therapy that advances strategic priorities for the field and improves outcomes for patients.</p>
+            <p class="card-due">Letters of Intent Due November 23, 2026<br>Full Proposals Due February 22, 2027</p>
           </div>
         </div>
       </div>
@@ -645,7 +657,7 @@ font-family: ui-monospace,
         <div class="spec-row"><span class="tag">Display<br>900</span><span class="t-display">Speed of Light</span></div>
         <div class="spec-row"><span class="tag">H1<br>800</span><span class="t-h1">Research gives hope</span></div>
         <div class="spec-row"><span class="tag">H2<br>800</span><span class="t-h2">Funding opportunities</span></div>
-        <div class="spec-row"><span class="tag">H3<br>800</span><span class="t-h3">ACS–ASTRO Clinician Scientist Development Grant</span></div>
+        <div class="spec-row"><span class="tag">H3<br>400 / 20</span><span class="t-h3">ACS–ASTRO Clinician Scientist Development Grant</span></div>
         <div class="spec-row"><span class="tag">Eyebrow<br>800 caps</span><span class="eyebrow">Research · Grants &amp; awards</span></div>
         <div class="spec-row"><span class="tag">Body<br>400 / 18<br>line 1.6</span><p class="t-body">Speed of Light – The ASTRO Foundation funds research and education so that patients can receive high-quality, innovative radiation treatments that improve their quality of life.</p></div>
         <div class="spec-row"><span class="tag">Small<br>400 / 15</span><span class="t-small">Letters of intent due November 23, 2026 · Full proposals due February 22, 2027</span></div>
@@ -790,7 +802,9 @@ font-family: ui-monospace,
   --sol-line-height-body: 1.6;
   --sol-line-height-tight: 1.5;      <span class="c">/* cards, panels, hero intros */</span>
   --sol-font-size-lead: 1.25rem;     <span class="c">/* 20px, hero intros */</span>
-  --sol-font-size-small: 0.9375rem;  <span class="c">/* 15px, minimum */</span>
+  --sol-font-size-small: 0.9375rem;  <span class="c">/* 15px, minimum; card descriptions and dates */</span>
+  --sol-font-size-h3: 1.25rem;       <span class="c">/* 20px, also content-card titles */</span>
+  --sol-font-weight-h3: 400;
 }</pre>
   </div>
 </section>
