@@ -232,8 +232,8 @@ code, pre { font-family: var(--mono); font-size: 0.875em; }
 .search-btn:hover { color: var(--brand-dark); }
 .panel-accent { border-top: 0; }
 .card-top::after { content: none; }
-.hero-dark p, .hero-fade p { font-size: 20px; line-height: 1.6; }
-.panel p, .links-demo { font-size: 17px; line-height: 1.65; }
+.hero-dark p, .hero-fade p { font-size: 20px; line-height: 1.5; }
+.panel p, .links-demo { font-size: 17px; line-height: 1.5; }
 .highlight { background: var(--r-text-hl); padding: 0.08em 0.35em; border-radius: 4px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
 
 /* ---------- Type ---------- */
@@ -271,7 +271,7 @@ td.num { font-variant-numeric: tabular-nums; font-weight: 800; color: var(--bran
 footer { padding-block: 32px 48px; border-top: 1px solid var(--alabaster); font-size: 13px; color: var(--body); }
 
 
-.t-body { font-size: 18px; line-height: 1.7; }
+.t-body { font-size: 18px; line-height: 1.6; }
 .t-small { font-size: 15px; }
 
 .res { display: inline-block; font-size: 11px; font-weight: 900; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
@@ -359,7 +359,7 @@ pre.tokens-css .c { color: var(--accent-on-dark); }
       <div class="change">
         <span class="change-role">Body text size</span>
         <span class="fromto" style="font-family:var(--font);font-size:13px;font-weight:700;color:var(--brand-dark)">16px → 18px</span>
-        <span class="change-note">Body text is 18px with a 1.7 line height, and small text never drops below 15px. Many of the site's readers are older.</span>
+        <span class="change-note">Body text is 18px with a 1.6 line height (1.5 in cards and panels), and small text never drops below 15px. Many of the site's readers are older.</span>
       </div>
       <div class="change">
         <span class="change-role">Lighter accent role</span>
@@ -622,7 +622,7 @@ font-family: ui-monospace,
       </div>
       <div class="rule">
         <h3>Body text is 18px</h3>
-        <p>Set running text at 18px with a 1.7 line height. Captions, dates and other small text stay at 15px or larger. Many readers are older, so don't shrink text to fit a layout.</p>
+        <p>Set running text at 18px with a 1.6 line height, and use 1.5 for short blocks like cards and panels. Captions, dates and other small text stay at 15px or larger. Many readers are older, so don't shrink text to fit a layout.</p>
       </div>
       <div class="rule">
         <h3>Granite is for large text</h3>
@@ -638,7 +638,7 @@ font-family: ui-monospace,
     <div class="sec-head">
       <span class="eyebrow chrome">Typography</span>
       <h2>Nunito everywhere, system mono for code</h2>
-      <p class="note">One family carries both headings and body. Body text is 18px with a 1.7 line height, because many of the site's readers are older. Small text never goes below 15px. Heading sizes are illustrative.</p>
+      <p class="note">One family carries both headings and body. Body text is 18px with a 1.6 line height, because many of the site's readers are older. Cards and panels use 1.5. Small text never goes below 15px. Heading sizes are illustrative.</p>
     </div>
     <div class="type-grid">
       <div class="specimen">
@@ -647,7 +647,7 @@ font-family: ui-monospace,
         <div class="spec-row"><span class="tag">H2<br>800</span><span class="t-h2">Funding opportunities</span></div>
         <div class="spec-row"><span class="tag">H3<br>800</span><span class="t-h3">ACS–ASTRO Clinician Scientist Development Grant</span></div>
         <div class="spec-row"><span class="tag">Eyebrow<br>800 caps</span><span class="eyebrow">Research · Grants &amp; awards</span></div>
-        <div class="spec-row"><span class="tag">Body<br>400 / 18<br>line 1.7</span><p class="t-body">Speed of Light – The ASTRO Foundation funds research and education so that patients can receive high-quality, innovative radiation treatments that improve their quality of life.</p></div>
+        <div class="spec-row"><span class="tag">Body<br>400 / 18<br>line 1.6</span><p class="t-body">Speed of Light – The ASTRO Foundation funds research and education so that patients can receive high-quality, innovative radiation treatments that improve their quality of life.</p></div>
         <div class="spec-row"><span class="tag">Small<br>400 / 15</span><span class="t-small">Letters of intent due November 23, 2026 · Full proposals due February 22, 2027</span></div>
       </div>
       <div class="font-cards">
@@ -787,7 +787,8 @@ font-family: ui-monospace,
   --sol-font-sans: 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --sol-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
   --sol-font-size-body: 1.125rem;    <span class="c">/* 18px */</span>
-  --sol-line-height-body: 1.7;
+  --sol-line-height-body: 1.6;
+  --sol-line-height-tight: 1.5;      <span class="c">/* cards, panels, hero intros */</span>
   --sol-font-size-lead: 1.25rem;     <span class="c">/* 20px, hero intros */</span>
   --sol-font-size-small: 0.9375rem;  <span class="c">/* 15px, minimum */</span>
 }</pre>

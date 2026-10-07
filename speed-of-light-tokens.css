@@ -60,7 +60,8 @@
   --sol-font-sans: 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --sol-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
   --sol-font-size-body: 1.125rem;    /* 18px */
-  --sol-line-height-body: 1.7;
+  --sol-line-height-body: 1.6;
+  --sol-line-height-tight: 1.5;      /* cards, panels, hero intros */
   --sol-font-size-lead: 1.25rem;     /* 20px, hero intros */
   --sol-font-size-small: 0.9375rem;  /* 15px, minimum */
 }
