@@ -46,6 +46,8 @@
   --sol-control-accent-bg: var(--sol-color-accent-fill);
   --sol-control-accent-hover-bg: var(--sol-color-accent-light);
   --sol-control-accent-fg: var(--sol-color-brand-dark);
+  --sol-alert-pill-bg: var(--sol-color-accent-light);
+  --sol-alert-pill-fg: var(--sol-color-brand-dark);
 
   --sol-panel-info-bg: var(--sol-color-brand-pale);
   --sol-panel-accent-bg: var(--sol-color-accent-tint);
