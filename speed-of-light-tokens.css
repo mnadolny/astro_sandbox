@@ -50,8 +50,6 @@
   --sol-panel-info-bg: var(--sol-color-brand-pale);
   --sol-panel-accent-bg: var(--sol-color-accent-tint);
   --sol-hero-fade: var(--sol-color-accent-palest);
-  --sol-success-bg: var(--sol-color-brand-pale);
-  --sol-success-fg: var(--sol-color-brand-dark);
 
   --sol-focus-ring: 3px solid var(--sol-color-focus);
   --sol-focus-offset: 2px;

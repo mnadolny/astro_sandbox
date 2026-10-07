@@ -55,7 +55,6 @@
   --r-accent-panel: var(--rasp-tint);
   --r-hero-fade: var(--accent-palest);
   --r-card-rule: var(--rasp);
-  --r-success-bg: var(--pale-blue); --r-success-fg: var(--brand-dark); --r-success-icon: var(--brand);
 
   --font: 'Nunito', ui-rounded, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
@@ -192,9 +191,6 @@ code, pre { font-family: var(--mono); font-size: 0.875em; }
 .panel-info { background: var(--pale-blue); }
 .panel-accent { background: var(--r-accent-panel); border-top: 3px solid var(--r-card-rule); }
 .panel-accent .eyebrow { font-size: 11px; }
-.status { display: flex; gap: 12px; align-items: flex-start; background: var(--r-success-bg); color: var(--r-success-fg); border-radius: 8px; padding: 14px 16px; font-size: 15px; font-weight: 700; }
-.status svg { flex: none; color: var(--r-success-icon); margin-top: 2px; }
-.status span { display: block; font-weight: 400; font-size: 14px; }
 .checks { display: grid; gap: 10px; }
 .check { display: flex; align-items: center; gap: 10px; font-size: 15px; cursor: pointer; }
 .check input { appearance: none; -webkit-appearance: none; width: 20px; height: 20px; margin: 0; border: 2px solid var(--granite); border-radius: 5px; background: var(--white); display: grid; place-items: center; cursor: pointer; flex: none; }
@@ -342,11 +338,6 @@ pre.tokens-css .c { color: var(--accent-on-dark); }
         <span class="change-note">Brand-blue icon with no fill, darkening to dark blue on hover. The pink fill is gone from the header.</span>
       </div>
       <div class="change">
-        <span class="change-role">Success message</span>
-        <span class="fromto"><i style="background:#E5EBEF"></i><i style="background:#003764"></i>new</span>
-        <span class="change-note">The ticket didn't name one. Success is dark blue text on pale blue with a check icon.</span>
-      </div>
-      <div class="change">
         <span class="change-role">Body text size</span>
         <span class="fromto" style="font-family:var(--font);font-size:13px;font-weight:700;color:var(--brand-dark)">16px → 18px</span>
         <span class="change-note">Body text is 18px with a 1.6 line height (1.5 in cards and panels), and small text never drops below 15px. Many of the site's readers are older.</span>
@@ -477,14 +468,6 @@ pre.tokens-css .c { color: var(--accent-on-dark); }
         </div>
       </div>
 
-      <div class="tile">
-        <h4>Status message</h4>
-        <div class="status" role="status">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="2"/><path d="M6 10.5l2.6 2.5L14 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <div>You're signed up.<span>Watch your inbox for Foundation news and funding opportunities.</span></div>
-        </div>
-        <p class="note">Success uses dark blue on pale blue. Errors and warnings keep ASTRO's existing red and amber.</p>
-      </div>
 
       <div class="tile">
         <h4>Checkboxes</h4>
@@ -543,9 +526,9 @@ font-family: ui-monospace,
       <h3>Blues</h3>
       <p>Structure, text and every button except Donate.</p>
       <div class="tokens">
-        <div class="tok"><div class="tok-chip" style="background:#003764;color:#fff">Aa</div><div class="tok-meta"><span class="tok-name">Dark blue</span><span class="tok-var">--sol-color-brand-dark</span><span class="tok-hex">#003764</span><span class="tok-use">All headings, button hover, dark hero background, success text.</span></div></div>
+        <div class="tok"><div class="tok-chip" style="background:#003764;color:#fff">Aa</div><div class="tok-meta"><span class="tok-name">Dark blue</span><span class="tok-var">--sol-color-brand-dark</span><span class="tok-hex">#003764</span><span class="tok-use">All headings, button hover, dark hero background.</span></div></div>
         <div class="tok"><div class="tok-chip" style="background:#004B8D;color:#fff">Aa</div><div class="tok-meta"><span class="tok-name">Brand blue</span><span class="tok-var">--sol-color-brand</span><span class="tok-hex">#004B8D</span><span class="tok-use">Links, primary button, secondary button outline, header rule, footer.</span></div></div>
-        <div class="tok"><div class="tok-chip" style="background:#E5EBEF;color:#003764">Aa</div><div class="tok-meta"><span class="tok-name">Pale blue</span><span class="tok-var">--sol-color-brand-pale</span><span class="tok-hex">#E5EBEF</span><span class="tok-use">Info panels, chips, section bands, success background.</span></div></div>
+        <div class="tok"><div class="tok-chip" style="background:#E5EBEF;color:#003764">Aa</div><div class="tok-meta"><span class="tok-name">Pale blue</span><span class="tok-var">--sol-color-brand-pale</span><span class="tok-hex">#E5EBEF</span><span class="tok-use">Info panels, chips, section bands.</span></div></div>
       </div>
     </div>
 
@@ -642,7 +625,7 @@ font-family: ui-monospace,
           <tr><td>Raspberry on raspberry tint</td><td><span class="sample" style="background:#F8EAF2;color:#BA1F7B">Eyebrow</span></td><td class="num">5.05:1</td><td><span class="res pass">AA</span></td></tr>
           <tr><td>Raspberry on palest accent</td><td><span class="sample" style="background:#FDF1F8;color:#BA1F7B">Eyebrow</span></td><td class="num">5.35:1</td><td><span class="res pass">AA</span></td></tr>
           <tr><td>Raspberry on pale blue</td><td><span class="sample" style="background:#E5EBEF;color:#BA1F7B">Eyebrow</span></td><td class="num">4.89:1</td><td><span class="res pass">AA</span></td></tr>
-          <tr><td>Dark blue on pale blue (chips, success)</td><td><span class="sample" style="background:#E5EBEF;color:#003764">Chip</span></td><td class="num">10.09:1</td><td><span class="res pass">AAA</span></td></tr>
+          <tr><td>Dark blue on pale blue (chips)</td><td><span class="sample" style="background:#E5EBEF;color:#003764">Chip</span></td><td class="num">10.09:1</td><td><span class="res pass">AAA</span></td></tr>
           <tr><td>Body text on pale blue</td><td><span class="sample" style="background:#E5EBEF;color:#58595B">Panel</span></td><td class="num">5.83:1</td><td><span class="res pass">AA</span></td></tr>
           <tr><td>Body text on raspberry tint</td><td><span class="sample" style="background:#F8EAF2;color:#58595B">Panel</span></td><td class="num">6.02:1</td><td><span class="res pass">AA</span></td></tr>
           <tr><td>Dark blue on light accent fill</td><td><span class="sample" style="background:#EC8EC6;color:#003764">Pill</span></td><td class="num">5.35:1</td><td><span class="res pass">AA</span></td></tr>
@@ -725,8 +708,6 @@ font-family: ui-monospace,
   --sol-panel-info-bg: var(--sol-color-brand-pale);
   --sol-panel-accent-bg: var(--sol-color-accent-tint);
   --sol-hero-fade: var(--sol-color-accent-palest);
-  --sol-success-bg: var(--sol-color-brand-pale);
-  --sol-success-fg: var(--sol-color-brand-dark);
 
   --sol-focus-ring: 3px solid var(--sol-color-focus);
   --sol-focus-offset: 2px;
